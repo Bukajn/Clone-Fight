@@ -22,10 +22,11 @@ class Teren(object):
             x = i.IsColision(self.main.Player.pos)
             if x != None:
                 a.append(x)
+
         if a!=[]:
             return min(a)
         else:
-            return 0
+            return 900
     def Sterowanie(self):
         self.keys = pygame.key.get_pressed()
         if self.keys[pygame.K_a]:
