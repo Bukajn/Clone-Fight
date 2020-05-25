@@ -33,16 +33,18 @@ class Teren(object):
         self.Left=0
         self.Right=0
         a=[]
+        x=None
         if self.keys[pygame.K_a]:
             for i in self.towys:
                 x=i.IsCollisionNextRight()
-            for i in x:
-                a.append(i)
-            for i in a:
+            if x!=None:
+                for i in x:
+                    a.append(i)
+                for i in a:
 
-                if i.x>self.main.Player.pos.x:
+                    if i.x>self.main.Player.pos.x:
 
-                    self.Left=1
+                        self.Left=1
             if self.Left == 0:
 
                 for i in self.pods:
