@@ -17,3 +17,5 @@ class Scene_test(object):
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 self.running = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                self.main.Player.pos.y = 0
