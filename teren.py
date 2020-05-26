@@ -4,7 +4,7 @@ class Teren(object):
     def __init__(self,main):
         self.img = pygame.image.load("assets/podłoga.png")
         self.main = main
-        self.pods=[Podloze(main, self.img, pygame.Vector2(-1, 500),800,102),Podloze(main, self.img, pygame.Vector2(1000, 500),800,102),Podloze(main, self.img, pygame.Vector2(-802, 420),800,102)]
+        self.pods=[Podloze(main, self.img, pygame.Vector2(-1, 500),800,102),Podloze(main, self.img, pygame.Vector2(800, 480),800,102),Podloze(main, self.img, pygame.Vector2(-802, 420),800,102)]
         self.towys=[]
         self.speed=2
     def wys(self):
@@ -32,24 +32,44 @@ class Teren(object):
         self.keys = pygame.key.get_pressed()
         self.Left=0
         self.Right=0
-        a=[]
-        x=None
+        self.BlokadaRuchuLewo()
+        self.BlokadaRuchuPrawo()
         if self.keys[pygame.K_a]:
-            for i in self.towys:
-                x=i.IsCollisionNextRight()
-            if x!=None:
-                for i in x:
-                    a.append(i)
-                for i in a:
 
-                    if i.x>self.main.Player.pos.x:
-
-                        self.Left=1
             if self.Left == 0:
-
-                for i in self.pods:
+                for i in self.pods:#ruch
                     i.pos.x+=self.speed
 
         if self.keys[pygame.K_d]:
-            for i in self.pods:
-                i.pos.x -= self.speed
+
+            if self.Right == 0:
+                for i in self.pods:
+                    i.pos.x -= self.speed
+    def BlokadaRuchuLewo(self):
+        a = []
+        x = None
+        for i in self.towys:
+            x = i.IsCollisionNext("right")  # pobranie wartości punktów
+        if x != None:
+            for i in x:
+                a.append(i)
+        if a != []:
+            for i in a:
+                if i.x > self.main.Player.pos.x and 0 < i.x - self.main.Player.pos.x < 20:  # sprawdzenie czy zachodzi kolizja
+                    self.Left = 1
+                    for b in self.pods:  # ruch
+                        b.pos.x -= i.x - (1 + self.main.Player.pos.x)
+    def BlokadaRuchuPrawo(self):
+        a=[]
+        for i in self.towys:
+            a = []
+            x = i.IsCollisionNext("left")  # pobranie wartości punktów
+        if x != None:
+            for i in x:
+                a.append(i)
+        if a != []:
+            for i in a:
+                if i.x < self.main.Player.pos.x + 64 and 0 < (self.main.Player.pos.x + 64) - i.x < 30:  # sprawdzenie czy zachodzi kolizja
+                    self.Right = 1
+                    for b in self.pods:  # ruch
+                        b.pos.x += (-1 + self.main.Player.pos.x+64)-i.x
