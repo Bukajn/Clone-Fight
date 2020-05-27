@@ -3,16 +3,24 @@ import pygame
 class Player(object):
     def __init__(self,main):
         self.main = main
-        self.img = pygame.image.load("assets/original.png")
+        self.img = pygame.image.load("assets/playerRight.png")
+        self.szerokosc=64
+        self.ZmianaWielkosci(1.5)
         self.pos = pygame.Vector2(336,0)
         self.state = 1 # 0=na ziemie 1=podczas spadania 2=podczas skoku
         self.speed = pygame.Vector2(0,0)
-        self.speedGravitation=0.005
-        self.speedJump=-2
-        self.wysSkoku=200
+        self.speedGravitation=0.1
+        self.speedJump=-8
+        self.wysSkoku=100
         self.old_pos_y=0
+
+        self.clock=pygame.time.Clock()
+        self.delta=0.0
+        self.max_tps=self.main.max_tps
     def wys(self):
-        self.Physik()
+        for i in range(self.Zegar()):
+            self.Physik()
+            self.main.screen.blit(self.img, self.pos)
         self.main.screen.blit(self.img, self.pos)
     def Physik(self):
 
@@ -46,3 +54,18 @@ class Player(object):
                 self.state = 1
         elif self.state == 0:
             self.old_pos_y = self.pos.y
+    def ZmianaWielkosci(self, mnoznik):
+        self.img = pygame.transform.rotozoom(self.img, 0, mnoznik)
+        self.szerokosc*=mnoznik
+    def ZmianaTex(self,texture):
+        old_szerokosc=self.szerokosc
+        self.szerokosc=64
+        self.img = pygame.image.load(texture)
+        self.ZmianaWielkosci(old_szerokosc/64)
+    def Zegar(self):
+        self.delta+=self.clock.tick()/1000.0
+        i=0
+        while self.delta>1/self.max_tps:
+            i+=1
+            self.delta-=1/self.max_tps
+        return i

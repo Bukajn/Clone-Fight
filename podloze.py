@@ -14,21 +14,19 @@ class Podloze():
         if self.pos.x > -1000 and self.pos.x < 2000:
             return True
     def IsColision(self,pos):
-        if self.pos.x-40 < pos.x <self.pos.x+self.d-20 and self.pos.y>=pos.y+64:
-            return self.pos.y-64
-    def IsCollisionNext(self,side):#kolizja dla prawej scianki
+        if self.pos.x-self.main.Player.szerokosc < pos.x <self.pos.x+self.d-15 and self.pos.y>=pos.y+self.main.Player.szerokosc:
+            return self.pos.y-self.main.Player.szerokosc
+    def IsCollisionNext(self,side):#kolizja dla scianki
         a=[]
-        for i in range(int((self.pos.y+self.szerokosc) - (self.pos.y - 62))):
+        for i in range(int((self.pos.y+self.szerokosc) - (self.pos.y - (self.main.Player.szerokosc-2)))):
             if side == "right":
-                if self.main.Player.pos.y<=self.pos.y+i+0.5-62 and self.main.Player.pos.y>=self.pos.y+i-0.5-62:
+                if self.main.Player.pos.y<=self.pos.y+i+0.5-(self.main.Player.szerokosc-2) and self.main.Player.pos.y>=self.pos.y+i-0.5-(self.main.Player.szerokosc-2):
                     a.append(pygame.Vector2(self.pos.x+self.d,self.pos.y+i))
-                if self.main.Player.pos.y<=self.pos.y+i+0.5-62 and self.main.Player.pos.y>=self.pos.y+i-0.5-62:
-                    a.append(pygame.Vector2(self.pos.x+self.d-1,self.pos.y+i))
+
             elif side == "left":
-                if self.main.Player.pos.y<=self.pos.y+i+0.5-62 and self.main.Player.pos.y>=self.pos.y+i-0.5-62:
+                if self.main.Player.pos.y<=self.pos.y+i+0.5-(self.main.Player.szerokosc-2) and self.main.Player.pos.y>=self.pos.y+i-0.5-(self.main.Player.szerokosc-2):
                     a.append(pygame.Vector2(self.pos.x,self.pos.y+i))
-                if self.main.Player.pos.y<=self.pos.y+i+0.5-62 and self.main.Player.pos.y>=self.pos.y+i-0.5-62:
-                    a.append(pygame.Vector2(self.pos.x+1,self.pos.y+i))
+
         return a
 
 

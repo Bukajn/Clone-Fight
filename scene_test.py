@@ -12,6 +12,11 @@ class Scene_test(object):
             self.check_events()
             self.main.Teren.wys()
             self.main.Player.wys()
+            a=0
+            #a=40000
+            for i in range(a):
+                if 200*50==10000:
+                    print("a")
             pygame.display.update()
     def check_events(self):
         for event in pygame.event.get():

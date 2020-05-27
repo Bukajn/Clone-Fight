@@ -6,8 +6,10 @@ class main(object):
     def __init__(self):
         pygame.init()
         self.set_window()
+        self.max_tps = 60
         self.Teren = Teren(self)
         self.Player=Player(self)
+
         self.scene = Scene_test(self)
     def set_window(self):
         self.screen = pygame.display.set_mode((800, 600))
