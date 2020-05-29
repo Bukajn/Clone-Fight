@@ -25,35 +25,42 @@ class Player(object):
     def Physik(self):
 
         height=self.main.Teren.ColisionWithFloar() #przyjęcie wysokości podłożą
+        heightSufit=self.main.Teren.CollisionWithUnderFloar()#przyjęcie wysokości sufitu
+
         self.grawitacja(height)
 
         self.keys = pygame.key.get_pressed()
-        self.jump()
+        self.jump(heightSufit)
 
         self.pos.y+=self.speed.y
         self.grawitacja(height)
+        self.jump(heightSufit)
     def grawitacja(self,height):
-        if self.pos.y < height and self.speed!=2:
+        if self.pos.y < height and self.state!=2:
             self.speed.y += self.speedGravitation
-        elif self.pos.y != self.old_pos_y: # jest na ziemi
+        elif self.pos.y != self.old_pos_y and self.state == 1: # jest na ziemi
             self.speed.y=0
             self.state=0
         if self.pos.y > height:
             self.pos.y = height
-    def jump(self):
+    def jump(self,heightSufit):
         if self.keys[pygame.K_SPACE] and self.state == 0:
+
             self.state = 2
             self.speed.y = self.speedJump
             self.posStart = self.pos.y
         if self.state == 2:
-            if self.pos.y > self.old_pos_y - self.wysSkoku:
-                if self.speed.y < -0.01:
+            if self.pos.y+self.szerokosc > self.old_pos_y - self.wysSkoku:
+                if self.speed.y < -5:
 
                     self.speed.y += -(self.speed.y / (self.wysSkoku - (self.posStart - self.pos.y)))
             else:
                 self.state = 1
+            if self.pos.y<heightSufit:
+                self.speed.y=0
+                self.state=1
         elif self.state == 0:
-            self.old_pos_y = self.pos.y
+            self.old_pos_y = self.pos.y+self.szerokosc
     def ZmianaWielkosci(self, mnoznik):
         self.img = pygame.transform.rotozoom(self.img, 0, mnoznik)
         self.szerokosc*=mnoznik

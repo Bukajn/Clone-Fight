@@ -2,9 +2,10 @@ import pygame
 from podloze import Podloze
 class Teren(object):
     def __init__(self,main):
-        self.img = pygame.image.load("assets/podłoga.png")
         self.main = main
-        self.pods=[Podloze(main, self.img, pygame.Vector2(-1, 500),800,102),Podloze(main, self.img, pygame.Vector2(800, 420),800,102),Podloze(main, self.img, pygame.Vector2(-802, 420),800,102)]
+        self.elements=[[self.main,pygame.image.load("assets/podłoga.png"),800,102],[self.main,pygame.image.load("assets/latajaca_wyspa.png"),102,32]]
+        self.img = pygame.image.load("assets/podłoga.png")
+        self.pods=[Podloze(self.elements[0],(0,500)),Podloze(self.elements[0],(802,420)),Podloze(self.elements[0],(-800,420)),Podloze(self.elements[1],(100,300))]
         self.towys=[]
         self.speed=8
         self.Left = 0
@@ -14,10 +15,6 @@ class Teren(object):
         self.max_tps=main.max_tps
         self.clock=pygame.time.Clock()
     def wys(self):
-        if self.main.Player.state!=0:
-            self.speed=6
-        else:
-            self.speed=8
         for i in range(self.Zegar()):
             self.towys = []
             for i in self.pods:
@@ -41,61 +38,50 @@ class Teren(object):
             return min(a)
         else:
             return 900
+    def CollisionWithUnderFloar(self):
+        a = []
+        for i in self.towys:
+            x = i.IsCollisionUnder(self.main.Player.pos)
+            if x != None:
+                a.append(x)
+        #print(a)
+        if a != []:
+            return max(a)
+        else:
+            return 0
     def Sterowanie(self):
         self.keys = pygame.key.get_pressed()
+        self.Left = 0
+        self.Right = 0
 
-        self.BlokadaRuchuLewo()
-        self.BlokadaRuchuPrawo()
+        if self.BlokadaRuchuLewo():
+            self.Left=1
+        if self.BlokadaRuchuPrawo():
+            self.Right=1
+
         if self.keys[pygame.K_a]:
 
             if self.Left == 0:
-                for i in self.pods:#ruch
-                    i.pos.x+=self.speed
+                self.Ruch(self.speed)
                 self.main.Player.ZmianaTex("assets/playerLeft.png")
         if self.keys[pygame.K_d]:
 
             if self.Right == 0:
-                for i in self.pods:
-                    i.pos.x -= self.speed
+                self.Ruch(-(self.speed))
                 self.main.Player.ZmianaTex("assets/playerRight.png")
+    def Ruch(self,speed):
+        for i in self.pods:  # ruch
+            i.pos.x += speed
+
     def BlokadaRuchuLewo(self):
-        a = []
-        x = None
-        self.Left = 0
         for i in self.towys:
-            x = i.IsCollisionNext("right")  # pobranie wartości punktów
-        if x != None:
-            for i in x:
-                a.append(i)
-        if a != []:
-            for i in a:
-                if 0> self.main.Player.pos.x+14-i.x>-20:
-                    y=(0.5-(self.main.Player.pos.x+14-i.x))
-                    i.x -= y
-                    for b in self.pods:  # ruch
-                        b.pos.x -= y
-                if 0 < self.main.Player.pos.x-i.x+14 < 1:  # sprawdzenie czy zachodzi kolizja
-                    self.Left = 1
-
-
+            if i.IsCollisionNext("right"):
+                return True
     def BlokadaRuchuPrawo(self):
-        a=[]
-        self.Right=0
-        x=None
         for i in self.towys:
-            a = []
-            x = i.IsCollisionNext("left")  # pobranie wartości punktów
-        if x != None:
-            for i in x:
-                a.append(i)
-        if a != []:
-            if 0 > i.x - (self.main.Player.pos.x+self.main.Player.szerokosc-14)>-20 :
-                y = (0.5 - (i.x-(self.main.Player.pos.x +self.main.Player.szerokosc-14)))
-                i.x += y
-                for b in self.pods:  # ruch
-                    b.pos.x += y
-            if 0 < i.x - (self.main.Player.pos.x+self.main.Player.szerokosc-14)  < 1:  # sprawdzenie czy zachodzi kolizja
-                self.Right = 1
+            if i.IsCollisionNext("left"):
+                return True
+
     def Zegar(self):
         self.delta+=self.clock.tick()/1000.0
         i=0
