@@ -30,13 +30,16 @@ class Player(object):
         self.grawitacja(height)
 
         self.keys = pygame.key.get_pressed()
+
         self.jump(heightSufit)
 
         self.pos.y+=self.speed.y
         self.grawitacja(height)
         self.jump(heightSufit)
+        self.wczesniejszekeys=self.keys
     def grawitacja(self,height):
         if self.pos.y < height and self.state!=2:
+            self.state=1
             self.speed.y += self.speedGravitation
         elif self.pos.y != self.old_pos_y and self.state == 1: # jest na ziemi
             self.speed.y=0
@@ -44,7 +47,7 @@ class Player(object):
         if self.pos.y > height:
             self.pos.y = height
     def jump(self,heightSufit):
-        if self.keys[pygame.K_SPACE] and self.state == 0:
+        if self.keys[pygame.K_SPACE] and self.state == 0 and self.keys[pygame.K_SPACE]!= self.wczesniejszekeys[pygame.K_SPACE]:
 
             self.state = 2
             self.speed.y = self.speedJump

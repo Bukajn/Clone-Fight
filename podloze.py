@@ -48,9 +48,9 @@ class Podloze():
         if mousePos[0]> self.pos.x and mousePos[0]<self.pos.x+self.d:
             if mousePos[1] > self.pos.y and mousePos[1] < self.pos.y+self.szerokosc:
                 return self
-    def WysNapis(self):
+    def WysNapis(self,colour):
         self.font = pygame.font.Font("freesansbold.ttf", 16)
-        self.napis = self.font.render(str(self.pos), True, (0, 0, 0))
+        self.napis = self.font.render(str(self.pos), True, colour)
         self.main.screen.blit(self.napis,(self.pos.x+self.d/2,self.pos.y+self.szerokosc/2))
     def Zmianapolozenia(self,stan):
 
@@ -63,7 +63,9 @@ class Podloze():
             self.pos.x+=1
         if self.keys[pygame.K_LEFT] and (self.wczesniejszystan[pygame.K_LEFT] !=self.keys[pygame.K_LEFT]or  stan =="ciagly"):
             self.pos.x-=1
-
+        if self.keys[pygame.K_DELETE]:
+            self.main.Teren.pods.remove(self)
+            self.main.create_maps.obiekt = None
         self.wczesniejszystan = self.keys
 
 

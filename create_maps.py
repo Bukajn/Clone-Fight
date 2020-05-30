@@ -1,5 +1,5 @@
 import pygame
-
+from okno_wyboru import OknoWyboru
 class Create_maps(object):
     def __init__(self,main):
         self.main=main
@@ -8,8 +8,11 @@ class Create_maps(object):
         self.stan = "pojedynczy"
         self.informacja = self.font.render(self.stan,True,(0,0,0))
         self.obiekt=None
+        self.OknoWyboru=OknoWyboru(self.main)
     def main_loop(self):
         self.running = True
+        self.obiektyKlikniete = []
+        self.otwarteOknoWyboru = False
         while self.running:
             self.main.screen.fill((100, 150, 255))
             self.check_events()
@@ -17,14 +20,11 @@ class Create_maps(object):
             self.main.Player.wys()
             self.main.screen.blit(self.napis,(0,0))
             self.main.screen.blit(self.informacja, (500, 0))
-            if pygame.mouse.get_pressed()[0]:
-                for i in self.main.Teren.towys:
-                    if i.CzyKlikniety()!=None:
-                        self.obiekt = i.CzyKlikniety()
-            if self.obiekt!=None:
-                self.obiekt.WysNapis()
-                self.obiekt.Zmianapolozenia(self.stan)
 
+            if self.otwarteOknoWyboru:
+                self.OknoWyboru.wys()
+            else:
+                self.Poruszanie()
             pygame.display.update()
     def check_events(self):
         for event in pygame.event.get():
@@ -38,3 +38,21 @@ class Create_maps(object):
                 else:
                     self.stan = "pojedynczy"
                 self.informacja = self.font.render(self.stan, True, (0, 0, 0))
+        if pygame.mouse.get_pressed()[2]:
+            self.otwarteOknoWyboru=True
+    def Poruszanie(self):
+        for i in self.main.Teren.towys:
+            i.WysNapis((0, 0, 0))
+
+        if pygame.mouse.get_pressed()[0]:
+            self.obiektyKlikniete = []
+            for i in self.main.Teren.towys:
+                if i.CzyKlikniety() != None:
+                    self.obiekt = i.CzyKlikniety()
+                    self.obiektyKlikniete.append(self.obiekt)
+        if self.obiektyKlikniete == []:
+            self.obiekt = None
+
+        if self.obiekt != None:
+            self.obiekt.WysNapis((255, 0, 0))
+            self.obiekt.Zmianapolozenia(self.stan)
