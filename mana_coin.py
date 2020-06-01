@@ -24,6 +24,8 @@ class Mana_coin(object):
         if self.podazajzamysza:
             self.pos = pygame.Vector2(pygame.mouse.get_pos())
         if self.podazajzamysza and pygame.mouse.get_pressed()[0]:
+            self.pozycjaYgorna = self.pos.y
+            self.pozycjaYdolna = self.pos.y + self.dlugosc / 2
             self.podazajzamysza=False
 
         if self.main.CzyKreatorOtworzony==False:
@@ -58,6 +60,8 @@ class Mana_coin(object):
         if self.keys[pygame.K_DELETE]:
             self.main.Teren.pods.remove(self)
             self.main.create_maps.obiekt = None
+        self.pozycjaYgorna = self.pos.y
+        self.pozycjaYdolna = self.pos.y + self.dlugosc / 2
         self.wczesniejszystan = self.keys
     def ruch(self):
         if self.pos.y<self.pozycjaYdolna and self.kierunek == 'dol':

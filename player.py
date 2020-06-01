@@ -8,6 +8,7 @@ class Player(object):
         self.jumpSound = mixer.Sound("assets/sound/jump.wav")
         #self.imgSkok = pygame.transform.rotozoom(self.imgSkok, 0, 1.5)
         self.szerokosc=64
+        pygame.transform.smoothscale(self.img,(1000,1000))
         self.ZmianaWielkosci(1.5)
         self.pos = pygame.Vector2(336,0)
         self.state = 1 # 0=na ziemie 1=podczas spadania 2=podczas skoku
