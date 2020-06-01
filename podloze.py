@@ -2,14 +2,21 @@ import pygame
 
 class Podloze():
     def __init__(self,wlasciwosci ,pos):
+        self.numerElementu = 0
         self.main=wlasciwosci[0]
         self.img=wlasciwosci[1]
         self.pos=pygame.Vector2(pos)
         self.d =wlasciwosci[2]
         self.szerokosc=wlasciwosci[3]
+        self.podazajzamysza=False
+    def __str__(self):
+        return ("|"+str(self.numerElementu)+",("+str(self.pos.x)+";"+str(self.pos.y)+")"+"%")
     def wys(self):
         self.main.screen.blit(self.img, self.pos)
-
+        if self.podazajzamysza:
+            self.pos = pygame.Vector2(pygame.mouse.get_pos())
+        if self.podazajzamysza and pygame.mouse.get_pressed()[0]:
+            self.podazajzamysza=False
     def checkIsItToWys(self):
         if self.pos.x > -1000 and self.pos.x < 2000:
             return True

@@ -1,11 +1,14 @@
 import pygame
 from podloze import Podloze
+from wyspa import Wyspa
+from mana_coin import Mana_coin
 class Teren(object):
     def __init__(self,main):
         self.main = main
-        self.elements=[[self.main,pygame.image.load("assets/podłoga.png"),800,102],[self.main,pygame.image.load("assets/latajaca_wyspa.png"),102,32]]
+        self.elements=[[self.main,pygame.image.load("assets/podłoga.png"),800,102],[self.main,pygame.image.load("assets/latajaca_wyspa.png"),102,32],[self.main,pygame.image.load("assets/mana.png"),32,32]]
+
         self.img = pygame.image.load("assets/podłoga.png")
-        self.pods=[Podloze(self.elements[0],(0,500)),Podloze(self.elements[0],(802,420)),Podloze(self.elements[0],(-800,420)),Podloze(self.elements[1],(100,300))]
+        self.pods=[]
         self.towys=[]
         self.speed=8
         self.Left = 0
@@ -14,6 +17,17 @@ class Teren(object):
         self.delta=0.0
         self.max_tps=main.max_tps
         self.clock=pygame.time.Clock()
+    def UtworzElement(self,numerElementu,zmienne,podazamyszka=False):
+        if numerElementu==0:
+            elementdododania =Podloze(zmienne[0],zmienne[1])
+        elif numerElementu==1:
+            elementdododania = Wyspa(zmienne[0], zmienne[1])
+        elif numerElementu==2:
+            elementdododania = Mana_coin(zmienne[0], zmienne[1])
+        self.pods.append(elementdododania)
+        if podazamyszka:
+            elementdododania.podazajzamysza=True
+
     def wys(self):
         for i in range(self.Zegar()):
             self.towys = []
@@ -30,7 +44,10 @@ class Teren(object):
     def ColisionWithFloar(self):
         a=[]
         for i in self.towys:
-            x = i.IsColision(self.main.Player.pos)
+            try:
+                x = i.IsColision(self.main.Player.pos)
+            except AttributeError:
+                x=None
             if x != None:
                 a.append(x)
 
@@ -41,7 +58,10 @@ class Teren(object):
     def CollisionWithUnderFloar(self):
         a = []
         for i in self.towys:
-            x = i.IsCollisionUnder(self.main.Player.pos)
+            try:
+                x = i.IsCollisionUnder(self.main.Player.pos)
+            except AttributeError:
+                x=None
             if x != None:
                 a.append(x)
         #print(a)
@@ -63,11 +83,13 @@ class Teren(object):
 
             if self.Left == 0:
                 self.Ruch(self.speed)
+
                 self.main.Player.ZmianaTex("assets/playerLeft.png")
         if self.keys[pygame.K_d]:
 
             if self.Right == 0:
                 self.Ruch(-(self.speed))
+
                 self.main.Player.ZmianaTex("assets/playerRight.png")
     def Ruch(self,speed):
         for i in self.pods:  # ruch
@@ -75,12 +97,18 @@ class Teren(object):
 
     def BlokadaRuchuLewo(self):
         for i in self.towys:
-            if i.IsCollisionNext("right"):
-                return True
+            try:
+                if i.IsCollisionNext("right"):
+                    return True
+            except AttributeError:
+                pass
     def BlokadaRuchuPrawo(self):
         for i in self.towys:
-            if i.IsCollisionNext("left"):
-                return True
+            try:
+                if i.IsCollisionNext("left"):
+                    return True
+            except AttributeError:
+              pass
 
     def Zegar(self):
         self.delta+=self.clock.tick()/1000.0

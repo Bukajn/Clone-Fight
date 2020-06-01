@@ -10,6 +10,7 @@ class Create_maps(object):
         self.obiekt=None
         self.OknoWyboru=OknoWyboru(self.main)
     def main_loop(self):
+        self.main.CzyKreatorOtworzony = True
         self.running = True
         self.obiektyKlikniete = []
         self.otwarteOknoWyboru = False
@@ -26,6 +27,7 @@ class Create_maps(object):
             else:
                 self.Poruszanie()
             pygame.display.update()
+        self.main.CzyKreatorOtworzony = False
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:

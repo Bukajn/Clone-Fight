@@ -1,9 +1,12 @@
 import pygame
-
+from pygame import mixer
 class Player(object):
     def __init__(self,main):
         self.main = main
         self.img = pygame.image.load("assets/playerRight.png")
+        self.imgSkok = "assets/playerSkok.png"
+        self.jumpSound = mixer.Sound("assets/sound/jump.wav")
+        #self.imgSkok = pygame.transform.rotozoom(self.imgSkok, 0, 1.5)
         self.szerokosc=64
         self.ZmianaWielkosci(1.5)
         self.pos = pygame.Vector2(336,0)
@@ -27,28 +30,34 @@ class Player(object):
         height=self.main.Teren.ColisionWithFloar() #przyjęcie wysokości podłożą
         heightSufit=self.main.Teren.CollisionWithUnderFloar()#przyjęcie wysokości sufitu
 
-        self.grawitacja(height)
+        self.grawitacja(height,heightSufit)
 
         self.keys = pygame.key.get_pressed()
 
         self.jump(heightSufit)
 
         self.pos.y+=self.speed.y
-        self.grawitacja(height)
+        self.grawitacja(height,heightSufit)
         self.jump(heightSufit)
         self.wczesniejszekeys=self.keys
-    def grawitacja(self,height):
+    def grawitacja(self,height,heightSufit):
+        if self.pos.y < heightSufit:
+            self.speed.y = 1
+            self.state = 1
         if self.pos.y < height and self.state!=2:
             self.state=1
             self.speed.y += self.speedGravitation
         elif self.pos.y != self.old_pos_y and self.state == 1: # jest na ziemi
             self.speed.y=0
             self.state=0
+
+            #self.ZmianaTex("assets/playerRight.png")
         if self.pos.y > height:
             self.pos.y = height
     def jump(self,heightSufit):
         if self.keys[pygame.K_SPACE] and self.state == 0 and self.keys[pygame.K_SPACE]!= self.wczesniejszekeys[pygame.K_SPACE]:
-
+            #self.ZmianaTex(self.imgSkok)
+            self.jumpSound.play()
             self.state = 2
             self.speed.y = self.speedJump
             self.posStart = self.pos.y
