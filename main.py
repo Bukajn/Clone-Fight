@@ -5,6 +5,9 @@ from player import Player
 from create_maps import Create_maps
 from scene import Scene
 import maps
+from GUI import GUI
+import pkg_resources.py2_warn
+
 class main(object):
     def __init__(self):
         pygame.init()
@@ -12,6 +15,7 @@ class main(object):
         self.max_tps = 60
         self.Teren = Teren(self)
         self.Player=Player(self)
+        self.GUI =GUI(self)
         self.CzyKreatorOtworzony = False
         #self.scena =  Scene_test(self)
         self.create_maps = Create_maps(self)

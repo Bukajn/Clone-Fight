@@ -2,12 +2,13 @@ import pygame
 from podloze import Podloze
 from wyspa import Wyspa
 from mana_coin import Mana_coin
+import asset
 class Teren(object):
     def __init__(self,main):
         self.main = main
-        self.elements=[[self.main,pygame.image.load("assets/podłoga.png"),800,102],[self.main,pygame.image.load("assets/latajaca_wyspa.png"),102,32],[self.main,pygame.image.load("assets/mana.png"),32,32]]
+        self.elements=[[self.main,pygame.image.load(asset.imgPodloze),800,102],[self.main,pygame.image.load(asset.imgLatajacaWyspa),102,32],[self.main,pygame.image.load(asset.imgManaCoin),32,32]]
 
-        self.img = pygame.image.load("assets/podłoga.png")
+
         self.pods=[]
         self.towys=[]
         self.speed=8
@@ -84,13 +85,13 @@ class Teren(object):
             if self.Left == 0:
                 self.Ruch(self.speed)
 
-                self.main.Player.ZmianaTex("assets/playerLeft.png")
+                self.main.Player.ZmianaTex(asset.imgPlayerLeft)
         if self.keys[pygame.K_d]:
 
             if self.Right == 0:
                 self.Ruch(-(self.speed))
 
-                self.main.Player.ZmianaTex("assets/playerRight.png")
+                self.main.Player.ZmianaTex(asset.imgPlayerRight)
     def Ruch(self,speed):
         for i in self.pods:  # ruch
             i.pos.x += speed

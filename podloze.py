@@ -1,5 +1,5 @@
 import pygame
-
+import asset
 class Podloze():
     def __init__(self,wlasciwosci ,pos):
         self.numerElementu = 0
@@ -56,7 +56,7 @@ class Podloze():
             if mousePos[1] > self.pos.y and mousePos[1] < self.pos.y+self.szerokosc:
                 return self
     def WysNapis(self,colour):
-        self.font = pygame.font.Font("freesansbold.ttf", 16)
+        self.font = pygame.font.Font(asset.czcionkaRoboto, 16)
         self.napis = self.font.render(str(self.pos), True, colour)
         self.main.screen.blit(self.napis,(self.pos.x+self.d/2,self.pos.y+self.szerokosc/2))
     def Zmianapolozenia(self,stan):

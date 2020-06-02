@@ -11,6 +11,7 @@ class Scene(object):
             self.check_events()
             self.main.Teren.wys()
             self.main.Player.wys()
+            self.main.GUI.wys()
             pygame.display.update()
     def check_events(self):
         for event in pygame.event.get():

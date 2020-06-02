@@ -1,11 +1,11 @@
 import pygame
 from pygame import mixer
+import  asset
 class Player(object):
     def __init__(self,main):
         self.main = main
-        self.img = pygame.image.load("assets/playerRight.png")
-        self.imgSkok = "assets/playerSkok.png"
-        self.jumpSound = mixer.Sound("assets/sound/jump.wav")
+        self.img = pygame.image.load(asset.imgPlayerRight)
+        self.jumpSound = mixer.Sound(asset.soundJump)
         #self.imgSkok = pygame.transform.rotozoom(self.imgSkok, 0, 1.5)
         self.szerokosc=64
         pygame.transform.smoothscale(self.img,(1000,1000))
@@ -21,6 +21,9 @@ class Player(object):
         self.clock=pygame.time.Clock()
         self.delta=0.0
         self.max_tps=self.main.max_tps
+
+        #
+
     def wys(self):
         for i in range(self.Zegar()):
             self.Physik()

@@ -1,8 +1,7 @@
 import pygame
-
+import asset
 class Mana_coin(object):
     def __init__(self,wlasciwosci,pos):
-        self.name = "Mana_coin"
         self.numerElementu = 2
         self.main = wlasciwosci[0]
         self.img = wlasciwosci[1]
@@ -43,7 +42,7 @@ class Mana_coin(object):
             if mousePos[1] > self.pos.y and mousePos[1] < self.pos.y+self.szerokosc:
                 return self
     def WysNapis(self,colour):
-        self.font = pygame.font.Font("freesansbold.ttf", 16)
+        self.font = pygame.font.Font(asset.czcionkaRoboto, 16)
         self.napis = self.font.render(str(self.pos), True, colour)
         self.main.screen.blit(self.napis, (self.pos.x + self.dlugosc / 2, self.pos.y + self.szerokosc / 2))
     def Zmianapolozenia(self,stan):

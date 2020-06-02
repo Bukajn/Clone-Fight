@@ -1,10 +1,10 @@
 import pygame
-
+import asset
 class Przycisk(object):
     def __init__(self,main,text,rozmiar,pos,colour,wielkoscfont,akcja):
         self.main = main
         self.wielkoscfont=wielkoscfont
-        self.font = pygame.font.Font("freesansbold.ttf",self.wielkoscfont)
+        self.font = pygame.font.Font(asset.czcionkaRoboto,self.wielkoscfont)
         self.tekst = self.font.render(text,True,(0,0,0))
         self.dlugosc = rozmiar[0]
         self.szerokosc = rozmiar[1]

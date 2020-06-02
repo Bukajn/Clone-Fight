@@ -1,13 +1,16 @@
 import pygame
 from okno_wyboru import OknoWyboru
+import asset
+import sys
 class Create_maps(object):
     def __init__(self,main):
         self.main=main
-        self.font=pygame.font.Font("freesansbold.ttf",32)
+        self.font=pygame.font.Font(asset.czcionkaRoboto,32)
         self.napis= self.font.render("Tworzenie mapy",True,(0,0,0))
         self.stan = "pojedynczy"
         self.informacja = self.font.render(self.stan,True,(0,0,0))
         self.obiekt=None
+        self.CzyNapisyWlaczone=False
         self.OknoWyboru=OknoWyboru(self.main)
     def main_loop(self):
         self.main.CzyKreatorOtworzony = True
@@ -19,6 +22,7 @@ class Create_maps(object):
             self.check_events()
             self.main.Teren.wys()
             self.main.Player.wys()
+            self.main.GUI.wys()
             self.main.screen.blit(self.napis,(0,0))
             self.main.screen.blit(self.informacja, (500, 0))
 
@@ -30,7 +34,9 @@ class Create_maps(object):
         self.main.CzyKreatorOtworzony = False
     def check_events(self):
         for event in pygame.event.get():
-            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            if event.type == pygame.QUIT:
+                sys.exit(0)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 self.running = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                 self.main.Player.pos.y = 0
@@ -40,11 +46,22 @@ class Create_maps(object):
                 else:
                     self.stan = "pojedynczy"
                 self.informacja = self.font.render(self.stan, True, (0, 0, 0))
+
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_n:
+                if self.CzyNapisyWlaczone ==True:
+                    self.CzyNapisyWlaczone=False
+                else:
+                    self.CzyNapisyWlaczone=True
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_KP_MINUS:
+                self.main.GUI.manadoDodania-=10
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_KP_PLUS:
+                self.main.GUI.manadoDodania+=10
         if pygame.mouse.get_pressed()[2]:
             self.otwarteOknoWyboru=True
     def Poruszanie(self):
-        for i in self.main.Teren.towys:
-            i.WysNapis((0, 0, 0))
+        if self.CzyNapisyWlaczone:
+            for i in self.main.Teren.towys:
+                i.WysNapis((0, 0, 0))
 
         if pygame.mouse.get_pressed()[0]:
             self.obiektyKlikniete = []
