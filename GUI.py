@@ -8,9 +8,9 @@ class GUI(object):
         self.pole = pygame.Rect(self.pos.x,self.pos.y,760,50)
         self.pasekMany = PasekMany(self.main,self)
 
-        self.mana =0
-        self.max_mana=100
-        self.manadoDodania=0
+        self.mana =0.0
+        self.max_mana=100.0
+
     def wys(self):
         pygame.draw.rect(self.main.screen,self.colour,self.pole)
         self.pasekMany.wys()

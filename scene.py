@@ -3,7 +3,8 @@ import pygame
 class Scene(object):
     def __init__(self,main,mapa):
         self.main = main
-        self.main.create_maps.OknoWyboru.Wczytaj(mapa)
+        self.mapa=mapa
+        self.main.create_maps.OknoWyboru.Wczytaj(self.mapa)
     def main_loop(self):
         self.running = True
         while self.running:
@@ -21,3 +22,5 @@ class Scene(object):
                 self.main.Player.pos.y = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
                 self.main.create_maps.main_loop()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
+                self.main.create_maps.OknoWyboru.Wczytaj(self.mapa)

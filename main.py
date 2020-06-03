@@ -1,4 +1,4 @@
-import pygame
+import pygame, math
 from scene_test import Scene_test
 from teren import Teren
 from player import Player
@@ -25,6 +25,10 @@ class main(object):
     def set_window(self):
         self.screen = pygame.display.set_mode((800, 600))
         pygame.display.set_caption("Przez czas")
-
-
+    def IsCollision(self,pos1,pos2,wymaganaodleglosc):
+        odleglosc = math.sqrt((math.pow(pos1.x-pos2.x,2)+math.pow(pos1.y-pos2.y,2)))
+        if odleglosc <= wymaganaodleglosc:
+            return True
+        else:
+            return False
 main()

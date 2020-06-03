@@ -94,7 +94,7 @@ class Teren(object):
                 self.main.Player.ZmianaTex(asset.imgPlayerRight)
     def Ruch(self,speed):
         for i in self.pods:  # ruch
-            i.pos.x += speed
+            i.Zmienpolozenie(speed)
 
     def BlokadaRuchuLewo(self):
         for i in self.towys:

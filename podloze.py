@@ -74,5 +74,7 @@ class Podloze():
             self.main.Teren.pods.remove(self)
             self.main.create_maps.obiekt = None
         self.wczesniejszystan = self.keys
+    def Zmienpolozenie(self,x):
+        self.pos.x+=x
 
 

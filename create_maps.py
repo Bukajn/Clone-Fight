@@ -36,7 +36,7 @@ class Create_maps(object):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
                 self.running = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                 self.main.Player.pos.y = 0
@@ -53,9 +53,9 @@ class Create_maps(object):
                 else:
                     self.CzyNapisyWlaczone=True
             if event.type == pygame.KEYDOWN and event.key == pygame.K_KP_MINUS:
-                self.main.GUI.manadoDodania-=10
+                self.main.GUI.pasekMany.DodawajMane(-100)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_KP_PLUS:
-                self.main.GUI.manadoDodania+=10
+                self.main.GUI.pasekMany.DodawajMane(100)
         if pygame.mouse.get_pressed()[2]:
             self.otwarteOknoWyboru=True
     def Poruszanie(self):

@@ -1,4 +1,5 @@
 import pygame
+import decimal
 class PasekMany(object):
     def __init__(self,main,GUI):
         self.main = main
@@ -8,30 +9,45 @@ class PasekMany(object):
         self.tlo = pygame.Rect(self.pos.x+5, self.pos.y+5, 240, 20)
         self.pasek = pygame.Rect(self.pos.x+5, self.pos.y+5, 0, 20)
         #self.pasekdododania = pygame.Rect(self.pos.x+5, self.pos.y+5, 0, 20)
-
+        self.manaDoDodania=0.0
     def wys(self):
         pygame.draw.rect(self.main.screen,(0,0,0),self.krawedzie)
         pygame.draw.rect(self.main.screen,self.GUI.colour, self.tlo)
-        if self.GUI.mana!=0:
-            pygame.draw.rect(self.main.screen, (0,0,255), self.pasek)
+
+        pygame.draw.rect(self.main.screen, (0,0,255), self.pasek)
         #pygame.draw.rect(self.main.screen,(255,255,255),self.pasekdododania)
-        self.DodawanieMany()
+        self.AnimacjaPaska()
 
+    def AnimacjaPaska(self):
+        self.speed = 2
+        self.speed = int(self.manaDoDodania/2)
+        if self.speed<0:
+            self.speed*=-1
+        if 0<=self.speed <2:
+            self.speed=2
+        if self.speed>7:
+            self.speed=7
 
-    def DodawanieMany(self):
-        self.speed =0.01
-        for i in range(2):
-            if self.GUI.manadoDodania >0 and self.GUI.mana<self.GUI.max_mana:
-                self.GUI.manadoDodania-=self.speed
-                self.GUI.mana+=self.speed
-            elif self.GUI.manadoDodania >0 and self.GUI.mana>self.GUI.max_mana:
-                self.GUI.manadoDodania=0
-            if self.GUI.manadoDodania <0 and self.GUI.mana>0:
-                self.GUI.manadoDodania+=self.speed
-                self.GUI.mana-=self.speed
-            elif self.GUI.manadoDodania <0 and self.GUI.mana<0:
-                self.GUI.manadoDodania = 0
+        for i in range(self.speed):
+            if self.manaDoDodania>0:
+                self.manaDoDodania-=0.01
+                self.manaDoDodania=float(decimal.Decimal(str(self.manaDoDodania)).quantize(decimal.Decimal('0.00')))
+            elif self.manaDoDodania<0:
+                self.manaDoDodania += 0.01
+                self.manaDoDodania = float(decimal.Decimal(str(self.manaDoDodania)).quantize(decimal.Decimal('0.00')))
+        #print(self.manaDoDodania)
 
-            self.pasek = pygame.Rect(self.pos.x + 5, self.pos.y + 5, (self.GUI.mana/self.GUI.max_mana)*240, 20)
+        self.pasek = pygame.Rect(self.pos.x + 5, self.pos.y + 5, ((self.GUI.mana-self.manaDoDodania) / self.GUI.max_mana) * 240, 20)
+    def DodawajMane(self,ilosc):
+        self.GUI.mana+=ilosc
+
+        if self.GUI.mana>self.GUI.max_mana:
+            self.GUI.mana =self.GUI.max_mana
+        elif self.GUI.mana<0:
+            self.GUI.mana =0
+        else:
+            self.manaDoDodania += ilosc
+    def NaprawBladReprezantacyjny(self,pierwsza,druga):
+        return float(decimal.Decimal(str(pierwsza)).quantize(decimal.Decimal(str(druga))))
 
 
