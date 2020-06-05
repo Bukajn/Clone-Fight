@@ -22,5 +22,3 @@ class Scene(object):
                 self.main.Player.pos.y = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
                 self.main.create_maps.main_loop()
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
-                self.main.create_maps.OknoWyboru.Wczytaj(self.mapa)

@@ -25,8 +25,8 @@ class PasekMany(object):
             self.speed*=-1
         if 0<=self.speed <2:
             self.speed=2
-        if self.speed>7:
-            self.speed=7
+        if self.speed>10:
+            self.speed=10
 
         for i in range(self.speed):
             if self.manaDoDodania>0:

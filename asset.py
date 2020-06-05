@@ -15,8 +15,9 @@ imgPlayerLeft = resource_path("assets/playerLeft.png")
 imgPodloze = resource_path("assets/podłoga.png")
 imgLatajacaWyspa= resource_path("assets/latajaca_wyspa.png")
 imgManaCoin = resource_path("assets/mana.png")
+imgRekaRight=resource_path("assets/rekaRight.png")
 #sound
 soundJump = resource_path("assets/sound/jump.wav")
-
+zbieranieMana_coin = resource_path("assets/sound/zbieraniemany.wav")
 #font
 czcionkaRoboto = resource_path("assets/fonts/Roboto-Medium.ttf")

@@ -8,39 +8,47 @@ class Mana_coin(object):
         self.img = wlasciwosci[1]
         self.pos = pygame.Vector2(pos)
 
+        self.zbieraniesound=pygame.mixer.Sound(asset.zbieranieMana_coin)
+        self.zbieraniesound.set_volume(0.1)
         self.dlugosc = wlasciwosci[2]
         self.szerokosc = wlasciwosci[3]
 
         self.pozycjaYgorna = self.pos.y
         self.pozycjaYdolna = self.pos.y + self.dlugosc/2
         self.kierunek = 'dol'
-        self.speed =0.03
+        self.speed =0.25
         self.speedNaSkos=None
         self.wczesniejszystanKreatora=0
         self.podazajzamysza = False
 
         self.RuchDoPaska = False
+
+        self.delta=0.0
+        self.max_tps=60
+        self.clock=pygame.time.Clock()
     def __str__(self):
         return ("|"+str(self.numerElementu)+",("+str(self.pos.x)+";"+str(self.pos.y)+")"+"%")
     def wys(self):
+        for i in range(self.Zegar()):
+            self.main.screen.blit(self.img, self.pos)
+            if self.podazajzamysza:
+                self.pos = pygame.Vector2(pygame.mouse.get_pos())
+            if self.podazajzamysza and pygame.mouse.get_pressed()[0]:
+                self.pozycjaYgorna = self.pos.y
+                self.pozycjaYdolna = self.pos.y + self.dlugosc / 2
+                self.podazajzamysza=False
+
+            if self.main.CzyKreatorOtworzony==False:
+
+                self.ruch()
+                self.wczesniejszystanKreatora = self.main.CzyKreatorOtworzony
+            elif self.wczesniejszystanKreatora == False:
+                self.wczesniejszystanKreatora=True
+                self.pos.y = self.pozycjaYgorna
+            self.SprawdzanieKolizy()
+            if self.RuchDoPaska:
+                self.pojscieNaskos(pygame.Vector2(504,548))
         self.main.screen.blit(self.img, self.pos)
-        if self.podazajzamysza:
-            self.pos = pygame.Vector2(pygame.mouse.get_pos())
-        if self.podazajzamysza and pygame.mouse.get_pressed()[0]:
-            self.pozycjaYgorna = self.pos.y
-            self.pozycjaYdolna = self.pos.y + self.dlugosc / 2
-            self.podazajzamysza=False
-
-        if self.main.CzyKreatorOtworzony==False:
-
-            self.ruch()
-            self.wczesniejszystanKreatora = self.main.CzyKreatorOtworzony
-        elif self.wczesniejszystanKreatora == False:
-            self.wczesniejszystanKreatora=True
-            self.pos.y = self.pozycjaYgorna
-        self.SprawdzanieKolizy()
-        if self.RuchDoPaska:
-            self.pojscieNaskos(pygame.Vector2(504,548))
     def checkIsItToWys(self):
         if self.pos.x > -1000 and self.pos.x < 2000:
             return True
@@ -84,20 +92,20 @@ class Mana_coin(object):
 
     def SprawdzanieKolizy(self):
         if self.main.IsCollision(pygame.Vector2(self.pos.x+self.dlugosc,self.pos.y+self.dlugosc),pygame.Vector2(self.main.Player.pos.x+self.main.Player.szerokosc,self.main.Player.pos.y+self.main.Player.szerokosc),80):
+            self.zbieraniesound.play()
             self.RuchDoPaska=True
+
 
     def pojscieNaskos(self,pos):
         if self.speedNaSkos==None:
-            self.speedNaSkos = 1
+            self.speedNaSkos =10
             odlegloscX = pos.x - self.pos.x
             odlegloscY = pos.y - self.pos.y
             odlegloscX = math.fabs(odlegloscX)
             odlegloscY = math.fabs(odlegloscY)
             if odlegloscX>odlegloscY:
-                print("b")
                 self.speedX = self.speedNaSkos
                 self.speedY = odlegloscY/(odlegloscX/self.speedX)
-
             else:
 
                 self.speedY=self.speedNaSkos
@@ -107,14 +115,24 @@ class Mana_coin(object):
                 self.speedX*=-1
             if pos.y - self.pos.y<0:
                 self.speedY *= -1
-        if pos.x-1<self.pos.x<pos.x+1 and pos.y-1<self.pos.y<pos.y+1:
+        if pos.x-1<self.pos.x<pos.x+1 and pos.y-1<self.pos.y<pos.y+1 or self.pos.y>pos.y:
             self.speedNaSkos=0
             if self in self.main.Teren.pods:
                 self.main.Teren.pods.remove(self)
                 self.main.GUI.pasekMany.DodawajMane(10)
         else:
+            if self.szerokosc > 20:
+                self.img = pygame.transform.rotozoom(self.img, 0, 0.9)
+                self.szerokosc *= 0.9
             self.pos.x+=self.speedX
             self.pos.y+=self.speedY
     def Zmienpolozenie(self,x):
         if self.RuchDoPaska==False:
             self.pos.x+=x
+    def Zegar(self):
+        self.delta+=self.clock.tick()/1000.0
+        i=0
+        while self.delta>1/self.max_tps:
+            i+=1
+            self.delta-=1/self.max_tps
+        return i

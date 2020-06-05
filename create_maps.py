@@ -56,6 +56,8 @@ class Create_maps(object):
                 self.main.GUI.pasekMany.DodawajMane(-100)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_KP_PLUS:
                 self.main.GUI.pasekMany.DodawajMane(100)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
+                self.OknoWyboru.Wczytaj(self.main.scena.mapa)
         if pygame.mouse.get_pressed()[2]:
             self.otwarteOknoWyboru=True
     def Poruszanie(self):

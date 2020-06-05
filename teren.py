@@ -85,13 +85,13 @@ class Teren(object):
             if self.Left == 0:
                 self.Ruch(self.speed)
 
-                self.main.Player.ZmianaTex(asset.imgPlayerLeft)
+                self.main.Player.ZmianaWLewo()
         if self.keys[pygame.K_d]:
 
             if self.Right == 0:
                 self.Ruch(-(self.speed))
 
-                self.main.Player.ZmianaTex(asset.imgPlayerRight)
+                self.main.Player.ZmianaWprawo()
     def Ruch(self,speed):
         for i in self.pods:  # ruch
             i.Zmienpolozenie(speed)
