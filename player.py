@@ -9,16 +9,20 @@ class Player(object):
         self.main = main
 
         self.RightReka = pygame.image.load(asset.imgRekaRight)
+        self.LeftReka = pygame.image.load(asset.imgRekaLeft)
         self.imgRight=pygame.image.load(asset.imgPlayerRight)
         self.imgLeft=pygame.image.load(asset.imgPlayerLeft)
+
 
         self.img = pygame.image.load(asset.imgPlayerRight)
         self.imgReka = self.RightReka
         self.jumpSound = mixer.Sound(asset.soundJump)
         self.szerokosc=64
-        #self.ZmianaWielkosci(1.5)
+
+
         #self.img = pygame.transform.rotate(self.img,45)
         self.pos = pygame.Vector2(336,0)#336
+        self.posReka = self.pos
         self.state = 1 # 0=na ziemie 1=podczas spadania 2=podczas skoku
         self.speed = pygame.Vector2(0,0)
         self.speedGravitation=0.1
@@ -31,14 +35,23 @@ class Player(object):
         self.delta=0.0
         self.max_tps=self.main.max_tps
 
-        self.OdlegloscRekiOdRoguPrawo = pygame.Vector2(-39,-30)#do zmiany wielkosci
-        self.PunktZaczepieniaRekiPrawo=pygame.Vector2(self.pos.x+(-self.OdlegloscRekiOdRoguPrawo.x),self.pos.y+(-self.OdlegloscRekiOdRoguPrawo.y))
+        self.OdlegloscRekiOdRoguPrawo = pygame.Vector2(37,31)
+
+        self.OdlegloscRekiOdRoguLewo = pygame.Vector2(-27, -30)
+
         self.Rotate=0
+        self.ZmianaWielkosci(1.5)
+
+        self.wczesniejszyKlik = pygame.mouse.get_pressed()
     def wys(self):
         #print(pygame.mouse.get_pos())
         for i in range(self.Zegar()):
+
             self.Physik()
             self.Ruch()
+
+
+
         self.Ruch()
     def Ruch(self):
         if self.ruch=="prawo":
@@ -46,26 +59,33 @@ class Player(object):
         elif self.ruch =="lewo":
             self.RuchWlewo()
     def RuchwPrawo(self):
-        self.PunktZaczepieniaRekiPrawo = pygame.Vector2(self.pos.x + (-self.OdlegloscRekiOdRoguPrawo.x),self.pos.y + (-self.OdlegloscRekiOdRoguPrawo.y))
-        self.copy = pygame.transform.rotate(self.imgReka,self.Rotate)
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        rel_x, rel_y = mouse_x - self.pos.x, mouse_y - self.pos.y
+        self.Rotate = ((180 / math.pi) * math.atan2(rel_y, rel_x))-40
+        self.PunktZaczepieniaRekiPrawo = pygame.Vector2(self.pos.x + (self.OdlegloscRekiOdRoguPrawo.x),self.pos.y + (self.OdlegloscRekiOdRoguPrawo.y))
         self.main.screen.blit(self.img, self.pos)
-        a=(self.ObrotPunktu(self.PunktZaczepieniaRekiPrawo,pygame.Vector2(self.pos.x,self.pos.y),self.Rotate))
-        #print(a)
-        self.main.screen.blit(self.copy,a)
-    def RuchWlewo(self):
-        self.main.screen.blit(self.img, self.pos)
-    def ObrotPunktu(self,punktzaczepienia, punktdoobrotu, promien):
-        #print(punktzaczepienia)
+        rotate_reka, rect = self.ObrotPunktu(self.imgReka,self.Rotate,self.PunktZaczepieniaRekiPrawo,pygame.math.Vector2(-6,4))
+        self.main.screen.blit(rotate_reka,rect)
+        if pygame.mouse.get_pressed()[0]:
+            self.Strzał()
 
-        punktdoobrotu.x -=punktzaczepienia.x
-        punktdoobrotu.y-=punktzaczepienia.y
-        #print(punktdoobrotu)
-        promien = math.radians(promien)
-        punktkoncowyX = ((punktdoobrotu.x*math.cos(promien))-(punktdoobrotu.y*math.sin(promien)))+punktzaczepienia.x
-        punktkoncowyY= ((punktdoobrotu.x*math.sin(promien))+(punktdoobrotu.y*math.cos(promien)))+punktzaczepienia.y
-        print(punktkoncowyX)
-        #print(pygame.Vector2(punktkoncowyX,punktkoncowyY))
-        return pygame.Vector2(punktkoncowyX,punktkoncowyY)
+    def RuchWlewo(self):
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        rel_x, rel_y = mouse_x - self.pos.x, mouse_y - self.pos.y
+        self.Rotate = ((180 / math.pi) * math.atan2(rel_y, rel_x))+220
+        self.PunktZaczepieniaRekiLewo = pygame.Vector2(self.pos.x + (-self.OdlegloscRekiOdRoguLewo.x),self.pos.y + (-self.OdlegloscRekiOdRoguLewo.y))
+        self.main.screen.blit(self.img, self.pos)
+        rotate_reka, rect = self.ObrotPunktu(self.imgReka, self.Rotate, self.PunktZaczepieniaRekiLewo,pygame.math.Vector2(6, 4))
+        self.main.screen.blit(rotate_reka, rect)
+    def Strzał(self):
+        pass
+    def ObrotPunktu(self,image, promien, pivot, przesuniecie):
+
+        rotate_img = pygame.transform.rotozoom(image, -promien, 1)  # Rotate the image.
+        rotated_offset = przesuniecie.rotate(promien)  # Rotate the offset vector.
+
+        rect = rotate_img.get_rect(center=pivot+rotated_offset)
+        return rotate_img,rect
     def Physik(self):
 
         height=self.main.Teren.ColisionWithFloar() #przyjęcie wysokości podłożą
@@ -118,9 +138,15 @@ class Player(object):
         self.imgRight = pygame.transform.rotozoom(self.imgRight, 0, mnoznik)
         self.imgLeft = pygame.transform.rotozoom(self.imgLeft, 0, mnoznik)
         self.RightReka= pygame.transform.rotozoom(self.RightReka, 0, mnoznik)
+        self.LeftReka=pygame.transform.rotozoom(self.LeftReka, 0, mnoznik)
 
         self.img =pygame.transform.rotozoom(self.img,0,mnoznik)
         self.imgReka = pygame.transform.rotozoom(self.imgReka, 0, mnoznik)
+
+        self.OdlegloscRekiOdRoguPrawo.x*=mnoznik
+        self.OdlegloscRekiOdRoguPrawo.y *= mnoznik
+        self.OdlegloscRekiOdRoguLewo.x *= mnoznik
+        self.OdlegloscRekiOdRoguLewo.y *= mnoznik
         self.szerokosc*=mnoznik
     def ZmianaWprawo(self):
         self.ruch = "prawo"
@@ -129,6 +155,7 @@ class Player(object):
     def ZmianaWLewo(self):
         self.ruch = "lewo"
         self.img = self.imgLeft
+        self.imgReka=self.LeftReka
     def Zegar(self):
         self.delta+=self.clock.tick()/1000.0
         i=0
