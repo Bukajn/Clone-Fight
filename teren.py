@@ -3,6 +3,7 @@ from podloze import Podloze
 from wyspa import Wyspa
 from mana_coin import Mana_coin
 import asset
+
 class Teren(object):
     def __init__(self,main):
         self.main = main
@@ -38,15 +39,15 @@ class Teren(object):
             self.Sterowanie()
             for i in self.towys:
                 i.wys()
-            self.ColisionWithFloar()
+            #self.ColisionWithFloar()
         for i in self.towys:
             i.wys()
-        self.ColisionWithFloar()
-    def ColisionWithFloar(self):
+        #self.ColisionWithFloar()
+    def ColisionWithFloar(self,pozycjaObiektu,szerokoscObiektu):
         a=[]
         for i in self.towys:
             try:
-                x = i.IsColision(self.main.Player.pos)
+                x = i.IsColision(pozycjaObiektu,szerokoscObiektu)
             except AttributeError:
                 x=None
             if x != None:
@@ -56,11 +57,11 @@ class Teren(object):
             return min(a)
         else:
             return 900
-    def CollisionWithUnderFloar(self):
+    def CollisionWithUnderFloar(self,pozycjaObiektu,szerokoscObiektu):
         a = []
         for i in self.towys:
             try:
-                x = i.IsCollisionUnder(self.main.Player.pos)
+                x = i.IsCollisionUnder(pozycjaObiektu,szerokoscObiektu)
             except AttributeError:
                 x=None
             if x != None:
@@ -75,9 +76,9 @@ class Teren(object):
         self.Left = 0
         self.Right = 0
 
-        if self.BlokadaRuchuLewo():
+        if self.CollisionNextTo("right",self.main.Player.szerokosc,self.main.Player.pos,self):
             self.Left=1
-        if self.BlokadaRuchuPrawo():
+        if self.CollisionNextTo("left",self.main.Player.szerokosc,self.main.Player.pos,self):
             self.Right=1
 
         if self.keys[pygame.K_a]:
@@ -95,22 +96,13 @@ class Teren(object):
     def Ruch(self,speed):
         for i in self.pods:  # ruch
             i.Zmienpolozenie(speed)
-
-    def BlokadaRuchuLewo(self):
+    def CollisionNextTo(self,side,szerokosc,pos,obiektwywołujący):
         for i in self.towys:
             try:
-                if i.IsCollisionNext("right"):
+                if i.IsCollisionNext(side,szerokosc,pos,obiektwywołujący):
                     return True
             except AttributeError:
                 pass
-    def BlokadaRuchuPrawo(self):
-        for i in self.towys:
-            try:
-                if i.IsCollisionNext("left"):
-                    return True
-            except AttributeError:
-              pass
-
     def Zegar(self):
         self.delta+=self.clock.tick()/1000.0
         i=0

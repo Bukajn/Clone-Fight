@@ -20,35 +20,41 @@ class Podloze():
     def checkIsItToWys(self):
         if self.pos.x > -1000 and self.pos.x < 2000:
             return True
-    def IsColision(self,pos):#kolizcja dla powierzchni
-        if self.pos.x-self.main.Player.szerokosc < pos.x <self.pos.x+self.d-15 and self.pos.y>=pos.y+self.main.Player.szerokosc:
-            return self.pos.y-self.main.Player.szerokosc
-    def IsCollisionUnder(self,pos):
+    def IsColision(self,pos,szerokosc=0):#kolizcja dla powierzchni
+        if self.pos.x-szerokosc < pos.x <self.pos.x+self.d-15 and self.pos.y>=pos.y+szerokosc:
+            return self.pos.y-szerokosc
+    def IsCollisionUnder(self,pos,szerokosc=0):
 
-        if self.pos.x-self.main.Player.szerokosc < pos.x <self.pos.x+self.d-15 and self.pos.y+self.szerokosc<pos.y:
+        if self.pos.x-szerokosc < pos.x <self.pos.x+self.d-15 and self.pos.y+self.szerokosc<pos.y:
             #print(self.pos.y+self.szerokosc)
             return self.pos.y+self.szerokosc
-    def IsCollisionNext(self,side):#kolizja dla scianki
-        for i in range(int((self.pos.y+self.szerokosc) - (self.pos.y - (self.main.Player.szerokosc-2)))):
+    def IsCollisionNext(self,side,szerokosc,pos,obiektwywołujący):#kolizja dla scianki
+        for i in range(int((self.pos.y+self.szerokosc) - (self.pos.y - (szerokosc-2)))):
             if side == "right":
-                if self.main.Player.pos.y<=self.pos.y+i+0.5-(self.main.Player.szerokosc-2) and self.main.Player.pos.y>=self.pos.y+i-0.5-(self.main.Player.szerokosc-2):
+                if pos.y<=self.pos.y+i+0.5-(szerokosc-2) and pos.y>=self.pos.y+i-0.5-(szerokosc-2):
                     a=self.pos.x+self.d
-                    if 0 > self.main.Player.pos.x + 14 - a > -20:
+                    if 0 > pos.x + 14 - a > -20:
                         y = (0.5 - (self.main.Player.pos.x + 14 - a))
                         a -= y
-                        self.main.Teren.Ruch(-y)
-                    if 0 < self.main.Player.pos.x - a + 14 < 1:  # sprawdzenie czy zachodzi kolizja
+                        try:
+                            obiektwywołujący.Ruch(-y)
+                        except:
+                            pass
+                    if 0 < pos.x - a + 14 < 10:  # sprawdzenie czy zachodzi kolizja
                         return True
 
 
             elif side == "left":
-                if self.main.Player.pos.y<=self.pos.y+i+0.5-(self.main.Player.szerokosc-2) and self.main.Player.pos.y>=self.pos.y+i-0.5-(self.main.Player.szerokosc-2):
+                if pos.y<=self.pos.y+i+0.5-(szerokosc-2) and pos.y>=self.pos.y+i-0.5-(szerokosc-2):
                     a=self.pos.x
-                    if 0 > a - (self.main.Player.pos.x + self.main.Player.szerokosc - 14) > -20:
-                        y = (0.5 - (a - (self.main.Player.pos.x + self.main.Player.szerokosc - 14)))
+                    if 0 > a - (pos.x + szerokosc - 14) > -20:
+                        y = (0.5 - (a - (pos.x + szerokosc - 14)))
                         a += y
-                        self.main.Teren.Ruch(y)
-                    if 0 < a - (self.main.Player.pos.x + self.main.Player.szerokosc - 14) < 1:  # sprawdzenie czy zachodzi kolizja
+                        try:
+                            obiektwywołujący.Ruch(y)
+                        except:
+                            pass
+                    if 0 < a - (pos.x + szerokosc-14) < 10:  # sprawdzenie czy zachodzi kolizja
                         return True
     def CzyKlikniety(self):
         mousePos = pygame.mouse.get_pos()

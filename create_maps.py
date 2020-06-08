@@ -68,9 +68,12 @@ class Create_maps(object):
         if pygame.mouse.get_pressed()[0]:
             self.obiektyKlikniete = []
             for i in self.main.Teren.towys:
-                if i.CzyKlikniety() != None:
-                    self.obiekt = i.CzyKlikniety()
-                    self.obiektyKlikniete.append(self.obiekt)
+                try:
+                    if i.CzyKlikniety() != None:
+                        self.obiekt = i.CzyKlikniety()
+                        self.obiektyKlikniete.append(self.obiekt)
+                except:
+                    pass
         if self.obiektyKlikniete == []:
             self.obiekt = None
 

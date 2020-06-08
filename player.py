@@ -1,7 +1,7 @@
 import pygame,math
 from pygame import mixer
 import  asset
-
+from Strzała import Strzała
 
 
 class Player(object):
@@ -11,12 +11,15 @@ class Player(object):
         self.RightReka = pygame.image.load(asset.imgRekaRight)
         self.LeftReka = pygame.image.load(asset.imgRekaLeft)
         self.imgRight=pygame.image.load(asset.imgPlayerRight)
+
         self.imgLeft=pygame.image.load(asset.imgPlayerLeft)
 
 
         self.img = pygame.image.load(asset.imgPlayerRight)
         self.imgReka = self.RightReka
         self.jumpSound = mixer.Sound(asset.soundJump)
+        self.shootsound=mixer.Sound(asset.soundShoot)
+        self.shootsound.set_volume(0.1)
         self.szerokosc=64
 
 
@@ -46,12 +49,12 @@ class Player(object):
     def wys(self):
         #print(pygame.mouse.get_pos())
         for i in range(self.Zegar()):
-
             self.Physik()
             self.Ruch()
-
-
-
+            if pygame.mouse.get_pressed()[0] and self.wczesniejszyKlik[0]!= pygame.mouse.get_pressed()[0]:
+                self.Strzał()
+                self.shootsound.play()
+            self.wczesniejszyKlik = pygame.mouse.get_pressed()
         self.Ruch()
     def Ruch(self):
         if self.ruch=="prawo":
@@ -66,8 +69,7 @@ class Player(object):
         self.main.screen.blit(self.img, self.pos)
         rotate_reka, rect = self.ObrotPunktu(self.imgReka,self.Rotate,self.PunktZaczepieniaRekiPrawo,pygame.math.Vector2(-6,4))
         self.main.screen.blit(rotate_reka,rect)
-        if pygame.mouse.get_pressed()[0]:
-            self.Strzał()
+
 
     def RuchWlewo(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -78,7 +80,8 @@ class Player(object):
         rotate_reka, rect = self.ObrotPunktu(self.imgReka, self.Rotate, self.PunktZaczepieniaRekiLewo,pygame.math.Vector2(6, 4))
         self.main.screen.blit(rotate_reka, rect)
     def Strzał(self):
-        pass
+        self.main.Teren.pods.append(Strzała(self.main,(self.pos.x+self.szerokosc/2,self.pos.y+self.szerokosc/2),pygame.mouse.get_pos()))
+        #(self.pos.x+self.szerokosc/2,self.pos.y+self.szerokosc/2-8)
     def ObrotPunktu(self,image, promien, pivot, przesuniecie):
 
         rotate_img = pygame.transform.rotozoom(image, -promien, 1)  # Rotate the image.
@@ -88,8 +91,8 @@ class Player(object):
         return rotate_img,rect
     def Physik(self):
 
-        height=self.main.Teren.ColisionWithFloar() #przyjęcie wysokości podłożą
-        heightSufit=self.main.Teren.CollisionWithUnderFloar()#przyjęcie wysokości sufitu
+        height=self.main.Teren.ColisionWithFloar(self.pos,self.szerokosc) #przyjęcie wysokości podłożą
+        heightSufit=self.main.Teren.CollisionWithUnderFloar(self.pos,self.szerokosc)#przyjęcie wysokości sufitu
 
         self.grawitacja(height,heightSufit)
 
