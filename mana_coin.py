@@ -50,7 +50,7 @@ class Mana_coin(object):
                 self.pojscieNaskos(pygame.Vector2(504,548))
         self.main.screen.blit(self.img, self.pos)
     def checkIsItToWys(self):
-        if self.pos.x > -1000 and self.pos.x < 2000:
+        if self.pos.x > -1000 and self.pos.x < 800:
             return True
     def CzyKlikniety(self):
         mousePos = pygame.mouse.get_pos()

@@ -45,16 +45,23 @@ class Player(object):
         self.Rotate=0
         self.ZmianaWielkosci(1.5)
 
-        self.wczesniejszyKlik = pygame.mouse.get_pressed()
+        #cooldown
+        self.cooldownZegar = pygame.time.Clock()
+        self.cooldown = 0.1
+        self.czasUplyniety=self.cooldown
     def wys(self):
         #print(pygame.mouse.get_pos())
         for i in range(self.Zegar()):
             self.Physik()
             self.Ruch()
-            if pygame.mouse.get_pressed()[0] and self.wczesniejszyKlik[0]!= pygame.mouse.get_pressed()[0]:
-                self.Strzał()
-                self.shootsound.play()
-            self.wczesniejszyKlik = pygame.mouse.get_pressed()
+            if self.czasUplyniety < self.cooldown:
+                self.czasUplyniety+= self.cooldownZegar.tick()/1000
+            else:
+                self.cooldownZegar.tick()
+                if pygame.mouse.get_pressed()[0]:
+                    self.czasUplyniety = 0
+                    self.Strzał()
+                    self.shootsound.play()
         self.Ruch()
     def Ruch(self):
         if self.ruch=="prawo":

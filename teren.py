@@ -36,6 +36,7 @@ class Teren(object):
             for i in self.pods:
                 if i.checkIsItToWys():
                     self.towys.append(i)
+
             self.Sterowanie()
             for i in self.towys:
                 i.wys()
@@ -43,6 +44,7 @@ class Teren(object):
         for i in self.towys:
             i.wys()
         #self.ColisionWithFloar()
+
     def ColisionWithFloar(self,pozycjaObiektu,szerokoscObiektu):
         a=[]
         for i in self.towys:

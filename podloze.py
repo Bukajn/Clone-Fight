@@ -18,7 +18,7 @@ class Podloze():
         if self.podazajzamysza and pygame.mouse.get_pressed()[0]:
             self.podazajzamysza=False
     def checkIsItToWys(self):
-        if self.pos.x > -1000 and self.pos.x < 2000:
+        if self.pos.x > -1000 and self.pos.x < 800:
             return True
     def IsColision(self,pos,szerokosc=0):#kolizcja dla powierzchni
         if self.pos.x-szerokosc < pos.x <self.pos.x+self.d-15 and self.pos.y>=pos.y+szerokosc:
@@ -40,7 +40,7 @@ class Podloze():
                             obiektwywołujący.Ruch(-y)
                         except:
                             pass
-                    if 0 < pos.x - a + 14 < 10:  # sprawdzenie czy zachodzi kolizja
+                    if 0 < pos.x - a + 14 < 20:  # sprawdzenie czy zachodzi kolizja
                         return True
 
 
@@ -54,7 +54,7 @@ class Podloze():
                             obiektwywołujący.Ruch(y)
                         except:
                             pass
-                    if 0 < a - (pos.x + szerokosc-14) < 10:  # sprawdzenie czy zachodzi kolizja
+                    if 0 < a - (pos.x + szerokosc-14) < 20:  # sprawdzenie czy zachodzi kolizja
                         return True
     def CzyKlikniety(self):
         mousePos = pygame.mouse.get_pos()
