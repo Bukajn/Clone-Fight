@@ -8,6 +8,8 @@ class Mana_coin(object):
         self.img = wlasciwosci[1]
         self.pos = pygame.Vector2(pos)
 
+        self.iloscdodawanejMany=10
+
         self.zbieraniesound=pygame.mixer.Sound(asset.zbieranieMana_coin)
         self.zbieraniesound.set_volume(0.1)
         self.dlugosc = wlasciwosci[2]
@@ -119,7 +121,7 @@ class Mana_coin(object):
             self.speedNaSkos=0
             if self in self.main.Teren.pods:
                 self.main.Teren.pods.remove(self)
-                self.main.GUI.pasekMany.DodawajMane(10)
+                self.main.GUI.pasekMany.DodawajMane(self.iloscdodawanejMany)
         else:
             if self.szerokosc > 20:
                 self.img = pygame.transform.rotozoom(self.img, 0, 0.9)

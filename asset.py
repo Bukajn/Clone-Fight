@@ -18,6 +18,10 @@ imgManaCoin = resource_path("assets/mana.png")
 imgRekaRight=resource_path("assets/rekaRight.png")
 imgRekaLeft=resource_path("assets/RekaLeft.png")
 imgStrzala=resource_path("assets/strzal.png")
+imgStrzalaWrog=resource_path("assets/strzalWrog.png")
+
+imgWrogPrawo=resource_path("assets/wrogRight.png")
+imgWrogRekaRight = resource_path("assets/rekaWrogRight.png")
 #sound
 soundJump = resource_path("assets/sound/jump.wav")
 zbieranieMana_coin = resource_path("assets/sound/zbieraniemany.wav")

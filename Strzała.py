@@ -2,12 +2,12 @@ import pygame
 import asset
 import math
 class Strzała(object):
-    def __init__(self,main,pos,kierunek):
+    def __init__(self,main,pos,kierunek,img,cel):
         self.main = main
         self.pos = pygame.Vector2(pos)
         self.pozadanaPozycja = self.pos
         self.kierunek = pygame.Vector2(kierunek)
-        self.img = pygame.image.load(asset.imgStrzala)
+        self.img = img
         self.szerokosc=15
         self.speed=None
         self.speedY=0
@@ -17,6 +17,7 @@ class Strzała(object):
         self.delta=0.0
         self.max_tps=60
         self.widoczny =True
+        self.cel =cel
     def wys(self):
 
         for i in range(self.Zegar()):
@@ -39,6 +40,17 @@ class Strzała(object):
         elif self.main.Teren.CollisionNextTo("left",self.szerokosc,self.pos,self) or self.main.Teren.CollisionNextTo("right",self.szerokosc,self.pos,self):
             self.speedX*=-1
             self.iloscOdbic += 1
+        if self.cel=="player":
+            self.KolizjaZgraczem()
+        elif self.cel=="enemy":
+            self.KolizjaZwrogiem()
+    def KolizjaZgraczem(self):
+        if self.main.IsCollision(pygame.Vector2(self.pos.x+self.szerokosc/2,self.pos.y+self.szerokosc/2),pygame.Vector2(self.main.Player.pos.x+self.main.Player.szerokosc/2,self.main.Player.pos.y+self.main.Player.szerokosc/2),40):
+            self.Usun()
+    def KolizjaZwrogiem(self):
+        for i in self.main.Teren.enemy:
+            if self.main.IsCollision(pygame.Vector2(self.pos.x+self.szerokosc/2,self.pos.y+self.szerokosc/2),pygame.Vector2(i.pos.x+i.szerokosc/2,i.pos.y+i.szerokosc/2),40):
+                self.Usun()
     def Zmienpolozenie(self,x):
         self.pozadanaPozycja.x+=x
     def checkIsItToWys(self):
