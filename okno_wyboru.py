@@ -22,6 +22,7 @@ class OknoWyboru(object):
         self.PrzyciskWczytaj.Wys()
         self.WyswietlElemnty()
         self.CzyKlikniety()
+
     def CzyKlikniety(self):
         mousePos = pygame.mouse.get_pos()
         if pygame.mouse.get_pressed()[0]:

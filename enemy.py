@@ -1,4 +1,4 @@
-import pygame, random
+import pygame, random, decimal
 import asset
 from Postac import Postac
 class Enemy(Postac):
@@ -18,11 +18,22 @@ class Enemy(Postac):
         self.cooldown=1
         self.celStrzalu = "player"
         self.punktkierunkowyStrzlu=pygame.Vector2(self.main.Player.pos.x+self.main.Player.szerokosc/2,self.main.Player.pos.y+self.main.Player.szerokosc/2)
+        self.PasekZdrowia = pygame.Rect(self.pos.x,self.pos.y,self.szerokosc,5)
+        self.max_hp=30
+        self.hp=self.max_hp
+        self.hpdododania=0
+        self.shootsound = pygame.mixer.Sound(asset.soundWrogStrzal)
+        self.shootsound.set_volume(0.1)
     def __str__(self):
         return ("|" + str(self.numerElementu) + ",(" + str(self.pos.x) + ";" + str(self.pos.y) + ")" + "%")
     def wys(self):
         if self.main.CzyKreatorOtworzony==False:
             super().wys()
+            self.AnimacjaPaska()
+            if self.hp - self.hpdododania>0:
+                pygame.draw.rect(self.main.screen,(0,255,0),self.PasekZdrowia)
+            else:
+                self.Smierc()
             if self.state==0:
                 #self.skocz=True
                 self.strzel=True
@@ -36,7 +47,8 @@ class Enemy(Postac):
                 self.pos=pygame.Vector2(pygame.mouse.get_pos())
             if self.podazajzamysza and pygame.mouse.get_pressed()[0]:
                 self.podazajzamysza = False
-
+        if not self in self.main.Teren.pods and self in self.main.Teren.enemy:
+            self.main.Teren.enemy.remove(self)
     # funkcje do poprawnego wyświetlania
     def checkIsItToWys(self):
         if self.pos.x > -100 and self.pos.x < 800:
@@ -67,3 +79,39 @@ class Enemy(Postac):
             self.main.Teren.pods.remove(self)
             self.main.create_maps.obiekt = None
         self.wczesniejszystan = self.keys
+    def HPdoDodania(self,ilosc):
+        if self.hp+ilosc<self.max_hp:
+            self.hp+=ilosc
+            self.hpdododania +=ilosc
+        else:
+            self.hp = self.max_hp
+            self.hpdododania+=self.max_hp-self.hp
+    def AnimacjaPaska(self):
+        self.speedAnimacji = 2
+        self.speedAnimacji = int(self.hpdododania)
+        if self.speedAnimacji < 0:
+            self.speedAnimacji *= -1
+        if 0 <= self.speedAnimacji < 2:
+            self.speedAnimacji = 2
+        if self.speedAnimacji> 10:
+            self.speedAnimacji = 10
+
+        for i in range(self.speedAnimacji):
+            if self.hpdododania > 0:
+                self.hpdododania -= 0.01
+                self.hpdododania = float(decimal.Decimal(str(self.hpdododania)).quantize(decimal.Decimal('0.00')))
+            elif self.hpdododania < 0 and (self.hp - self.hpdododania)/self.max_hp>0:
+                self.hpdododania += 0.01
+                self.hpdododania = float(decimal.Decimal(str(self.hpdododania)).quantize(decimal.Decimal('0.00')))
+
+        self.PasekZdrowia = pygame.Rect(self.pos.x + 20, self.pos.y - 10, ((self.hp - self.hpdododania) / self.max_hp) * 56, 5)
+    def Smierc(self):
+        if self in self.main.Teren.pods and self in self.main.Teren.enemy:
+            losowa = random.randint(0, 1)
+            if losowa == 0:
+                self.main.Teren.UtworzElement(2,[self.main.Teren.elements[2],(self.pos.x+self.szerokosc/2,self.pos.y+self.szerokosc/2)])
+            else:
+                self.main.Teren.UtworzElement(4,[self.main.Teren.elements[4],(self.pos.x+self.szerokosc/2,self.pos.y+self.szerokosc/2)])
+
+            self.main.Teren.pods.remove(self)
+            self.main.Teren.enemy.remove(self)

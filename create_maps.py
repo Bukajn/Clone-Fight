@@ -2,6 +2,7 @@ import pygame
 from okno_wyboru import OknoWyboru
 import asset
 import sys
+from OknoZmianyWlasciwosci import Okno
 class Create_maps(object):
     def __init__(self,main):
         self.main=main
@@ -12,6 +13,7 @@ class Create_maps(object):
         self.obiekt=None
         self.CzyNapisyWlaczone=False
         self.OknoWyboru=OknoWyboru(self.main)
+        self.oknowlasciwosci=None
     def main_loop(self):
         self.main.CzyKreatorOtworzony = True
         self.running = True
@@ -30,8 +32,16 @@ class Create_maps(object):
                 self.OknoWyboru.wys()
             else:
                 self.Poruszanie()
+                self.oknowlasciwosciZarzadzanie()
             pygame.display.update()
+
         self.main.CzyKreatorOtworzony = False
+    def oknowlasciwosciZarzadzanie(self):
+        if self.oknowlasciwosci ==None and self.obiekt != None or self.oknowlasciwosci !=None and self.obiekt != None and self.oknowlasciwosci.obiekt != self.obiekt:
+            self.oknowlasciwosci = Okno(self.main,self.obiekt)
+        if self.oknowlasciwosci != None:
+            self.oknowlasciwosci.wys()
+
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -64,18 +74,18 @@ class Create_maps(object):
         if self.CzyNapisyWlaczone:
             for i in self.main.Teren.towys:
                 i.WysNapis((0, 0, 0))
-
-        if pygame.mouse.get_pressed()[0]:
-            self.obiektyKlikniete = []
-            for i in self.main.Teren.towys:
-                try:
-                    if i.CzyKlikniety() != None:
-                        self.obiekt = i.CzyKlikniety()
-                        self.obiektyKlikniete.append(self.obiekt)
-                except:
-                    pass
-        if self.obiektyKlikniete == []:
-            self.obiekt = None
+        if self.oknowlasciwosci!=None and self.oknowlasciwosci.Czynajechany()==False or self.oknowlasciwosci==None:
+            if pygame.mouse.get_pressed()[0]:
+                self.obiektyKlikniete = []
+                for i in self.main.Teren.towys:
+                    try:
+                        if i.CzyKlikniety() != None:
+                            self.obiekt = i.CzyKlikniety()
+                            self.obiektyKlikniete.append(self.obiekt)
+                    except:
+                        pass
+            if self.obiektyKlikniete == []:
+                self.obiekt = None
 
         if self.obiekt != None:
             self.obiekt.WysNapis((255, 0, 0))

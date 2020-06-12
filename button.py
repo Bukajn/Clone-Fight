@@ -12,11 +12,13 @@ class Przycisk(object):
         self.colour=colour
         self.przycisk = pygame.Rect(self.pos.x,self.pos.y,self.dlugosc,self.szerokosc)
         self.akcja=akcja
-        self.wczesniejczyklik=None
+        self.wczesniejczyklik=pygame.mouse.get_pressed()
     def Wys(self):
+        self.przycisk = pygame.Rect(self.pos.x, self.pos.y, self.dlugosc, self.szerokosc)
         pygame.draw.rect(self.main.screen,self.colour,self.przycisk)
         self.main.screen.blit(self.tekst,(self.pos.x,self.pos.y))
         self.Czyklikniety()
+
     def Czyklikniety(self):
         mousePos = pygame.mouse.get_pos()
         if pygame.mouse.get_pressed()[0] and pygame.mouse.get_pressed()[0] !=self.wczesniejczyklik[0]:

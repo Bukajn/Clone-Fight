@@ -3,12 +3,13 @@ from podloze import Podloze
 from wyspa import Wyspa
 from mana_coin import Mana_coin
 from enemy import  Enemy
+from apteczka import Apteczka
 import asset
 
 class Teren(object):
     def __init__(self,main):
         self.main = main
-        self.elements=[[self.main,pygame.image.load(asset.imgPodloze),800,102],[self.main,pygame.image.load(asset.imgLatajacaWyspa),102,32],[self.main,pygame.image.load(asset.imgManaCoin),32,32],[self.main,pygame.image.load(asset.imgWrogPrawo),64,64]]
+        self.elements=[[self.main,pygame.image.load(asset.imgPodloze),800,102],[self.main,pygame.image.load(asset.imgLatajacaWyspa),102,32],[self.main,pygame.image.load(asset.imgManaCoin),32,32],[self.main,pygame.image.load(asset.imgWrogPrawo),64,64],[self.main,pygame.image.load(asset.imgApteczka),32,32]]
 
 
         self.pods=[]
@@ -31,6 +32,8 @@ class Teren(object):
         elif numerElementu ==3:
             elementdododania=Enemy(zmienne[0],zmienne[1])
             self.enemy.append(elementdododania)
+        elif numerElementu ==4:
+            elementdododania=Apteczka(zmienne[0],zmienne[1])
         self.pods.append(elementdododania)
         if podazamyszka:
             elementdododania.podazajzamysza=True

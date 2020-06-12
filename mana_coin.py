@@ -28,6 +28,7 @@ class Mana_coin(object):
         self.delta=0.0
         self.max_tps=60
         self.clock=pygame.time.Clock()
+        self.miejscedocelowe=pygame.Vector2(504,548)
     def __str__(self):
         return ("|"+str(self.numerElementu)+",("+str(self.pos.x)+";"+str(self.pos.y)+")"+"%")
     def wys(self):
@@ -49,7 +50,7 @@ class Mana_coin(object):
                 self.pos.y = self.pozycjaYgorna
             self.SprawdzanieKolizy()
             if self.RuchDoPaska:
-                self.pojscieNaskos(pygame.Vector2(504,548))
+                self.pojscieNaskos(self.miejscedocelowe)
         self.main.screen.blit(self.img, self.pos)
     def checkIsItToWys(self):
         if self.pos.x > -1000 and self.pos.x < 800:
@@ -121,7 +122,7 @@ class Mana_coin(object):
             self.speedNaSkos=0
             if self in self.main.Teren.pods:
                 self.main.Teren.pods.remove(self)
-                self.main.GUI.pasekMany.DodawajMane(self.iloscdodawanejMany)
+                self.Dodaj()
         else:
             if self.szerokosc > 20:
                 self.img = pygame.transform.rotozoom(self.img, 0, 0.9)
@@ -131,6 +132,8 @@ class Mana_coin(object):
     def Zmienpolozenie(self,x):
         if self.RuchDoPaska==False:
             self.pos.x+=x
+    def Dodaj(self):
+        self.main.GUI.pasekMany.DodawajMane(self.iloscdodawanejMany)
     def Zegar(self):
         self.delta+=self.clock.tick()/1000.0
         i=0

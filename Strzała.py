@@ -46,10 +46,12 @@ class Strzała(object):
             self.KolizjaZwrogiem()
     def KolizjaZgraczem(self):
         if self.main.IsCollision(pygame.Vector2(self.pos.x+self.szerokosc/2,self.pos.y+self.szerokosc/2),pygame.Vector2(self.main.Player.pos.x+self.main.Player.szerokosc/2,self.main.Player.pos.y+self.main.Player.szerokosc/2),40):
+            self.main.Player.HPdoDodania(-10)
             self.Usun()
     def KolizjaZwrogiem(self):
         for i in self.main.Teren.enemy:
             if self.main.IsCollision(pygame.Vector2(self.pos.x+self.szerokosc/2,self.pos.y+self.szerokosc/2),pygame.Vector2(i.pos.x+i.szerokosc/2,i.pos.y+i.szerokosc/2),40):
+                i.HPdoDodania(-10)
                 self.Usun()
     def Zmienpolozenie(self,x):
         self.pozadanaPozycja.x+=x
