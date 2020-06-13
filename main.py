@@ -1,4 +1,4 @@
-import pygame, math
+import pygame, math, asset
 from scene_test import Scene_test
 from teren import Teren
 from player import Player
@@ -11,6 +11,7 @@ import pkg_resources.py2_warn
 class main(object):
     def __init__(self):
         pygame.init()
+
         self.set_window()
         self.max_tps = 60
         self.Teren = Teren(self)
@@ -20,7 +21,7 @@ class main(object):
         #self.scena =  Scene_test(self)
         self.create_maps = Create_maps(self)
         #self.create_maps.main_loop()
-        self.scena = Scene(self,maps.sekret)
+        self.scena = Scene(self,"sekret.obj")
         self.scena.main_loop()
     def set_window(self):
         self.screen = pygame.display.set_mode((800, 600))

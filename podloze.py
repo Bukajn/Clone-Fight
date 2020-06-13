@@ -1,16 +1,19 @@
 import pygame
 import asset
 class Podloze():
-    def __init__(self,wlasciwosci ,pos):
+    def __init__(self,wlasciwosci,pos):
         self.numerElementu = 0
+
         self.main=wlasciwosci[0]
         self.img=wlasciwosci[1]
         self.pos=pygame.Vector2(pos)
         self.d =wlasciwosci[2]
+
         self.szerokosc=wlasciwosci[3]
+
         self.podazajzamysza=False
-    def __str__(self):
-        return ("|"+str(self.numerElementu)+",("+str(self.pos.x)+";"+str(self.pos.y)+")"+"%")
+    #def __str__(self):
+        # return ("|"+str(self.numerElementu)+",("+str(self.pos.x)+";"+str(self.pos.y)+")"+"%")
     def wys(self):
         self.main.screen.blit(self.img, self.pos)
         if self.podazajzamysza:
@@ -34,7 +37,7 @@ class Podloze():
                 if pos.y<=self.pos.y+i+0.5-(szerokosc-2) and pos.y>=self.pos.y+i-0.5-(szerokosc-2):
                     a=self.pos.x+self.d
                     if 0 > pos.x + 14 - a > -20:
-                        y = (0.5 - (self.main.Player.pos.x + 14 - a))
+                        y = (0.5 - (pos.x + 14 - a))
                         a -= y
                         try:
                             obiektwywołujący.Ruch(-y)
@@ -82,5 +85,10 @@ class Podloze():
         self.wczesniejszystan = self.keys
     def Zmienpolozenie(self,x):
         self.pos.x+=x
-
+    def PrzygotujDoZapisu(self):
+        Zmiennedoprzechowania =[]
+        Zmiennedoprzechowania.append(self.img)
+        self.img=None
+        return Zmiennedoprzechowania
+    def Powcztaniu(self,listadop):
 

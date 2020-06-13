@@ -1,6 +1,7 @@
 import pygame
+import asset
 from button import Przycisk
-
+import pickle
 class OknoWyboru(object):
     def __init__(self,main):
         self.main = main
@@ -38,10 +39,17 @@ class OknoWyboru(object):
         for i in self.elementy:
             i.Wyswietl()
     def Zapisz(self):
-        zbiorElementow = []
+        nazwamapy = input("Podaj nazwe mapy(wpisz t do zapisu terazniejszej): ")
+        if nazwamapy == "t":
+            nazwamapy=self.main.scena.mapa
+        print(nazwamapy)
+        plikdoZapisu= open(nazwamapy,"wb")
         for i in self.main.Teren.pods:
-            zbiorElementow.append(str(i).replace("'",""))
-        print("Mapa: ", zbiorElementow)
+            i.main = str(i.main)
+            listaPrzechowania = i.PrzygotujDoZapisu()
+            pickle.dump(i,plikdoZapisu)
+            i.main = self.main
+        plikdoZapisu.close()
     def Wczytaj(self,mapa=""):
         if mapa == "":
             mapa = input("Wprowadź mapę(wpisz n by anulować):")
@@ -66,7 +74,7 @@ class ElementyDoWyboru(object):
         self.main = wlasciwosci[0]
         self.img=wlasciwosci[1]
         self.dlugosc = wlasciwosci[2]
-        self.szerokosc = wlasciwosci[3]
+        self.szerokosc = wlasciwosci[2]
         self.numerElementu=numerElementu
         self.dlugoscPola = 100
         self.szerokoscPola =100

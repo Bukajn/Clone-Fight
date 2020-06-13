@@ -5,7 +5,7 @@ class Mana_coin(object):
     def __init__(self,wlasciwosci,pos):
         self.numerElementu = 2
         self.main = wlasciwosci[0]
-        self.img = wlasciwosci[1]
+        self.img =wlasciwosci[1]
         self.pos = pygame.Vector2(pos)
 
         self.iloscdodawanejMany=10
@@ -33,12 +33,12 @@ class Mana_coin(object):
         return ("|"+str(self.numerElementu)+",("+str(self.pos.x)+";"+str(self.pos.y)+")"+"%")
     def wys(self):
         for i in range(self.Zegar()):
-            self.main.screen.blit(self.img, self.pos)
+            self.main.screen.blit(pygame.image.load(self.img), self.pos)
             if self.podazajzamysza:
                 self.pos = pygame.Vector2(pygame.mouse.get_pos())
             if self.podazajzamysza and pygame.mouse.get_pressed()[0]:
                 self.pozycjaYgorna = self.pos.y
-                self.pozycjaYdolna = self.pos.y + self.dlugosc / 2
+                self.pozycjaYdolna = self.pos.y + self.dlugoscd / 2
                 self.podazajzamysza=False
 
             if self.main.CzyKreatorOtworzony==False:
@@ -51,7 +51,7 @@ class Mana_coin(object):
             self.SprawdzanieKolizy()
             if self.RuchDoPaska:
                 self.pojscieNaskos(self.miejscedocelowe)
-        self.main.screen.blit(self.img, self.pos)
+        self.main.screen.blit(pygame.image.load(self.img), self.pos)
     def checkIsItToWys(self):
         if self.pos.x > -1000 and self.pos.x < 800:
             return True
@@ -91,14 +91,10 @@ class Mana_coin(object):
                 self.pos.y-=self.speed
             else:
                 self.kierunek ="dol"
-
-
     def SprawdzanieKolizy(self):
         if self.main.IsCollision(pygame.Vector2(self.pos.x+self.dlugosc,self.pos.y+self.dlugosc),pygame.Vector2(self.main.Player.pos.x+self.main.Player.szerokosc,self.main.Player.pos.y+self.main.Player.szerokosc),80):
             self.zbieraniesound.play()
             self.RuchDoPaska=True
-
-
     def pojscieNaskos(self,pos):
         if self.speedNaSkos==None:
             self.speedNaSkos =10
@@ -141,3 +137,5 @@ class Mana_coin(object):
             i+=1
             self.delta-=1/self.max_tps
         return i
+    def PrzygotujDoZapisu(self):
+        pass
