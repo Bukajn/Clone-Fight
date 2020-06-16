@@ -2,19 +2,24 @@ import pygame
 import asset
 import math
 class Mana_coin(object):
-    def __init__(self,wlasciwosci,pos):
+    def __init__(self,wlasciwosci,pos,mnoznik=1,iloscdodawanejMany=10):
         self.numerElementu = 2
         self.main = wlasciwosci[0]
-        self.img =wlasciwosci[1]
+        self.orginalImg = wlasciwosci[1]
+        self.mnoznik = mnoznik
+        self.img = pygame.image.load(wlasciwosci[1])
+        self.img=pygame.transform.rotozoom(self.img,0,self.mnoznik)
         self.pos = pygame.Vector2(pos)
 
-        self.iloscdodawanejMany=10
+        self.iloscdodawanejMany=iloscdodawanejMany
 
-        self.zbieraniesound=pygame.mixer.Sound(asset.zbieranieMana_coin)
-        self.zbieraniesound.set_volume(0.1)
+        self.orginalzbieraniesound = [asset.zbieranieMana_coin,0.1]
+        self.zbieraniesound=pygame.mixer.Sound(self.orginalzbieraniesound[0])
+        self.zbieraniesound.set_volume(self.orginalzbieraniesound[1])
+
         self.dlugosc = wlasciwosci[2]
         self.szerokosc = wlasciwosci[3]
-
+        self.orginalSzerokosc =self.szerokosc
         self.pozycjaYgorna = self.pos.y
         self.pozycjaYdolna = self.pos.y + self.dlugosc/2
         self.kierunek = 'dol'
@@ -29,16 +34,19 @@ class Mana_coin(object):
         self.max_tps=60
         self.clock=pygame.time.Clock()
         self.miejscedocelowe=pygame.Vector2(504,548)
+
+        self.wlasciwosciDozmiany = [["powiekszenie", "Rozmiar", self.mnoznik, 0.5],["powiekszenie", "Mana do dania", self.iloscdodawanejMany, 1]]
+
     def __str__(self):
         return ("|"+str(self.numerElementu)+",("+str(self.pos.x)+";"+str(self.pos.y)+")"+"%")
     def wys(self):
         for i in range(self.Zegar()):
-            self.main.screen.blit(pygame.image.load(self.img), self.pos)
+            self.main.screen.blit(self.img, self.pos)
             if self.podazajzamysza:
                 self.pos = pygame.Vector2(pygame.mouse.get_pos())
             if self.podazajzamysza and pygame.mouse.get_pressed()[0]:
                 self.pozycjaYgorna = self.pos.y
-                self.pozycjaYdolna = self.pos.y + self.dlugoscd / 2
+                self.pozycjaYdolna = self.pos.y + self.dlugosc / 2
                 self.podazajzamysza=False
 
             if self.main.CzyKreatorOtworzony==False:
@@ -51,9 +59,9 @@ class Mana_coin(object):
             self.SprawdzanieKolizy()
             if self.RuchDoPaska:
                 self.pojscieNaskos(self.miejscedocelowe)
-        self.main.screen.blit(pygame.image.load(self.img), self.pos)
+        self.main.screen.blit(self.img, self.pos)
     def checkIsItToWys(self):
-        if self.pos.x > -1000 and self.pos.x < 800:
+        if self.pos.x > 0-self.dlugosc and self.pos.x < 800:
             return True
     def CzyKlikniety(self):
         mousePos = pygame.mouse.get_pos()
@@ -92,7 +100,7 @@ class Mana_coin(object):
             else:
                 self.kierunek ="dol"
     def SprawdzanieKolizy(self):
-        if self.main.IsCollision(pygame.Vector2(self.pos.x+self.dlugosc,self.pos.y+self.dlugosc),pygame.Vector2(self.main.Player.pos.x+self.main.Player.szerokosc,self.main.Player.pos.y+self.main.Player.szerokosc),80):
+        if self.main.IsCollision(pygame.Vector2(self.pos.x+self.dlugosc,self.pos.y+self.dlugosc),pygame.Vector2(self.main.Player.pos.x+self.main.Player.szerokosc,self.main.Player.pos.y+self.main.Player.szerokosc),80*self.mnoznik):
             self.zbieraniesound.play()
             self.RuchDoPaska=True
     def pojscieNaskos(self,pos):
@@ -137,5 +145,30 @@ class Mana_coin(object):
             i+=1
             self.delta-=1/self.max_tps
         return i
+
     def PrzygotujDoZapisu(self):
-        pass
+
+        self.img = None
+        self.zbieraniesound=None
+        self.clock = None
+        # bez zapisu
+        self.font = None
+        self.napis = None
+
+
+    def PoWczytaniu(self):
+        self.img = pygame.image.load(self.orginalImg)
+        self.img=pygame.transform.rotozoom(self.img,0,self.mnoznik)
+        self.zbieraniesound =pygame.mixer.Sound(self.orginalzbieraniesound[0])
+        self.zbieraniesound.set_volume(self.orginalzbieraniesound[1])
+        self.clock = pygame.time.Clock()
+        self.__init__([self.main,self.orginalImg,self.szerokosc,self.dlugosc],self.pos,self.mnoznik,self.iloscdodawanejMany)
+    def PrzyjmijWlasciwosci(self, wlasciwosci):
+        self.mnoznik = wlasciwosci[0]
+        self.iloscdodawanejMany=wlasciwosci[1]
+        self.wlasciwosciDozmiany = [["powiekszenie", "Rozmiar", self.mnoznik, 0.5],["powiekszenie", "Mana do dania", self.iloscdodawanejMany, 1]]
+        self.ZmienWielkosc()
+
+    def ZmienWielkosc(self):
+        self.img = pygame.transform.rotozoom(pygame.image.load(self.orginalImg), 0, self.mnoznik)
+        self.szerokosc=self.orginalSzerokosc*self.mnoznik

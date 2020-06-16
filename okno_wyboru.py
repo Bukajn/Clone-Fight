@@ -43,15 +43,20 @@ class OknoWyboru(object):
         if nazwamapy == "t":
             nazwamapy=self.main.scena.mapa
         print(nazwamapy)
-        plikdoZapisu= open(nazwamapy,"wb")
+        plikdoZapisu= open("assets/maps/"+nazwamapy+".obj","wb")
+
         for i in self.main.Teren.pods:
+            #przygotowanie do zapisu
             i.main = str(i.main)
-            listaPrzechowania = i.PrzygotujDoZapisu()
+            i.PrzygotujDoZapisu()
+            #zapis
             pickle.dump(i,plikdoZapisu)
+            #Po zapisie
             i.main = self.main
+            i.PoWczytaniu()
         plikdoZapisu.close()
     def Wczytaj(self,mapa=""):
-        if mapa == "":
+        """if mapa == "":
             mapa = input("Wprowadź mapę(wpisz n by anulować):")
             if mapa == "n":
                 return
@@ -65,14 +70,37 @@ class OknoWyboru(object):
             ostatecznaMapa.append(zmienne)
         for i in range(len(ostatecznaMapa)):
             self.main.Teren.UtworzElement(ostatecznaMapa[i][0],(self.main.Teren.elements[ostatecznaMapa[i][0]],ostatecznaMapa[i][1]))
-        self.main.create_maps.otwarteOknoWyboru=False
+        self.main.create_maps.otwarteOknoWyboru=False"""
 
+        if mapa =="":
+            print("wczytywanie")
+            nazwamapy= input("Podaj nazwe mapy(wpisz t do wczytania terazniejszej): ")
+            if nazwamapy == "t":
+                nazwamapy=mapa
+        else:
+            nazwamapy = mapa
+        try:
+            plikdoOdczytu = open("assets/maps/" + nazwamapy + ".obj", "rb")
+        except FileNotFoundError:
+            print("nie znaleziono pilku")
+            return
+        self.main.Teren.pods = []
+        while True:
+            try:
+                obiektDoDodania = pickle.load(plikdoOdczytu)
+                obiektDoDodania.main = self.main
+                obiektDoDodania.PoWczytaniu()
+                self.main.Teren.pods.append(obiektDoDodania)
+            except EOFError:
+                plikdoOdczytu.close()
+                print("ZakonczenieWczytywania")
+                return
 
 
 class ElementyDoWyboru(object):
     def __init__(self,wlasciwosci,pos,numerElementu):
         self.main = wlasciwosci[0]
-        self.img=wlasciwosci[1]
+        self.img=pygame.image.load(wlasciwosci[1])
         self.dlugosc = wlasciwosci[2]
         self.szerokosc = wlasciwosci[2]
         self.numerElementu=numerElementu

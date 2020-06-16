@@ -9,7 +9,7 @@ import asset
 class Teren(object):
     def __init__(self,main):
         self.main = main
-        self.elements=[[self.main,pygame.image.load(asset.imgPodloze),800,102],[self.main,pygame.image.load(asset.imgLatajacaWyspa),102,32],[self.main,pygame.image.load(asset.imgManaCoin),32,32],[self.main,pygame.image.load(asset.imgWrogPrawo),64,64],[self.main,pygame.image.load(asset.imgApteczka),32,32]]
+        self.elements=[[self.main,asset.imgPodloze,800,102],[self.main,asset.imgLatajacaWyspa,102,32],[self.main,asset.imgManaCoin,32,32],[self.main,asset.imgWrogPrawo,64,64],[self.main,asset.imgApteczka,32,32]]
 
 
         self.pods=[]

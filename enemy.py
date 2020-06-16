@@ -2,16 +2,28 @@ import pygame, random, decimal
 import asset
 from Postac import Postac
 class Enemy(Postac):
-    def __init__(self,wlasciwosci,pos):
+    def __init__(self,wlasciwosci,pos,max_hp=30,mocStrzalu=10):
         super().__init__(wlasciwosci[0])
-        self.imgRight=pygame.image.load(asset.imgWrogPrawo)
-        self.imgRight=pygame.transform.rotozoom(self.imgRight,0,1.5)
-        self.RightReka=pygame.image.load(asset.imgWrogRekaRight)
-        self.RightReka=pygame.transform.rotozoom(self.RightReka,0,1.5)
+        self.max_hp=max_hp
+        self.hp=self.max_hp
+        print(self.hp)
+        self.mnoznik=1.5
+        self.orginalimgRight=[asset.imgWrogPrawo,self.mnoznik]
+        self.imgRight=pygame.image.load(self.orginalimgRight[0])
+        self.imgRight=pygame.transform.rotozoom(self.imgRight,0,self.orginalimgRight[1])
+
+        self.orginalRightReka = [asset.imgWrogRekaRight,self.mnoznik]
+        self.RightReka=pygame.image.load(self.orginalRightReka[0])
+        self.RightReka=pygame.transform.rotozoom(self.RightReka,0,self.orginalRightReka[1])
+
         self.szerokosc=wlasciwosci[2]*1.5
         self.img = self.imgRight
         self.imgReka=self.RightReka
-        self.imgstrzala=pygame.image.load(asset.imgStrzalaWrog)
+
+        self.orginalstrzala=[asset.imgStrzalaWrog,1]
+        self.imgstrzala=pygame.image.load(self.orginalstrzala[0])
+        self.imgstrzala=pygame.transform.rotozoom(self.imgstrzala,0,self.orginalstrzala[1])
+
         self.pos=pygame.Vector2(pos)
         self.podazajzamysza = False
         self.numerElementu=3
@@ -22,8 +34,18 @@ class Enemy(Postac):
         self.max_hp=30
         self.hp=self.max_hp
         self.hpdododania=0
-        self.shootsound = pygame.mixer.Sound(asset.soundWrogStrzal)
-        self.shootsound.set_volume(0.1)
+
+        self.orginalshootsound = [asset.soundWrogStrzal,0.1]
+        self.shootsound = pygame.mixer.Sound(self.orginalshootsound[0])
+        self.shootsound.set_volume(self.orginalshootsound[1])
+
+        self.orginalJump = [asset.soundJump,1]
+        self.jumpSound=pygame.mixer.Sound(self.orginalJump[0])
+        self.jumpSound.set_volume(self.orginalJump[1])
+
+        self.mocStrzalu = mocStrzalu
+
+        self.wlasciwosciDozmiany = [["powiekszenie", "Max_hp", self.max_hp, 1],["powiekszenie", "Siła ataku", self.mocStrzalu, 1]]
     def __str__(self):
         return ("|" + str(self.numerElementu) + ",(" + str(self.pos.x) + ";" + str(self.pos.y) + ")" + "%")
     def wys(self):
@@ -91,10 +113,9 @@ class Enemy(Postac):
         self.speedAnimacji = int(self.hpdododania)
         if self.speedAnimacji < 0:
             self.speedAnimacji *= -1
-        if 0 <= self.speedAnimacji < 2:
-            self.speedAnimacji = 2
-        if self.speedAnimacji> 10:
-            self.speedAnimacji = 10
+        if 0 <= self.speedAnimacji < 20:
+            self.speedAnimacji = 20
+
 
         for i in range(self.speedAnimacji):
             if self.hpdododania > 0:
@@ -115,3 +136,45 @@ class Enemy(Postac):
 
             self.main.Teren.pods.remove(self)
             self.main.Teren.enemy.remove(self)
+    def PrzygotujDoZapisu(self):
+        self.img=None
+        self.imgReka=None
+        self.imgstrzala=None
+        self.imgRight=None
+        self.imgLeft=None
+        self.RightReka=None
+        self.LeftReka=None
+        self.clock=None
+        self.shootsound=None
+        self.jumpSound=None
+        self.cooldownZegar=None
+        # bez zapisu
+        self.font = None
+        self.napis = None
+    def PoWczytaniu(self):
+        self.imgstrzala = pygame.image.load(self.orginalstrzala[0])
+        self.imgstrzala = pygame.transform.rotozoom(self.imgstrzala, 0, self.orginalstrzala[1])
+
+        self.imgRight=pygame.image.load(self.orginalimgRight[0])
+        self.imgRight = pygame.transform.rotozoom(self.imgRight,0,self.orginalimgRight[1])
+        #self.imgLeft=pygame.image.load(self.org)
+        self.RightReka = pygame.image.load(self.orginalRightReka[0])
+        self.RightReka = pygame.transform.rotozoom(self.RightReka, 0, self.orginalimgRight[1])
+        #self.LeftReka=listadoprzywrocenia[6]
+        self.clock=pygame.time.Clock()
+        self.shootsound=pygame.mixer.Sound(self.orginalshootsound[0])
+        self.shootsound.set_volume(self.orginalshootsound[1])
+        self.jumpSound = pygame.mixer.Sound(self.orginalJump[0])
+        self.jumpSound.set_volume(self.orginalJump[1])
+        self.cooldownZegar=pygame.time.Clock()
+
+        self.main.Teren.enemy.append(self)
+
+        self.img = self.imgRight
+        self.imgReka = self.RightReka
+        self.__init__([self.main, self.orginalimgRight, self.szerokosc/1.5, self.szerokosc/1.5], self.pos, self.max_hp)
+    def PrzyjmijWlasciwosci(self, wlasciwosci):
+        self.max_hp = wlasciwosci[0]
+        self.mocStrzalu = wlasciwosci[1]
+        self.hp = self.max_hp
+        self.wlasciwosciDozmiany = [["powiekszenie", "Max_hp", self.max_hp, 1]]

@@ -1,27 +1,36 @@
 import pygame
 import asset
+from OknoZmianyWlasciwosci import Powiekszanie
 class Podloze():
-    def __init__(self,wlasciwosci,pos):
+    def __init__(self,wlasciwosci,pos,mnoznik=1):
         self.numerElementu = 0
-
+        self.mnoznik = mnoznik
         self.main=wlasciwosci[0]
-        self.img=wlasciwosci[1]
+        self.orginalImg = wlasciwosci[1]
+        self.img = pygame.image.load(self.orginalImg)
+        self.img = pygame.transform.rotozoom(self.img, 0, self.mnoznik)
+
         self.pos=pygame.Vector2(pos)
         self.d =wlasciwosci[2]
-
+        self.orginald = self.d
         self.szerokosc=wlasciwosci[3]
+        self.orginalszerokosc = self.szerokosc
 
         self.podazajzamysza=False
+
+
+        self.wlasciwosciDozmiany=[["powiekszenie","Rozmiar",self.mnoznik,0.5]]
     #def __str__(self):
         # return ("|"+str(self.numerElementu)+",("+str(self.pos.x)+";"+str(self.pos.y)+")"+"%")
     def wys(self):
+
         self.main.screen.blit(self.img, self.pos)
         if self.podazajzamysza:
             self.pos = pygame.Vector2(pygame.mouse.get_pos())
         if self.podazajzamysza and pygame.mouse.get_pressed()[0]:
             self.podazajzamysza=False
     def checkIsItToWys(self):
-        if self.pos.x > -1000 and self.pos.x < 800:
+        if self.pos.x > 0-self.d and self.pos.x < 800:
             return True
     def IsColision(self,pos,szerokosc=0):#kolizcja dla powierzchni
         if self.pos.x-szerokosc < pos.x <self.pos.x+self.d-15 and self.pos.y>=pos.y+szerokosc:
@@ -86,9 +95,19 @@ class Podloze():
     def Zmienpolozenie(self,x):
         self.pos.x+=x
     def PrzygotujDoZapisu(self):
-        Zmiennedoprzechowania =[]
-        Zmiennedoprzechowania.append(self.img)
         self.img=None
-        return Zmiennedoprzechowania
-    def Powcztaniu(self,listadop):
-
+        #bez zapisu
+        self.font=None
+        self.napis=None
+    def PoWczytaniu(self):
+        self.img = pygame.image.load(self.orginalImg)
+        self.img = pygame.transform.rotozoom(self.img, 0, self.mnoznik)
+        self.__init__([self.main,self.orginalImg,self.d,self.szerokosc],self.pos,self.mnoznik)
+    def PrzyjmijWlasciwosci(self,wlasciwosci):
+        self.mnoznik = wlasciwosci[0]
+        self.wlasciwosciDozmiany = [["powiekszenie", "Rozmiar", self.mnoznik, 0.5]]
+        self.ZmienWielkosc()
+    def ZmienWielkosc(self):
+        self.img = pygame.transform.rotozoom(pygame.image.load(self.orginalImg), 0, self.mnoznik)
+        self.d=self.orginald*self.mnoznik
+        self.szerokosc=self.orginalszerokosc*self.mnoznik

@@ -58,6 +58,8 @@ class Postac(object):
 
         self.max_hp=100
         self.hp=self.max_hp
+
+        self.mocStrzalu = 10
     def wys(self):
         #print(pygame.mouse.get_pos())
         for i in range(self.Zegar()):
@@ -99,7 +101,7 @@ class Postac(object):
         self.main.screen.blit(rotate_reka, rect)
     def Strzał(self):
         if self.main.CzyKreatorOtworzony==False:
-            self.main.Teren.pods.append(Strzała(self.main,(self.pos.x+self.szerokosc/2,self.pos.y+self.szerokosc/2),self.punktkierunkowyStrzlu,self.imgstrzala,self.celStrzalu))
+            self.main.Teren.pods.append(Strzała(self.main,(self.pos.x+self.szerokosc/2,self.pos.y+self.szerokosc/2),self.punktkierunkowyStrzlu,self.imgstrzala,self.celStrzalu,self.mocStrzalu))
         #(self.pos.x+self.szerokosc/2,self.pos.y+self.szerokosc/2-8)
     def ObrotPunktu(self,image, promien, pivot, przesuniecie):
 

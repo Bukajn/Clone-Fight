@@ -21,7 +21,7 @@ class main(object):
         #self.scena =  Scene_test(self)
         self.create_maps = Create_maps(self)
         #self.create_maps.main_loop()
-        self.scena = Scene(self,"sekret.obj")
+        self.scena = Scene(self,"sekret")
         self.scena.main_loop()
     def set_window(self):
         self.screen = pygame.display.set_mode((800, 600))
