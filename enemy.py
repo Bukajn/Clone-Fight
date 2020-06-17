@@ -6,15 +6,23 @@ class Enemy(Postac):
         super().__init__(wlasciwosci[0])
         self.max_hp=max_hp
         self.hp=self.max_hp
-        print(self.hp)
         self.mnoznik=1.5
+
         self.orginalimgRight=[asset.imgWrogPrawo,self.mnoznik]
         self.imgRight=pygame.image.load(self.orginalimgRight[0])
         self.imgRight=pygame.transform.rotozoom(self.imgRight,0,self.orginalimgRight[1])
 
+        self.orginalimgLeft=[asset.imgWrogLewo,self.mnoznik]
+        self.imgLeft=pygame.image.load(self.orginalimgLeft[0])
+        self.imgLeft=pygame.transform.rotozoom(self.imgLeft,0,self.orginalimgLeft[1])
+
         self.orginalRightReka = [asset.imgWrogRekaRight,self.mnoznik]
         self.RightReka=pygame.image.load(self.orginalRightReka[0])
         self.RightReka=pygame.transform.rotozoom(self.RightReka,0,self.orginalRightReka[1])
+
+        self.orginalLeftReka = [asset.imgWrogRekaLeft, self.mnoznik]
+        self.LeftReka = pygame.image.load(self.orginalLeftReka[0])
+        self.LeftReka = pygame.transform.rotozoom(self.LeftReka, 0, self.orginalLeftReka[1])
 
         self.szerokosc=wlasciwosci[2]*1.5
         self.img = self.imgRight
@@ -31,8 +39,6 @@ class Enemy(Postac):
         self.celStrzalu = "player"
         self.punktkierunkowyStrzlu=pygame.Vector2(self.main.Player.pos.x+self.main.Player.szerokosc/2,self.main.Player.pos.y+self.main.Player.szerokosc/2)
         self.PasekZdrowia = pygame.Rect(self.pos.x,self.pos.y,self.szerokosc,5)
-        self.max_hp=30
-        self.hp=self.max_hp
         self.hpdododania=0
 
         self.orginalshootsound = [asset.soundWrogStrzal,0.1]
@@ -46,19 +52,17 @@ class Enemy(Postac):
         self.mocStrzalu = mocStrzalu
 
         self.wlasciwosciDozmiany = [["powiekszenie", "Max_hp", self.max_hp, 1],["powiekszenie", "Siła ataku", self.mocStrzalu, 1]]
+        self.speed.x=0.5
     def __str__(self):
         return ("|" + str(self.numerElementu) + ",(" + str(self.pos.x) + ";" + str(self.pos.y) + ")" + "%")
     def wys(self):
         if self.main.CzyKreatorOtworzony==False:
             super().wys()
             self.AnimacjaPaska()
-            if self.hp - self.hpdododania>0:
+            if self.hp - self.hpdododania>0 and self.main.StartMenuOtworzone==False:
                 pygame.draw.rect(self.main.screen,(0,255,0),self.PasekZdrowia)
-            else:
+            elif self.main.StartMenuOtworzone==False:
                 self.Smierc()
-            if self.state==0:
-                #self.skocz=True
-                self.strzel=True
             if self.czasUplyniety < self.cooldown - 0.5:
                 self.punktkierunkowyStrzlu = pygame.Vector2((self.main.Player.pos.x + self.main.Player.szerokosc / 2),(self.main.Player.pos.y + self.main.Player.szerokosc / 2))
             else:
@@ -71,6 +75,35 @@ class Enemy(Postac):
                 self.podazajzamysza = False
         if not self in self.main.Teren.pods and self in self.main.Teren.enemy:
             self.main.Teren.enemy.remove(self)
+    def Ruch(self):
+        super().Ruch()
+        self.AI()
+    def AI(self):
+        self.LewoBlokada=False
+        self.PrawoBlokada=False
+        if self.main.IsCollision(self.pos,self.main.Player.pos,400):
+            self.strzel=True
+
+            if self.main.Teren.ColisionWithFloar(self.pos-pygame.Vector2(self.speed.x+60,0),self.szerokosc)>600:
+                self.LewoBlokada=True
+            else:
+                self.LewoBlokada=False
+            if self.pos.x-self.main.Player.pos.x>10 and self.ruch=="prawo":
+                self.ZmianaWLewo()
+            elif self.pos.x-self.main.Player.pos.x<-10 and self.ruch=="lewo":
+                self.ZmianaWprawo()
+            if self.main.IsCollision(self.pos,self.main.Player.pos,200)==False:
+                    if self.ruch=="prawo" and self.pos.x!=self.main.Player.pos.x:
+                        self.Przemieszczenie(self.speed.x)
+                    elif self.ruch=="lewo"and self.pos.x!=self.main.Player.pos.x:
+                        self.Przemieszczenie(-self.speed.x)
+    def Przemieszczenie(self,speed):
+        if self.main.Teren.CollisionNextTo("right", self.szerokosc, self.pos, self)==None and self.ruch=="lewo" and self.LewoBlokada==False:
+            self.pos.x+=speed
+        elif self.main.Teren.CollisionNextTo("left", self.szerokosc, self.pos, self)==None and self.ruch=="prawo":
+            self.pos.x += speed
+        elif self.state==0 and self.ruch=="lewo" and self.LewoBlokada==False or self.state==0 and self.ruch=="prawo" and self.PrawoBlokada==False:
+            self.skocz=True
     # funkcje do poprawnego wyświetlania
     def checkIsItToWys(self):
         if self.pos.x > -100 and self.pos.x < 800:
@@ -172,9 +205,9 @@ class Enemy(Postac):
 
         self.img = self.imgRight
         self.imgReka = self.RightReka
-        self.__init__([self.main, self.orginalimgRight, self.szerokosc/1.5, self.szerokosc/1.5], self.pos, self.max_hp)
+        self.__init__([self.main, self.orginalimgRight, self.szerokosc/1.5, self.szerokosc/1.5], self.pos, self.max_hp, self.mocStrzalu)
     def PrzyjmijWlasciwosci(self, wlasciwosci):
         self.max_hp = wlasciwosci[0]
         self.mocStrzalu = wlasciwosci[1]
         self.hp = self.max_hp
-        self.wlasciwosciDozmiany = [["powiekszenie", "Max_hp", self.max_hp, 1]]
+        self.wlasciwosciDozmiany = [["powiekszenie", "Max_hp", self.max_hp, 1],["powiekszenie", "Siła ataku", self.mocStrzalu, 1]]
