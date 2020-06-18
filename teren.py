@@ -44,8 +44,8 @@ class Teren(object):
             for i in self.pods:
                 if i.checkIsItToWys():
                     self.towys.append(i)
-
-            self.Sterowanie()
+            if self.main.StartMenuOtworzone==False:
+                self.Sterowanie()
             for i in self.towys:
                 i.wys()
             #self.ColisionWithFloar()

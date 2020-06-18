@@ -25,6 +25,8 @@ imgWrogPrawo=resource_path("assets/wrogRight.png")
 imgWrogLewo=resource_path("assets/wrogLeft.png")
 imgWrogRekaRight = resource_path("assets/rekaWrogRight.png")
 imgWrogRekaLeft = resource_path("assets/wrogRekaLeft.png")
+
+imgTytul = resource_path("assets/tytul.png")
 #sound
 soundJump = resource_path("assets/sound/jump.wav")
 zbieranieMana_coin = resource_path("assets/sound/zbieraniemany.wav")
