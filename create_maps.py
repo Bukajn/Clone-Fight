@@ -6,6 +6,7 @@ from OknoZmianyWlasciwosci import Okno
 class Create_maps(object):
     def __init__(self,main):
         self.main=main
+        self.mapa=None
         self.font=pygame.font.Font(asset.czcionkaRoboto,32)
         self.napis= self.font.render("Tworzenie mapy",True,(0,0,0))
         self.stan = "pojedynczy"
@@ -14,6 +15,9 @@ class Create_maps(object):
         self.CzyNapisyWlaczone=False
         self.OknoWyboru=OknoWyboru(self.main)
         self.oknowlasciwosci=None
+    def WczytajMape(self,mapa,czytworzonajestnowamapa=False):
+        self.mapa = mapa
+        self.OknoWyboru.Wczytaj(self.mapa,czytworzonajestnowamapa)
     def main_loop(self):
         self.main.CzyKreatorOtworzony = True
         self.running = True
@@ -45,8 +49,6 @@ class Create_maps(object):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
-                self.running = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                 self.main.Player.pos.y = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_COMMA:
@@ -68,6 +70,9 @@ class Create_maps(object):
             if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
 
                 self.OknoWyboru.Wczytaj(self.main.scena.mapa)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
+                self.main.scenaTestowa.main_loop()
+                self.main.CzyKreatorOtworzony = True
         if pygame.mouse.get_pressed()[2]:
             self.otwarteOknoWyboru=True
     def Poruszanie(self):

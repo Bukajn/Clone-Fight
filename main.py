@@ -20,13 +20,16 @@ class main(object):
         self.GUI =GUI(self)
         self.CzyKreatorOtworzony = False
         self.StartMenuOtworzone=False
-        #self.scena =  Scene_test(self)
+        self.mapy=["sekret","dotestow","NamenuStartowe"]
+
+        self.scena = Scene(self, "")
+        self.scenaTestowa =  Scene_test(self)
         self.create_maps = Create_maps(self)
         #self.create_maps.main_loop()
-        self.StartScena=StartMenu(self,"sekret")
+        self.StartScena=StartMenu(self,"NamenuStartowe")
+
         self.StartScena.main_loop()
-        self.scena = Scene(self,"sekret")
-        self.scena.main_loop()
+
     def set_window(self):
         self.screen = pygame.display.set_mode((800, 600))
         pygame.display.set_caption("Clone Fight")

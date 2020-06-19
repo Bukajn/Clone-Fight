@@ -11,7 +11,7 @@ class OknoWyboru(object):
         self.gornyPasek = pygame.Rect(30,51,720,30)
         self.elementy =[]
         self.PrzyciskZapisz = Przycisk(self.main,"Zapisz",(85,26),(self.pos.x+10,self.pos.y+2),(255,255,255),25,self.Zapisz)
-        self.PrzyciskWczytaj = Przycisk(self.main,"Wczytaj",(105,26),(self.pos.x+105,self.pos.y+2),(255,255,255),25,self.Wczytaj)
+        #self.PrzyciskWczytaj = Przycisk(self.main,"Wczytaj",(105,26),(self.pos.x+105,self.pos.y+2),(255,255,255),25,self.Wczytaj)
         self.UtworzElementy()
         #self.Zapisz()
         #self.Wczytaj()
@@ -20,7 +20,7 @@ class OknoWyboru(object):
         pygame.draw.rect(self.main.screen, (255, 0, 0), self.przyciskZamykania)
         pygame.draw.rect(self.main.screen, (128, 128, 128), self.gornyPasek)
         self.PrzyciskZapisz.Wys()
-        self.PrzyciskWczytaj.Wys()
+        #self.PrzyciskWczytaj.Wys()
         self.WyswietlElemnty()
         self.CzyKlikniety()
 
@@ -39,9 +39,7 @@ class OknoWyboru(object):
         for i in self.elementy:
             i.Wyswietl()
     def Zapisz(self):
-        nazwamapy = input("Podaj nazwe mapy(wpisz t do zapisu terazniejszej): ")
-        if nazwamapy == "t":
-            nazwamapy=self.main.scena.mapa
+        nazwamapy=self.main.create_maps.mapa
         print(nazwamapy)
         plikdoZapisu= open("assets/maps/"+nazwamapy+".obj","wb")
 
@@ -55,7 +53,7 @@ class OknoWyboru(object):
             i.main = self.main
             i.PoWczytaniu()
         plikdoZapisu.close()
-    def Wczytaj(self,mapa=""):
+    def Wczytaj(self,mapa="",tworzenieNowejMapy=False):
         """if mapa == "":
             mapa = input("Wprowadź mapę(wpisz n by anulować):")
             if mapa == "n":
@@ -72,18 +70,16 @@ class OknoWyboru(object):
             self.main.Teren.UtworzElement(ostatecznaMapa[i][0],(self.main.Teren.elements[ostatecznaMapa[i][0]],ostatecznaMapa[i][1]))
         self.main.create_maps.otwarteOknoWyboru=False"""
 
-        if mapa =="":
-            print("wczytywanie")
-            nazwamapy= input("Podaj nazwe mapy(wpisz t do wczytania terazniejszej): ")
-            if nazwamapy == "t":
-                nazwamapy=mapa
-        else:
-            nazwamapy = mapa
+        nazwamapy = mapa
         try:
             plikdoOdczytu = open("assets/maps/" + nazwamapy + ".obj", "rb")
         except FileNotFoundError:
-            print("nie znaleziono pilku")
-            return
+            if tworzenieNowejMapy:
+                self.main.Teren.pods=[]
+                return
+            else:
+                print("nie znaleziono pilku")
+                return
         self.main.Teren.pods = []
         while True:
             try:

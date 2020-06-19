@@ -77,7 +77,8 @@ class Enemy(Postac):
             self.main.Teren.enemy.remove(self)
     def Ruch(self):
         super().Ruch()
-        self.AI()
+        if self.main.StartMenuOtworzone==False:
+            self.AI()
     def AI(self):
         self.LewoBlokada=False
         self.PrawoBlokada=False

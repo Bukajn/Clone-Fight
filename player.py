@@ -8,9 +8,10 @@ class Player(Postac):
         self.celStrzalu = "enemy"
         self.punktkierunkowyStrzlu=pygame.mouse.get_pos()
     def wys(self):
-        super().wys()
-        self.CzySkoczyc()
-        self.punktkierunkowyStrzlu=pygame.mouse.get_pos()
+        if self.main.StartMenuOtworzone==False:
+            super().wys()
+            self.CzySkoczyc()
+            self.punktkierunkowyStrzlu=pygame.mouse.get_pos()
     def CzySkoczyc(self):
         self.keys = pygame.key.get_pressed()
         if self.keys[pygame.K_SPACE]  and self.state==0:
