@@ -76,11 +76,15 @@ class OknoWyboru(object):
         except FileNotFoundError:
             if tworzenieNowejMapy:
                 self.main.Teren.pods=[]
+                self.main.Teren.enemy=[]
+                self.main.Teren.przesuniecie=0
                 return
             else:
                 print("nie znaleziono pilku")
                 return
         self.main.Teren.pods = []
+        self.main.Teren.enemy = []
+        self.main.Teren.przesuniecie = 0
         while True:
             try:
                 obiektDoDodania = pickle.load(plikdoOdczytu)

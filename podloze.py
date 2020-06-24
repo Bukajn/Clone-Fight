@@ -2,7 +2,7 @@ import pygame
 import asset
 from OknoZmianyWlasciwosci import Powiekszanie
 class Podloze():
-    def __init__(self,wlasciwosci,pos,mnoznik=1):
+    def __init__(self,wlasciwosci,pos,mnoznik=1,Czykontrolowanie=0):
         self.numerElementu = 0
         self.mnoznik = mnoznik
         self.main=wlasciwosci[0]
@@ -18,13 +18,17 @@ class Podloze():
 
         self.podazajzamysza=False
 
+        self.CzyKontronlowane =Czykontrolowanie
 
-        self.wlasciwosciDozmiany=[["powiekszenie","Rozmiar",self.mnoznik,0.5]]
+        self.CzyWyswietlac =True
+        self.CzyKolizja=True
+
+        self.wlasciwosciDozmiany=[["powiekszenie","Rozmiar",self.mnoznik,0.5],["powiekszenie","Kontrolowanie",self.CzyKontronlowane,1]]
     #def __str__(self):
         # return ("|"+str(self.numerElementu)+",("+str(self.pos.x)+";"+str(self.pos.y)+")"+"%")
     def wys(self):
-
-        self.main.screen.blit(self.img, self.pos)
+        if self.CzyWyswietlac:
+            self.main.screen.blit(self.img, self.pos)
         if self.podazajzamysza:
             self.pos = pygame.Vector2(pygame.mouse.get_pos())
         if self.podazajzamysza and pygame.mouse.get_pressed()[0]:
@@ -33,41 +37,43 @@ class Podloze():
         if self.pos.x > 0-self.d and self.pos.x < 800:
             return True
     def IsColision(self,pos,szerokosc=0):#kolizcja dla powierzchni
-        if self.pos.x-szerokosc < pos.x <self.pos.x+self.d-15 and self.pos.y>=pos.y+szerokosc:
-            return self.pos.y-szerokosc
+        if self.CzyKolizja:
+            if self.pos.x-szerokosc < pos.x <self.pos.x+self.d-15 and self.pos.y>=pos.y+szerokosc:
+                return self.pos.y-szerokosc
     def IsCollisionUnder(self,pos,szerokosc=0):
-
-        if self.pos.x-szerokosc < pos.x <self.pos.x+self.d-15 and self.pos.y+self.szerokosc<pos.y:
-            #print(self.pos.y+self.szerokosc)
-            return self.pos.y+self.szerokosc
+        if self.CzyKolizja:
+            if self.pos.x-szerokosc < pos.x <self.pos.x+self.d-15 and self.pos.y+self.szerokosc<pos.y:
+                #print(self.pos.y+self.szerokosc)
+                return self.pos.y+self.szerokosc
     def IsCollisionNext(self,side,szerokosc,pos,obiektwywołujący):#kolizja dla scianki
-        for i in range(int((self.pos.y+self.szerokosc) - (self.pos.y - (szerokosc-2)))):
-            if side == "right":
-                if pos.y<=self.pos.y+i+0.5-(szerokosc-2) and pos.y>=self.pos.y+i-0.5-(szerokosc-2):
-                    a=self.pos.x+self.d
-                    if 0 > pos.x + 14 - a > -20:
-                        y = (0.5 - (pos.x + 14 - a))
-                        a -= y
-                        try:
-                            obiektwywołujący.Ruch(-y)
-                        except:
-                            pass
-                    if 0 < pos.x - a + 14 < 20:  # sprawdzenie czy zachodzi kolizja
-                        return True
+        if self.CzyKolizja:
+            for i in range(int((self.pos.y+self.szerokosc) - (self.pos.y - (szerokosc-2)))):
+                if side == "right":
+                    if pos.y<=self.pos.y+i+0.5-(szerokosc-2) and pos.y>=self.pos.y+i-0.5-(szerokosc-2):
+                        a=self.pos.x+self.d
+                        if 0 > pos.x + 14 - a > -20:
+                            y = (0.5 - (pos.x + 14 - a))
+                            a -= y
+                            try:
+                                obiektwywołujący.Ruch(-y)
+                            except:
+                                pass
+                        if 0 < pos.x - a + 14 < 20:  # sprawdzenie czy zachodzi kolizja
+                            return True
 
 
-            elif side == "left":
-                if pos.y<=self.pos.y+i+0.5-(szerokosc-2) and pos.y>=self.pos.y+i-0.5-(szerokosc-2):
-                    a=self.pos.x
-                    if 0 > a - (pos.x + szerokosc - 14) > -20:
-                        y = (0.5 - (a - (pos.x + szerokosc - 14)))
-                        a += y
-                        try:
-                            obiektwywołujący.Ruch(y)
-                        except:
-                            pass
-                    if 0 < a - (pos.x + szerokosc-14) < 20:  # sprawdzenie czy zachodzi kolizja
-                        return True
+                elif side == "left":
+                    if pos.y<=self.pos.y+i+0.5-(szerokosc-2) and pos.y>=self.pos.y+i-0.5-(szerokosc-2):
+                        a=self.pos.x
+                        if 0 > a - (pos.x + szerokosc - 14) > -20:
+                            y = (0.5 - (a - (pos.x + szerokosc - 14)))
+                            a += y
+                            try:
+                                obiektwywołujący.Ruch(y)
+                            except:
+                                pass
+                        if 0 < a - (pos.x + szerokosc-14) < 20:  # sprawdzenie czy zachodzi kolizja
+                            return True
     def CzyKlikniety(self):
         mousePos = pygame.mouse.get_pos()
         if mousePos[0]> self.pos.x and mousePos[0]<self.pos.x+self.d:
@@ -102,12 +108,22 @@ class Podloze():
     def PoWczytaniu(self):
         self.img = pygame.image.load(self.orginalImg)
         self.img = pygame.transform.rotozoom(self.img, 0, self.mnoznik)
-        self.__init__([self.main,self.orginalImg,self.d,self.szerokosc],self.pos,self.mnoznik)
+        self.__init__([self.main,self.orginalImg,self.d,self.szerokosc],self.pos,self.mnoznik,self.CzyKontronlowane)
     def PrzyjmijWlasciwosci(self,wlasciwosci):
         self.mnoznik = wlasciwosci[0]
-        self.wlasciwosciDozmiany = [["powiekszenie", "Rozmiar", self.mnoznik, 0.5]]
+        self.CzyKontronlowane=wlasciwosci[1]
+        self.wlasciwosciDozmiany = [["powiekszenie", "Rozmiar", self.mnoznik, 0.5],["powiekszenie","Kontrowanie",self.CzyKontronlowane,1]]
         self.ZmienWielkosc()
     def ZmienWielkosc(self):
         self.img = pygame.transform.rotozoom(pygame.image.load(self.orginalImg), 0, self.mnoznik)
         self.d=self.orginald*self.mnoznik
         self.szerokosc=self.orginalszerokosc*self.mnoznik
+    def UstawMotyw(self,styl):
+        if styl ==1:
+            self.img = pygame.image.load(asset.imgPodloze)
+        elif styl ==2:
+            self.img = pygame.image.load(asset.imgPodlozeM2)
+    def __bool__(self):
+        if self.CzyKontronlowane==1:
+            return True
+        return False

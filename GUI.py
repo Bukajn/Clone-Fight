@@ -9,7 +9,8 @@ class GUI(object):
         self.colour =(56,215,178)
         self.pole = pygame.Rect(self.pos.x,self.pos.y,760,50)
         self.pasekMany = PasekMany(self.main,self)
-        self.paseknaladowania = Paseknaladowania(self.main,self)
+        self.paseknaladowania = Paseknaladowania(self.main,self,(300,560),self.main.Player.cooldown)
+        self.paseknaladowaniaPromienia = Paseknaladowania(self.main,self,(300,575),self.main.Player.cooldownPromien)
         self.pasekZdrowia= PasekZdrowia(self.main,self)
         self.mana =0.0
         self.max_mana=100.0
@@ -17,6 +18,7 @@ class GUI(object):
     def wys(self):
         pygame.draw.rect(self.main.screen,self.colour,self.pole)
         self.pasekMany.wys()
-        self.paseknaladowania.wys()
+        self.paseknaladowania.wys(self.main.Player.czasUplyniety)
+        self.paseknaladowaniaPromienia.wys(self.main.Player.czasUplynietyPromien)
         self.pasekZdrowia.wys()
 

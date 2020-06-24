@@ -48,7 +48,7 @@ class StartMenu():
                     for i in self.Elementy:
                         i.wys()
                     self.PrzyciskNowaMapa.Wys()
-                pygame.draw.line(self.main.screen, (50, 50, 50), pygame.Vector2(400, 0), pygame.Vector2(400, 600))
+                #pygame.draw.line(self.main.screen, (50, 50, 50), pygame.Vector2(400, 0), pygame.Vector2(400, 600))
                 pygame.display.update()
                 if len(self.main.Teren.towys)<=1:
                     self.main.create_maps.OknoWyboru.Wczytaj(self.mapa)

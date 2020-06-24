@@ -53,6 +53,7 @@ class Enemy(Postac):
 
         self.wlasciwosciDozmiany = [["powiekszenie", "Max_hp", self.max_hp, 1],["powiekszenie", "Siła ataku", self.mocStrzalu, 1]]
         self.speed.x=0.5
+        self.CzyMozeSpascPonizej600 = False
     def __str__(self):
         return ("|" + str(self.numerElementu) + ",(" + str(self.pos.x) + ";" + str(self.pos.y) + ")" + "%")
     def wys(self):
@@ -84,11 +85,6 @@ class Enemy(Postac):
         self.PrawoBlokada=False
         if self.main.IsCollision(self.pos,self.main.Player.pos,400):
             self.strzel=True
-
-            if self.main.Teren.ColisionWithFloar(self.pos-pygame.Vector2(self.speed.x+60,0),self.szerokosc)>600:
-                self.LewoBlokada=True
-            else:
-                self.LewoBlokada=False
             if self.pos.x-self.main.Player.pos.x>10 and self.ruch=="prawo":
                 self.ZmianaWLewo()
             elif self.pos.x-self.main.Player.pos.x<-10 and self.ruch=="lewo":
@@ -101,7 +97,7 @@ class Enemy(Postac):
     def Przemieszczenie(self,speed):
         if self.main.Teren.CollisionNextTo("right", self.szerokosc, self.pos, self)==None and self.ruch=="lewo" and self.LewoBlokada==False:
             self.pos.x+=speed
-        elif self.main.Teren.CollisionNextTo("left", self.szerokosc, self.pos, self)==None and self.ruch=="prawo":
+        elif self.main.Teren.CollisionNextTo("left", self.szerokosc, self.pos, self)==None and self.ruch=="prawo" and self.PrawoBlokada==False:
             self.pos.x += speed
         elif self.state==0 and self.ruch=="lewo" and self.LewoBlokada==False or self.state==0 and self.ruch=="prawo" and self.PrawoBlokada==False:
             self.skocz=True

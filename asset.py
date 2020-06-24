@@ -13,7 +13,9 @@ def resource_path(relative_path):
 imgPlayerRight = resource_path("assets/playerRight.png")
 imgPlayerLeft = resource_path("assets/playerLeft.png")
 imgPodloze = resource_path("assets/podłoga.png")
+imgPodlozeM2 = resource_path("assets/podłogaM2.png")
 imgLatajacaWyspa= resource_path("assets/latajaca_wyspa.png")
+imgLatajacaWyspaM2 = resource_path("assets/latajaca_wyspaM2.png")
 imgManaCoin = resource_path("assets/mana.png")
 imgApteczka = resource_path("assets/apteczka.png")
 imgRekaRight=resource_path("assets/rekaRight.png")
@@ -27,10 +29,18 @@ imgWrogRekaRight = resource_path("assets/rekaWrogRight.png")
 imgWrogRekaLeft = resource_path("assets/wrogRekaLeft.png")
 
 imgTytul = resource_path("assets/tytul.png")
+
+imgDrzwi = resource_path("assets/drzwi.png")
+imgDrzwiObramowka = resource_path("assets/DrzwiObramowka.png")
+imgDrzwiOtwarte = resource_path("assets/DrzwiOtwarte.png")
+imgDrzwiOtwarteObramowka = resource_path("assets/DrzwiOtwarteObramowka.png")
 #sound
 soundJump = resource_path("assets/sound/jump.wav")
 zbieranieMana_coin = resource_path("assets/sound/zbieraniemany.wav")
 soundShoot = resource_path("assets/sound/shootsound.wav")
 soundWrogStrzal = resource_path("assets/sound/soundstrzalwroga.wav")
+soundClick = resource_path("assets/sound/clicksound.wav")
+
+soundDoor = resource_path("assets/sound/soundDoor.wav")
 #font
 czcionkaRoboto = resource_path("assets/fonts/Roboto-Medium.ttf")

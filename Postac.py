@@ -60,6 +60,9 @@ class Postac(object):
         self.hp=self.max_hp
 
         self.mocStrzalu = 10
+
+        self.CzyMozeSpascPonizej600=True
+        self.wczesciejszyheiht=0
     def wys(self):
         #print(pygame.mouse.get_pos())
         for i in range(self.Zegar()):
@@ -113,6 +116,8 @@ class Postac(object):
     def Physik(self):
 
         height=self.main.Teren.ColisionWithFloar(self.pos,self.szerokosc) #przyjęcie wysokości podłożą
+        if self.CzyMozeSpascPonizej600 ==False and height > 600:
+            height=self.wczesciejszyheiht
         heightSufit=self.main.Teren.CollisionWithUnderFloar(self.pos,self.szerokosc)#przyjęcie wysokości sufitu
 
         self.grawitacja(height,heightSufit)
@@ -124,7 +129,7 @@ class Postac(object):
         self.pos.y+=self.speed.y
         self.grawitacja(height,heightSufit)
         self.jump(heightSufit)
-
+        self.wczesciejszyheiht = height
     def grawitacja(self,height,heightSufit):
         if self.pos.y < heightSufit:
             self.speed.y = 1

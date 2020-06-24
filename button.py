@@ -18,9 +18,11 @@ class Przycisk(object):
         self.TextColour = textColour
         self.TextColour2=textColour2
         self.tekst = self.font.render(self.Text, True, self.TextColour)
+        self.clicksound = pygame.mixer.Sound(asset.soundClick)
     def Wys(self):
 
         self.przycisk = pygame.Rect(self.pos.x, self.pos.y, self.dlugosc, self.szerokosc)
+
         if self.WyswietlanieTla:
             pygame.draw.rect(self.main.screen,self.colour,self.przycisk)
         self.main.screen.blit(self.tekst,(self.pos.x,self.pos.y))
@@ -41,5 +43,6 @@ class Przycisk(object):
                 self.colour = self.colour1
     def Czyklikniety(self):
         if pygame.mouse.get_pressed()[0] and pygame.mouse.get_pressed()[0] !=self.wczesniejczyklik[0]:
+            self.clicksound.play()
             self.akcja()
         self.wczesniejczyklik= pygame.mouse.get_pressed()

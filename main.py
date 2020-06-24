@@ -5,6 +5,7 @@ from player import Player
 from create_maps import Create_maps
 from scene import Scene
 from StartMenu import StartMenu
+from Samouczek import Samouczek
 import maps
 from GUI import GUI
 import pkg_resources.py2_warn
@@ -20,15 +21,24 @@ class main(object):
         self.GUI =GUI(self)
         self.CzyKreatorOtworzony = False
         self.StartMenuOtworzone=False
-        self.mapy=["sekret","dotestow","NamenuStartowe"]
+        self.mapy=["sekret","dotestow","NamenuStartowe","samouczek"]
 
-        self.scena = Scene(self, "")
+        #self.scena = Scene(self, "")
         self.scenaTestowa =  Scene_test(self)
         self.create_maps = Create_maps(self)
-        #self.create_maps.main_loop()
+
+
+
+
         self.StartScena=StartMenu(self,"NamenuStartowe")
 
-        self.StartScena.main_loop()
+        self.samouczek = Samouczek(self)
+        self.samouczek.main_loop()
+        #self.scena.WczytajMape("sekret")
+        #self.scena.main_loop()
+        #self.create_maps.WczytajMape("sekret", False)
+        #self.create_maps.main_loop()
+        #self.StartScena.main_loop()
 
     def set_window(self):
         self.screen = pygame.display.set_mode((800, 600))

@@ -3,6 +3,7 @@ from okno_wyboru import OknoWyboru
 import asset
 import sys
 from OknoZmianyWlasciwosci import Okno
+from OknoPodwojnegoWyboru import OknoPodwojnegoWyboru
 class Create_maps(object):
     def __init__(self,main):
         self.main=main
@@ -15,6 +16,7 @@ class Create_maps(object):
         self.CzyNapisyWlaczone=False
         self.OknoWyboru=OknoWyboru(self.main)
         self.oknowlasciwosci=None
+        self.oknowyboru=None
     def WczytajMape(self,mapa,czytworzonajestnowamapa=False):
         self.mapa = mapa
         self.OknoWyboru.Wczytaj(self.mapa,czytworzonajestnowamapa)
@@ -23,6 +25,8 @@ class Create_maps(object):
         self.running = True
         self.obiektyKlikniete = []
         self.otwarteOknoWyboru = False
+        self.main.Player.pos.y = 0
+
         while self.running:
             self.main.screen.fill((100, 150, 255))
             self.check_events()
@@ -36,8 +40,12 @@ class Create_maps(object):
             else:
                 self.Poruszanie()
                 self.oknowlasciwosciZarzadzanie()
+            if self.oknowyboru != None:
+                self.main.StartMenuOtworzone = True
+                self.oknowyboru.wys()
+            else:
+                self.main.StartMenuOtworzone = False
             pygame.display.update()
-
         self.main.CzyKreatorOtworzony = False
     def oknowlasciwosciZarzadzanie(self):
         if self.oknowlasciwosci ==None and self.obiekt != None or self.oknowlasciwosci !=None and self.obiekt != None and self.oknowlasciwosci.obiekt != self.obiekt:
@@ -69,12 +77,26 @@ class Create_maps(object):
                 self.main.GUI.pasekMany.DodawajMane(100)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
 
-                self.OknoWyboru.Wczytaj(self.main.scena.mapa)
+                self.OknoWyboru.Wczytaj(self.mapa)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
                 self.main.scenaTestowa.main_loop()
                 self.main.CzyKreatorOtworzony = True
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                self.oknowyboru = OknoPodwojnegoWyboru(self.main, "                Czy napewno chcesz wyjść?",
+                                                       self.ZamknijOknoWyboru, self.ZamknijScene, "    Tak", "    Nie")
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_z:
+                self.main.Teren.Ruch(-self.main.Teren.przesuniecie)
+
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_t:
+                self.main.Player.pos.y=800
         if pygame.mouse.get_pressed()[2]:
             self.otwarteOknoWyboru=True
+    def ZamknijOknoWyboru(self):
+        self.oknowyboru=None
+    def ZamknijScene(self):
+        self.oknowyboru = None
+        self.main.CzyKreatorOtworzony=False
+        self.main.StartScena.main_loop()
     def Poruszanie(self):
         if self.CzyNapisyWlaczone:
             for i in self.main.Teren.towys:

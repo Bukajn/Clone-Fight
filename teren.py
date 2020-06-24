@@ -22,6 +22,8 @@ class Teren(object):
         self.delta=0.0
         self.max_tps=main.max_tps
         self.clock=pygame.time.Clock()
+
+        self.przesuniecie = 0
     def UtworzElement(self,numerElementu,zmienne,podazamyszka=False):
         if numerElementu==0:
             elementdododania =Podloze(zmienne[0],zmienne[1])
@@ -37,7 +39,12 @@ class Teren(object):
         self.pods.append(elementdododania)
         if podazamyszka:
             elementdododania.podazajzamysza=True
-
+    def UstawMotyw(self,styl):
+        for i in self.pods:
+            try:
+                i.UstawMotyw(styl)
+            except:
+                pass
     def wys(self):
         for i in range(self.Zegar()):
             self.towys = []
@@ -106,6 +113,7 @@ class Teren(object):
     def Ruch(self,speed):
         for i in self.pods:  # ruch
             i.Zmienpolozenie(speed)
+        self.przesuniecie+=speed
     def CollisionNextTo(self,side,szerokosc,pos,obiektwywołujący):
         for i in self.towys:
             try:

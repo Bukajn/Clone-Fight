@@ -24,7 +24,8 @@ class PasekZdrowia():
             self.speed = 2
         if self.speed > 10:
             self.speed = 10
-
+        if self.main.Player.hp ==0:
+            self.speed=20
         for i in range(self.speed):
             if self.hpdododania > 0:
                 self.hpdododania -= 0.01
