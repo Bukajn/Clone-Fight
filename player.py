@@ -11,6 +11,7 @@ class Player(Postac):
         self.cooldownPromien =2
         self.zegarPromien = pygame.time.Clock()
         self.czasUplynietyPromien=0
+        self.CzyMoznaSkoczyc = True
     def wys(self):
         if self.main.StartMenuOtworzone==False:
             super().wys()
@@ -30,7 +31,7 @@ class Player(Postac):
 
     def CzySkoczyc(self):
         self.keys = pygame.key.get_pressed()
-        if self.keys[pygame.K_SPACE]  and self.state==0:
+        if self.keys[pygame.K_SPACE]  and self.state==0 and self.CzyMoznaSkoczyc:
             self.jumpSound.play()
             self.skocz=True
         if pygame.mouse.get_pressed()[0]:

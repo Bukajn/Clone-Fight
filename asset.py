@@ -34,6 +34,14 @@ imgDrzwi = resource_path("assets/drzwi.png")
 imgDrzwiObramowka = resource_path("assets/DrzwiObramowka.png")
 imgDrzwiOtwarte = resource_path("assets/DrzwiOtwarte.png")
 imgDrzwiOtwarteObramowka = resource_path("assets/DrzwiOtwarteObramowka.png")
+
+imgBed = resource_path("assets/Łóżko.png")
+imgBedObramowka = resource_path("assets/LóżkoObramowka.png")
+
+imgPhone = resource_path("assets/telefon.png")
+imgPhoneObramowka = resource_path("assets/telefonObramowka.png")
+
+imgPoleDialogowe = resource_path("assets/PoleDialogowe.png")
 #sound
 soundJump = resource_path("assets/sound/jump.wav")
 zbieranieMana_coin = resource_path("assets/sound/zbieraniemany.wav")

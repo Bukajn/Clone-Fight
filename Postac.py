@@ -63,6 +63,8 @@ class Postac(object):
 
         self.CzyMozeSpascPonizej600=True
         self.wczesciejszyheiht=0
+        self.CzydzialaGrawitacja=True
+
     def wys(self):
         #print(pygame.mouse.get_pos())
         for i in range(self.Zegar()):
@@ -125,8 +127,8 @@ class Postac(object):
 
 
         self.jump(heightSufit)
-
-        self.pos.y+=self.speed.y
+        if self.CzydzialaGrawitacja:
+            self.pos.y+=self.speed.y
         self.grawitacja(height,heightSufit)
         self.jump(heightSufit)
         self.wczesciejszyheiht = height

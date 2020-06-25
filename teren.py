@@ -24,6 +24,7 @@ class Teren(object):
         self.clock=pygame.time.Clock()
 
         self.przesuniecie = 0
+        self.czySterowanieAktywne=True
     def UtworzElement(self,numerElementu,zmienne,podazamyszka=False):
         if numerElementu==0:
             elementdododania =Podloze(zmienne[0],zmienne[1])
@@ -51,7 +52,7 @@ class Teren(object):
             for i in self.pods:
                 if i.checkIsItToWys():
                     self.towys.append(i)
-            if self.main.StartMenuOtworzone==False:
+            if self.main.StartMenuOtworzone==False and self.czySterowanieAktywne:
                 self.Sterowanie()
             for i in self.towys:
                 i.wys()
@@ -102,14 +103,20 @@ class Teren(object):
 
             if self.Left == 0:
                 self.Ruch(self.speed)
-
                 self.main.Player.ZmianaWLewo()
+                if self.main.Player.CzydzialaGrawitacja == False:
+                    self.main.Player.pos.y -=10
+                    self.main.Player.CzydzialaGrawitacja = True
+
         if self.keys[pygame.K_d]:
 
             if self.Right == 0:
                 self.Ruch(-(self.speed))
-
                 self.main.Player.ZmianaWprawo()
+                if self.main.Player.CzydzialaGrawitacja==False:
+                    self.main.Player.pos.y-=10
+                    self.main.Player.CzydzialaGrawitacja = True
+
     def Ruch(self,speed):
         for i in self.pods:  # ruch
             i.Zmienpolozenie(speed)
