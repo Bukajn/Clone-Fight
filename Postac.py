@@ -127,8 +127,8 @@ class Postac(object):
 
 
         self.jump(heightSufit)
-        if self.CzydzialaGrawitacja:
-            self.pos.y+=self.speed.y
+
+        self.pos.y+=self.speed.y
         self.grawitacja(height,heightSufit)
         self.jump(heightSufit)
         self.wczesciejszyheiht = height
@@ -138,7 +138,8 @@ class Postac(object):
             self.state = 1
         if self.pos.y < height and self.state!=2:
             self.state=1
-            self.speed.y += self.speedGravitation
+            if self.CzydzialaGrawitacja:
+                self.speed.y += self.speedGravitation
         elif self.pos.y != self.old_pos_y and self.state == 1: # jest na ziemi
             self.speed.y=0
             self.state=0

@@ -41,7 +41,12 @@ imgBedObramowka = resource_path("assets/LóżkoObramowka.png")
 imgPhone = resource_path("assets/telefon.png")
 imgPhoneObramowka = resource_path("assets/telefonObramowka.png")
 
+imgZnakAutobusowy = resource_path("assets/ZnakAutobusowy.png")
+imgZnakAutobusowyObramowka = resource_path("assets/ZnakAutobusowyObramowka.png")
+
 imgPoleDialogowe = resource_path("assets/PoleDialogowe.png")
+
+imgTloSamouczek = resource_path('assets/tloSamouczek.png')
 #sound
 soundJump = resource_path("assets/sound/jump.wav")
 zbieranieMana_coin = resource_path("assets/sound/zbieraniemany.wav")
@@ -50,5 +55,7 @@ soundWrogStrzal = resource_path("assets/sound/soundstrzalwroga.wav")
 soundClick = resource_path("assets/sound/clicksound.wav")
 
 soundDoor = resource_path("assets/sound/soundDoor.wav")
+soundBed = resource_path("assets/sound/soundBed.wav")
+soundPhone = resource_path("assets/sound/soundPhoneCalling.wav")
 #font
 czcionkaRoboto = resource_path("assets/fonts/Roboto-Medium.ttf")

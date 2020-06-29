@@ -8,6 +8,10 @@ class Scene(object):
         self.oknowyboru=None
         self.oknoSmierci = OknoPodwojnegoWyboru(self.main,"                         Przegrałeś",self.ZamknijScene,self.Odrodz,"  Odródź","   Menu")
         self.poziom=poziom
+
+
+        self.niesmiertelnosc=True
+
     def WczytajMape(self,mapa):
         self.mapa=mapa
         self.main.create_maps.OknoWyboru.Wczytaj(self.mapa)
@@ -31,7 +35,7 @@ class Scene(object):
                     self.oknowyboru.wys()
                 else:
                     self.main.StartMenuOtworzone = False
-                if self.main.Player.hp-self.main.GUI.pasekZdrowia.hpdododania <=0:
+                if self.main.Player.hp-self.main.GUI.pasekZdrowia.hpdododania <=0 and self.niesmiertelnosc == False:
                     self.main.StartMenuOtworzone = True
                     self.oknoSmierci.wys()
                 pygame.display.update()
@@ -46,7 +50,7 @@ class Scene(object):
                 self.oknowyboru.wys()
             else:
                 self.main.StartMenuOtworzone = False
-            if self.main.Player.hp - self.main.GUI.pasekZdrowia.hpdododania <= 0:
+            if self.main.Player.hp - self.main.GUI.pasekZdrowia.hpdododania <= 0 and self.niesmiertelnosc == False:
                 self.main.StartMenuOtworzone = True
                 self.oknoSmierci.wys()
             pygame.display.update()
@@ -63,6 +67,13 @@ class Scene(object):
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 self.oknowyboru=OknoPodwojnegoWyboru(self.main,"                Czy napewno chcesz wyjść?",self.ZamknijOknoWyboru,self.ZamknijScene,"    Tak","    Nie")
+            #tymcasowe
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                self.main.Teren.Ruch(-800)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                self.main.Teren.Ruch(800)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_t:
+                self.main.Player.pos.y = 0
     def ZamknijOknoWyboru(self):
         self.oknowyboru=None
     def ZamknijScene(self):

@@ -25,7 +25,7 @@ class Teren(object):
 
         self.przesuniecie = 0
         self.czySterowanieAktywne=True
-    def UtworzElement(self,numerElementu,zmienne,podazamyszka=False):
+    def UtworzElement(self,numerElementu,zmienne,podazamyszka=False,czyZwrocicElement = False):
         if numerElementu==0:
             elementdododania =Podloze(zmienne[0],zmienne[1])
         elif numerElementu==1:
@@ -40,6 +40,8 @@ class Teren(object):
         self.pods.append(elementdododania)
         if podazamyszka:
             elementdododania.podazajzamysza=True
+        if czyZwrocicElement:
+            return elementdododania
     def UstawMotyw(self,styl):
         for i in self.pods:
             try:
@@ -54,11 +56,18 @@ class Teren(object):
                     self.towys.append(i)
             if self.main.StartMenuOtworzone==False and self.czySterowanieAktywne:
                 self.Sterowanie()
+            if self.main.aktualnyPoziom!=None:
+                if self.main.aktualnyPoziom.tlo !=None:
+                    self.main.aktualnyPoziom.tlo.wys()
             for i in self.towys:
                 i.wys()
             #self.ColisionWithFloar()
+        if self.main.aktualnyPoziom != None:
+            if self.main.aktualnyPoziom.tlo != None:
+                self.main.aktualnyPoziom.tlo.wys()
         for i in self.towys:
             i.wys()
+
         #self.ColisionWithFloar()
 
     def ColisionWithFloar(self,pozycjaObiektu,szerokoscObiektu):

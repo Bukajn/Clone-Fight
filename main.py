@@ -33,7 +33,8 @@ class main(object):
         self.StartScena=StartMenu(self,"NamenuStartowe")
 
         self.samouczek = Samouczek(self)
-        self.samouczek.main_loop()
+        self.aktualnyPoziom=self.samouczek
+        self.aktualnyPoziom.main_loop()
         #self.scena.WczytajMape("sekret")
         #self.scena.main_loop()
         #self.create_maps.WczytajMape("sekret", False)

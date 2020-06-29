@@ -1,4 +1,4 @@
-import pygame
+import pygame,math
 import asset
 from OknoZmianyWlasciwosci import Powiekszanie
 class Podloze():
@@ -23,6 +23,11 @@ class Podloze():
         self.CzyWyswietlac =True
         self.CzyKolizja=True
 
+        self.speed = None
+        self.ruchnaskos=False
+        self.pos1=0
+        self.pos2=0
+        self.wymaganaSpeed=0.1
         self.wlasciwosciDozmiany=[["powiekszenie","Rozmiar",self.mnoznik,0.5],["powiekszenie","Kontrolowanie",self.CzyKontronlowane,1]]
     #def __str__(self):
         # return ("|"+str(self.numerElementu)+",("+str(self.pos.x)+";"+str(self.pos.y)+")"+"%")
@@ -33,6 +38,9 @@ class Podloze():
             self.pos = pygame.Vector2(pygame.mouse.get_pos())
         if self.podazajzamysza and pygame.mouse.get_pressed()[0]:
             self.podazajzamysza=False
+
+        if self.ruchnaskos:
+            self.pojscieNaskos(self.pos1,self.pos2)
     def checkIsItToWys(self):
         if self.pos.x > 0-self.d and self.pos.x < 800:
             return True
@@ -46,7 +54,7 @@ class Podloze():
                 #print(self.pos.y+self.szerokosc)
                 return self.pos.y+self.szerokosc
     def IsCollisionNext(self,side,szerokosc,pos,obiektwywołujący):#kolizja dla scianki
-        if self.CzyKolizja:
+        if self.CzyKolizja and self.ruchnaskos==False:
             for i in range(int((self.pos.y+self.szerokosc) - (self.pos.y - (szerokosc-2)))):
                 if side == "right":
                     if pos.y<=self.pos.y+i+0.5-(szerokosc-2) and pos.y>=self.pos.y+i-0.5-(szerokosc-2):
@@ -100,6 +108,11 @@ class Podloze():
         self.wczesniejszystan = self.keys
     def Zmienpolozenie(self,x):
         self.pos.x+=x
+        try:
+            self.pos1.x+=x
+            self.pos2.x+=x
+        except:
+            pass
     def PrzygotujDoZapisu(self):
         self.img=None
         #bez zapisu
@@ -127,3 +140,64 @@ class Podloze():
         if self.CzyKontronlowane==1:
             return True
         return False
+    def pojscieNaskos(self,pos1,pos2):
+
+        self.ruchnaskos=True
+
+        if self.speed==None:
+            try:
+
+                if self.posP == self.pos1:
+                    self.posP =self.pos2
+                else:
+
+                    self.posP=self.pos1
+            except:
+                self.posP = pos1
+                self.pos1 = pos1
+                self.pos2 = pos2
+            self.speed =self.wymaganaSpeed
+            odlegloscX = self.posP.x - self.pos.x
+            odlegloscY = self.posP.y - self.pos.y
+            odlegloscX = math.fabs(odlegloscX)
+            odlegloscY = math.fabs(odlegloscY)
+            if odlegloscX>odlegloscY:
+                self.speedX = self.speed
+                try:
+                    self.speedY = odlegloscY/(odlegloscX/self.speedX)
+                except ZeroDivisionError:
+                    self.speedY=0
+            else:
+
+                self.speedY=self.speed
+                try:
+                    self.speedX = odlegloscX/(odlegloscY/self.speedY)
+                except ZeroDivisionError:
+                    self.speedX=0
+            if self.posP.x - self.pos.x<0:
+                self.speedX*=-1
+            if self.posP.y - self.pos.y<0:
+                self.speedY *= -1
+
+        if self.posP.x - 1 < self.pos.x < self.posP.x + 1 and self.posP.y - 1 < self.pos.y < self.posP.y + 1:
+            self.speed=None
+        else:
+
+            self.pos.x+=self.speedX
+            self.pos.y+=self.speedY
+
+            if self.pos.x - self.main.Player.szerokosc < self.main.Player.pos.x < self.pos.x + self.d - 15 and -1<self.pos.y-(self.main.Player.pos.y + self.main.Player.szerokosc)<1 and self.speedY<0:
+                self.main.Player.CzydzialaGrawitacja=False
+                self.main.Player.pos.y-= self.speed
+                self.main.Player.state = 0
+            elif self.pos.x - self.main.Player.szerokosc < self.main.Player.pos.x < self.pos.x + self.d - 15 and self.pos.y>self.main.Player.pos.y+self.main.Player.szerokosc:
+                self.main.Player.CzydzialaGrawitacja = True
+                if -1<self.pos.y-(self.main.Player.pos.y + self.main.Player.szerokosc)<1 and self.speedY>0:
+                    self.main.Player.state=0
+            if self.pos.x - self.main.Player.szerokosc < self.main.Player.pos.x < self.pos.x + self.d - 15 and -1<self.pos.y-(self.main.Player.pos.y + self.main.Player.szerokosc)<1:
+                if self.speedX>0:
+                    self.speedX = 1
+                    self.main.Teren.Ruch(-self.speedX)
+                elif self.speedX<0:
+                    self.speedX = 1
+                    self.main.Teren.Ruch(self.speedX)

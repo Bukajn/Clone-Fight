@@ -23,6 +23,7 @@ class StartMenu():
 
         self.UtworzMapyDowyboru()
     def main_loop(self):
+        self.main.aktualnyPoziom=None
         self.main.StartMenuOtworzone = True
         self.main.Player.pos.y = 2000
         self.main.create_maps.OknoWyboru.Wczytaj(self.mapa)
