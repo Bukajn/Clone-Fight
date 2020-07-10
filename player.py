@@ -3,15 +3,18 @@ from Postac import Postac
 from Promien import Promien
 class Player(Postac):
     def __init__(self,main):
+        self.pos = pygame.Vector2(336, 0)
         super().__init__(main)
+
         self.cooldown=1
         self.celStrzalu = "enemy"
         self.punktkierunkowyStrzlu=pygame.mouse.get_pos()
         self.promien =None
-        self.cooldownPromien =2
+        self.cooldownPromien =10
         self.zegarPromien = pygame.time.Clock()
         self.czasUplynietyPromien=0
         self.CzyMoznaSkoczyc = True
+        self.czyMozeWykonacPromien=True
     def wys(self):
         if self.main.StartMenuOtworzone==False:
             super().wys()
@@ -19,7 +22,7 @@ class Player(Postac):
             self.punktkierunkowyStrzlu=pygame.mouse.get_pos()
             if self.pos.y>600:
                 self.HPdoDodania(-self.hp)
-            if pygame.mouse.get_pressed()[2] and self.main.CzyKreatorOtworzony==False and self.main.GUI.mana>0 and self.czasUplynietyPromien>self.cooldownPromien:
+            if pygame.mouse.get_pressed()[2] and self.main.CzyKreatorOtworzony==False and self.main.GUI.mana>0 and self.czasUplynietyPromien>self.cooldownPromien and self.czyMozeWykonacPromien:
                 self.promien = Promien(self.main)
                 self.main.GUI.pasekMany.DodawajMane(-self.main.GUI.mana)
                 self.czasUplynietyPromien=0

@@ -14,11 +14,12 @@ class GUI(object):
         self.pasekZdrowia= PasekZdrowia(self.main,self)
         self.mana =0.0
         self.max_mana=100.0
-
+        self.czywyswietlac=True
     def wys(self):
-        pygame.draw.rect(self.main.screen,self.colour,self.pole)
-        self.pasekMany.wys()
-        self.paseknaladowania.wys(self.main.Player.czasUplyniety)
-        self.paseknaladowaniaPromienia.wys(self.main.Player.czasUplynietyPromien)
-        self.pasekZdrowia.wys()
+        if self.czywyswietlac:
+            pygame.draw.rect(self.main.screen,self.colour,self.pole)
+            self.pasekMany.wys()
+            self.paseknaladowania.wys(self.main.Player.czasUplyniety)
+            self.paseknaladowaniaPromienia.wys(self.main.Player.czasUplynietyPromien)
+            self.pasekZdrowia.wys()
 

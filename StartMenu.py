@@ -22,6 +22,8 @@ class StartMenu():
         self.stan =0
 
         self.UtworzMapyDowyboru()
+        self.UtworzMapyDowyboru2()
+
     def main_loop(self):
         self.main.aktualnyPoziom=None
         self.main.StartMenuOtworzone = True
@@ -41,7 +43,7 @@ class StartMenu():
                 elif self.stan==1:
                     pygame.draw.rect(self.main.screen, (153, 0, 153), self.GornyPasek)
                     self.PrzyciskPowrot.Wys()
-                    for i in self.Elementy:
+                    for i in self.Elementy2:
                         i.wys()
                 elif self.stan==2:
                     pygame.draw.rect(self.main.screen, (153, 0, 153), self.GornyPasek)
@@ -80,6 +82,13 @@ class StartMenu():
         for i in range(len(self.main.mapy)):
             self.Elementy.append(WyborMapa(self.main,self,(0,y),self.main.mapy[i]))
             y+=25
+
+    def UtworzMapyDowyboru2(self):
+        self.Elementy2 = []
+        y = 30
+        for i in range(len(self.main.poziomy)):
+            self.Elementy2.append(WyborMapa(self.main, self, (0, y), self.main.poziomy[i]))
+            y += 25
     def OtworzPustyEdytor(self):
         nazwanowejmapy=input("Podaj nazwe nowej mapy:")
         self.main.StartMenuOtworzone=False
@@ -89,6 +98,12 @@ class StartMenu():
         self.main.StartMenuOtworzone = False
         self.main.scena.WczytajMape(mapa)
         self.main.scena.main_loop()
+    def OtworzScene2(self,poziom):
+        self.main.StartMenuOtworzone = False
+        poziom = poziom(self.main)
+        self.main.aktualnyPoziom=poziom
+        poziom.main_loop()
+        self.running=False
     def OtworzEdytor(self,mapa):
         self.main.StartMenuOtworzone=False
         self.main.create_maps.WczytajMape(mapa)
@@ -99,11 +114,15 @@ class WyborMapa():
         self.menu=menu
         self.pos=pygame.Vector2(pos)
         self.nazwamapy = nazwamapy
+        if type(self.nazwamapy)!= str:
+            self.poziom=self.nazwamapy
+            self.nazwamapy=str(self.poziom(self.main))
+
         self.pole = Przycisk(self.main,self.nazwamapy,(400,20),(self.pos.x,self.pos.y),(128,128,128),20,self.JestWybrany,True,(0,0,0),(100,100,100))
     def wys(self):
         self.pole.Wys()
     def JestWybrany(self):
         if self.menu.stan==1:
-            self.menu.OtworzScene(self.nazwamapy)
+            self.menu.OtworzScene2(self.poziom)
         elif self.menu.stan==2:
             self.menu.OtworzEdytor(self.nazwamapy)

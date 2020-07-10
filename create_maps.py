@@ -91,6 +91,10 @@ class Create_maps(object):
                 self.main.Player.pos.y=800
             if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
                 print(self.main.Teren.przesuniecie)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT and self.obiekt == None:
+                self.main.Teren.Ruch(-800)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT and self.obiekt == None:
+                self.main.Teren.Ruch(800)
         if pygame.mouse.get_pressed()[2]:
             self.otwarteOknoWyboru=True
     def ZamknijOknoWyboru(self):

@@ -3,25 +3,27 @@ import asset
 from Postac import Postac
 class Enemy(Postac):
     def __init__(self,wlasciwosci,pos,max_hp=30,mocStrzalu=10):
+        self.pos = pygame.Vector2(pos)
         super().__init__(wlasciwosci[0])
+
         self.max_hp=max_hp
         self.hp=self.max_hp
         self.mnoznik=1.5
 
         self.orginalimgRight=[asset.imgWrogPrawo,self.mnoznik]
-        self.imgRight=pygame.image.load(self.orginalimgRight[0])
+        self.imgRight=pygame.image.load(self.orginalimgRight[0]).convert_alpha()
         self.imgRight=pygame.transform.rotozoom(self.imgRight,0,self.orginalimgRight[1])
 
         self.orginalimgLeft=[asset.imgWrogLewo,self.mnoznik]
-        self.imgLeft=pygame.image.load(self.orginalimgLeft[0])
+        self.imgLeft=pygame.image.load(self.orginalimgLeft[0]).convert_alpha()
         self.imgLeft=pygame.transform.rotozoom(self.imgLeft,0,self.orginalimgLeft[1])
 
         self.orginalRightReka = [asset.imgWrogRekaRight,self.mnoznik]
-        self.RightReka=pygame.image.load(self.orginalRightReka[0])
+        self.RightReka=pygame.image.load(self.orginalRightReka[0]).convert_alpha()
         self.RightReka=pygame.transform.rotozoom(self.RightReka,0,self.orginalRightReka[1])
 
         self.orginalLeftReka = [asset.imgWrogRekaLeft, self.mnoznik]
-        self.LeftReka = pygame.image.load(self.orginalLeftReka[0])
+        self.LeftReka = pygame.image.load(self.orginalLeftReka[0]).convert_alpha()
         self.LeftReka = pygame.transform.rotozoom(self.LeftReka, 0, self.orginalLeftReka[1])
 
         self.szerokosc=wlasciwosci[2]*1.5
@@ -29,10 +31,11 @@ class Enemy(Postac):
         self.imgReka=self.RightReka
 
         self.orginalstrzala=[asset.imgStrzalaWrog,1]
-        self.imgstrzala=pygame.image.load(self.orginalstrzala[0])
+        self.imgstrzala=pygame.image.load(self.orginalstrzala[0]).convert_alpha()
         self.imgstrzala=pygame.transform.rotozoom(self.imgstrzala,0,self.orginalstrzala[1])
 
-        self.pos=pygame.Vector2(pos)
+
+
         self.podazajzamysza = False
         self.numerElementu=3
         self.cooldown=1
@@ -50,19 +53,31 @@ class Enemy(Postac):
         self.jumpSound.set_volume(self.orginalJump[1])
 
         self.mocStrzalu = mocStrzalu
+        self.wysSkoku = 50
+        self.speedGravitation = 0.005
+        self.speedJump = -0.8
+
 
         self.wlasciwosciDozmiany = [["powiekszenie", "Max_hp", self.max_hp, 1],["powiekszenie", "Siła ataku", self.mocStrzalu, 1]]
         self.speed.x=0.5
         self.CzyMozeSpascPonizej600 = False
+        self.czydzialaAi=True
+        self.czywyswietlaccPasekZrowia=True
+
+
+
     def __str__(self):
         return ("|" + str(self.numerElementu) + ",(" + str(self.pos.x) + ";" + str(self.pos.y) + ")" + "%")
     def wys(self):
         if self.main.CzyKreatorOtworzony==False:
-            super().wys()
+            self.main.screen.blit(self.img,self.pos)
+
+            self.wys2()
+
             self.AnimacjaPaska()
-            if self.hp - self.hpdododania>0 and self.main.StartMenuOtworzone==False:
+            if self.hp - self.hpdododania>0 and self.main.StartMenuOtworzone==False and self.czywyswietlaccPasekZrowia:
                 pygame.draw.rect(self.main.screen,(0,255,0),self.PasekZdrowia)
-            elif self.main.StartMenuOtworzone==False:
+            elif self.main.StartMenuOtworzone==False and self.czywyswietlaccPasekZrowia:
                 self.Smierc()
             if self.czasUplyniety < self.cooldown - 0.5:
                 self.punktkierunkowyStrzlu = pygame.Vector2((self.main.Player.pos.x + self.main.Player.szerokosc / 2),(self.main.Player.pos.y + self.main.Player.szerokosc / 2))
@@ -76,14 +91,31 @@ class Enemy(Postac):
                 self.podazajzamysza = False
         if not self in self.main.Teren.pods and self in self.main.Teren.enemy:
             self.main.Teren.enemy.remove(self)
+    def wys2(self):
+        if self.czyWyswietlac:
+            #for i in range(self.Zegar()):
+            self.Physik()
+            self.Ruch()
+            if self.czasUplyniety < self.cooldown:
+                self.czasUplyniety += self.cooldownZegar.tick() / 1000
+                self.strzel = False
+            else:
+                self.cooldownZegar.tick()
+                if self.strzel:
+                    self.strzel = False
+                    self.czasUplyniety = 0
+                    self.Strzał()
+                    self.shootsound.play()
+            #self.Ruch()
+
     def Ruch(self):
         super().Ruch()
-        if self.main.StartMenuOtworzone==False:
+        if self.main.StartMenuOtworzone==False and self.czydzialaAi:
             self.AI()
     def AI(self):
         self.LewoBlokada=False
         self.PrawoBlokada=False
-        if self.main.IsCollision(self.pos,self.main.Player.pos,400):
+        if self.main.IsCollision(self.pos,self.main.Player.pos,800):
             self.strzel=True
             if self.pos.x-self.main.Player.pos.x>10 and self.ruch=="prawo":
                 self.ZmianaWLewo()
@@ -103,6 +135,7 @@ class Enemy(Postac):
             self.skocz=True
     # funkcje do poprawnego wyświetlania
     def checkIsItToWys(self):
+        #return True
         if self.pos.x > -100 and self.pos.x < 800:
             return True
     def Zmienpolozenie(self,x):
@@ -208,3 +241,5 @@ class Enemy(Postac):
         self.mocStrzalu = wlasciwosci[1]
         self.hp = self.max_hp
         self.wlasciwosciDozmiany = [["powiekszenie", "Max_hp", self.max_hp, 1],["powiekszenie", "Siła ataku", self.mocStrzalu, 1]]
+    def __bool__(self):
+        return False

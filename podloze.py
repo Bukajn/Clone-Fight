@@ -25,8 +25,6 @@ class Podloze():
 
         self.speed = None
         self.ruchnaskos=False
-        self.pos1=0
-        self.pos2=0
         self.wymaganaSpeed=0.1
         self.wlasciwosciDozmiany=[["powiekszenie","Rozmiar",self.mnoznik,0.5],["powiekszenie","Kontrolowanie",self.CzyKontronlowane,1]]
     #def __str__(self):
@@ -141,7 +139,6 @@ class Podloze():
             return True
         return False
     def pojscieNaskos(self,pos1,pos2):
-
         self.ruchnaskos=True
 
         if self.speed==None:
@@ -153,10 +150,12 @@ class Podloze():
 
                     self.posP=self.pos1
             except:
+
                 self.posP = pos1
                 self.pos1 = pos1
                 self.pos2 = pos2
             self.speed =self.wymaganaSpeed
+
             odlegloscX = self.posP.x - self.pos.x
             odlegloscY = self.posP.y - self.pos.y
             odlegloscX = math.fabs(odlegloscX)

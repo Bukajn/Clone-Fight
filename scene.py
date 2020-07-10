@@ -10,7 +10,7 @@ class Scene(object):
         self.poziom=poziom
 
 
-        self.niesmiertelnosc=True
+        self.niesmiertelnosc=False
 
     def WczytajMape(self,mapa):
         self.mapa=mapa
@@ -54,12 +54,14 @@ class Scene(object):
                 self.main.StartMenuOtworzone = True
                 self.oknoSmierci.wys()
             pygame.display.update()
-    def Odrodz(self):
-        self.poziom.Przesuniecie()
-        self.WczytajMape(self.mapa)
-        if self.poziom!=None:
-           self.poziom.DodajdoTeren()
 
+    def Odrodz(self):
+        #self.poziom.Przesuniecie()
+        #self.WczytajMape(self.mapa)
+        #if self.poziom!=None:
+           #self.poziom.DodajdoTeren()
+
+        self.poziom.CheckPoint.CofnijDoCheckPointa()
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

@@ -38,20 +38,28 @@ class OknoWyboru(object):
     def WyswietlElemnty(self):
         for i in self.elementy:
             i.Wyswietl()
-    def Zapisz(self):
-        nazwamapy=self.main.create_maps.mapa
+    def Zapisz(self,mapa=""):
+        if mapa =="":
+            nazwamapy=self.main.create_maps.mapa
+        else:
+            nazwamapy=mapa
         print(nazwamapy)
         plikdoZapisu= open("assets/maps/"+nazwamapy+".obj","wb")
 
         for i in self.main.Teren.pods:
-            #przygotowanie do zapisu
-            i.main = str(i.main)
-            i.PrzygotujDoZapisu()
-            #zapis
-            pickle.dump(i,plikdoZapisu)
-            #Po zapisie
-            i.main = self.main
-            i.PoWczytaniu()
+            try:
+                #przygotowanie do zapisu
+                i.PrzygotujDoZapisu()
+                i.main = str(i.main)
+
+                #zapis
+                pickle.dump(i,plikdoZapisu)
+                #Po zapisie
+                i.main = self.main
+                i.PoWczytaniu()
+            except:
+                i.main = self.main
+                pass
         plikdoZapisu.close()
     def Wczytaj(self,mapa="",tworzenieNowejMapy=False):
         """if mapa == "":

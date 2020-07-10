@@ -10,7 +10,9 @@ class Poziom():
         self.poleDialogowe = None
         self.etap = 0
         self.tlo = None
-    def UstawWlasciwosc(self):
+        self.nazwa=None
+        self.running=True
+    def UstawWlasciwosci(self):
         self.obiektyDoKontrolowania = []
         for i in self.main.Teren.pods:
             try:
@@ -18,6 +20,8 @@ class Poziom():
                     self.obiektyDoKontrolowania.append(i)
             except:
                 pass
+    def __str__(self):
+        return self.nazwa
     def DodajdoTeren(self):
         self.main.Teren.pods.append(self)
         self.Zmienpolozenie(-self.przesuniecie)
@@ -26,7 +30,7 @@ class Poziom():
         self.przesuniecie = self.main.Teren.przesuniecie
     def main_loop(self):
         self.DodajdoTeren()
-        while True:
+        while self.running:
 
             self.scena.main_loop()
             self.Fabula()
@@ -43,11 +47,14 @@ class Poziom():
             self.tlo.Przesun(speed)
     def ZwiekszEtap(self):
         self.etap+=1
+
+    def ZwiekszEtapLess(self):
+        self.etap += 0.1
     def ZwiekszEtapzResetem(self):
         self.ZwiekszEtap()
         self.poleDialogowe=None
 class PrzedmiotInteraktywny():
-    def __init__(self,main,img,imgO,img2,imgO2,pos,akcja1=None,akcja2=None,sound1=None,sound2=None,odleglosc=999,czyaktywny=True):
+    def __init__(self,main,img,imgO,img2,imgO2,pos,akcja1=None,akcja2=None,sound1=None,sound2=None,odleglosc=999,czyaktywny=True,CzywykonacReset=False):
         self.main = main
         self.img=pygame.image.load(img)
         self.imgO = pygame.image.load(imgO)
@@ -57,6 +64,8 @@ class PrzedmiotInteraktywny():
         self.odleglosc= odleglosc
         self.akcja1 =akcja1
         self.akcja2 = akcja2
+        self.czyWykonacReset = CzywykonacReset
+        self.Czywyswietla=True
         try:
             self.sound1 = pygame.mixer.Sound(sound1)
             self.sound2 = pygame.mixer.Sound(sound2)
@@ -69,19 +78,19 @@ class PrzedmiotInteraktywny():
 
         self.wczesniejszyKlik=pygame.key.get_pressed()
     def wys(self):
-
-        if self.stan1:
-            self.main.screen.blit(self.img,self.pos)
-        else:
-            self.main.screen.blit(self.img2, self.pos)
-        if self.main.IsCollision(self.pos,self.main.Player.pos,self.odleglosc) and self.czyAktywny:
-            self.CzyNajechany()
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_r] and self.czyAktywny:
+        if self.Czywyswietla:
             if self.stan1:
-                self.main.screen.blit(self.imgO, self.pos)
+                self.main.screen.blit(self.img,self.pos)
             else:
-                self.main.screen.blit(self.imgO2, self.pos)
+                self.main.screen.blit(self.img2, self.pos)
+            if self.main.IsCollision(self.pos,self.main.Player.pos,self.odleglosc) and self.czyAktywny:
+                self.CzyNajechany()
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_r] and self.czyAktywny:
+                if self.stan1:
+                    self.main.screen.blit(self.imgO, self.pos)
+                else:
+                    self.main.screen.blit(self.imgO2, self.pos)
     def Przesun(self,droga):
         self.pos.x+=droga
     def CzyNajechany(self):
@@ -96,32 +105,48 @@ class PrzedmiotInteraktywny():
 
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_e] and keys[pygame.K_e]!=self.wczesniejszyKlik[pygame.K_e]:
-                   if self.stan1:
-                        self.stan1=False
-                        rect = self.img2.get_rect()
-                        self.Rozmiar = pygame.Vector2(rect[2], rect[3])
-                        try:
-                            self.akcja1()
-                        except:
-                            pass
-                        try:
-                            self.sound1.play()
-                        except:
-                            pass
-
-                   else:
-                        self.stan1=True
-                        rect = self.img.get_rect()
-                        self.Rozmiar = pygame.Vector2(rect[2], rect[3])
-                        try:
-                            self.akcja2()
-                        except:
-                            pass
-                        try:
-                            self.sound2.play()
-                        except:
-                            pass
+                   self.Zmiana()
                 self.wczesniejszyKlik = pygame.key.get_pressed()
+    def Zmiana(self):
+        if self.stan1:
+            self.stan1 = False
+            rect = self.img2.get_rect()
+            self.Rozmiar = pygame.Vector2(rect[2], rect[3])
+            try:
+                self.akcja1()
+            except:
+                pass
+            try:
+                self.sound1.play()
+            except:
+                pass
+
+        else:
+            self.stan1 = True
+            rect = self.img.get_rect()
+            self.Rozmiar = pygame.Vector2(rect[2], rect[3])
+            try:
+                self.akcja2()
+            except:
+                pass
+            try:
+                self.sound2.play()
+            except:
+                pass
+    def reset(self,stan1):
+        if self.czyWykonacReset:
+
+            if stan1:
+                self.stan1 = True
+                self.akcja2()
+
+
+            else:
+                self.stan1 = False
+                self.akcja1()
+
+    def aktualnyStan(self):
+        return self.stan1
 class PoleDialogowe():
     def __init__(self,main,pos,nadawca,tekst,iloscznakow1=999,akcjaKoncowa=None,czySkipAktywny=None):
         self.main = main
@@ -189,30 +214,40 @@ class Cel():
         self.napis = self.font.render("", True, (0, 0, 0))
         self.rect = self.napis.get_rect()
         self.zegar = pygame.time.Clock()
+        self.orginalnapozycjaX=None
         self.CzasMiniety=0
         self.cooldown=3
     def UstawNowyCel(self,pos,text):
         self.pos = pygame.Vector2(pos)
+        self.orginalnapozycjaX = self.pos.x
         self.napis = self.font.render(text, True, (0, 0, 0))
         self.rect = self.napis.get_rect()
 
         self.CzasMiniety=0
         self.zegar.tick()
     def wys(self):
+        if self.orginalnapozycjaX!=None:
+            if self.orginalnapozycjaX>780:
+                self.pos.x=780
+            else:
+                self.pos.x =self.orginalnapozycjaX
         keys = pygame.key.get_pressed()
         if keys[pygame.K_r] or self.CzasMiniety<self.cooldown:
             pygame.draw.circle(self.main.screen,(225, 255, 0),(int(self.pos.x),int(self.pos.y)),10)
             pygame.draw.circle(self.main.screen, (225, 0, 0), (int(self.pos.x), int(self.pos.y)), 5)
-            self.main.screen.blit(self.napis,self.pos-pygame.Vector2(self.rect[2]+10,10))
+            pygame.draw.rect(self.main.screen,(255,0,0),pygame.Rect(self.pos.x-(self.rect[2]+13),self.pos.y-10,self.rect[2]+2,20))
+            self.main.screen.blit(self.napis,self.pos-pygame.Vector2(self.rect[2]+12,10))
             if self.CzasMiniety<self.cooldown:
                 self.CzasMiniety += self.zegar.tick()/1000
     def Przesun(self, droga):
         self.pos.x += droga
+        if self.orginalnapozycjaX!=None:
+            self.orginalnapozycjaX+=droga
 class Tlo():
     def __init__(self,main,img):
         self.main = main
         self.img = pygame.image.load(img).convert_alpha()
-        self.pos= pygame.Vector2(0,0)
+        self.pos= pygame.Vector2(5,0)
     def wys(self):
         self.main.screen.blit(self.img,self.pos)
     def Przesun(self,droga):
@@ -220,3 +255,61 @@ class Tlo():
             self.pos.x+=droga
     def checkIsItToWys(self):
         return True
+class Checkpoint():
+    def __init__(self,main,poziom):
+        self.main = main
+        self.poziom = poziom
+
+        self.czyWyswietlac=False
+        self.zegar = pygame.time.Clock()
+        self.CzasMiniety = 0
+        self.Stany=[]
+    def UstawCheckPoint(self,etap):
+
+        self.czyWyswietlac = True
+        self.zegar.tick()
+        self.CzasMiniety = 0
+
+        self.etap = etap
+        self.przesuniecie = self.main.Teren.przesuniecie
+        self.posPlayerY=self.main.Player.pos.y
+
+        self.hpPlayer=self.main.Player.hp
+        self.manaPlayer= self.main.GUI.mana
+        self.main.create_maps.OknoWyboru.Zapisz("CheckPoint")
+        self.Stany = []
+        for i in self.poziom.obiekty:
+            try:
+                self.Stany.append(i.aktualnyStan())
+            except:
+                self.Stany.append(None)
+        self.CofnijDoCheckPointa()
+    def CofnijDoCheckPointa(self):
+        a = -(self.main.Teren.przesuniecie-self.przesuniecie)
+        if a ==0:
+            self.main.Teren.Ruch(a)
+        else:
+            self.main.Teren.Ruch(-(self.main.Teren.przesuniecie))
+
+        self.main.aktualnyPoziom.scena.WczytajMape("CheckPoint")
+        self.main.Teren.pods.append(self.poziom)
+        self.main.aktualnyPoziom.UstawWlasciwosci()
+        self.main.Player.pos.y = self.posPlayerY
+        self.main.Player.hp = self.hpPlayer
+        self.main.GUI.mana = self.manaPlayer
+        for i in range(len(self.poziom.obiekty)):
+            try:
+                self.poziom.obiekty[i].reset(self.Stany[i])
+            except:
+                pass
+        self.poziom.etap=self.etap
+
+    def wys(self):
+
+        if self.czyWyswietlac:
+            pygame.draw.rect(self.main.screen,(255,255,0),pygame.Rect(0,0,800,600))
+            self.CzasMiniety+=self.zegar.tick()/1000
+            if self.CzasMiniety>1:
+                self.czyWyswietlac=False
+    def Przesun(self,x):
+        pass

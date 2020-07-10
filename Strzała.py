@@ -30,7 +30,7 @@ class Strzała(object):
             if self.iloscOdbic>self.maxodbic:
                 self.Usun()
             self.pos.x = self.pozadanaPozycja.x
-            self.main.screen.blit(self.img, self.pos)
+
         self.main.screen.blit(self.img, self.pos)
 
     def SprawdzanieKolizji(self,wysokoscsufitu,wysokoscPodloza):

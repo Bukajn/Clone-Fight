@@ -2,7 +2,7 @@ import pygame,math
 from pygame import mixer
 import  asset
 from Strzała import Strzała
-
+import enemy
 
 class Postac(object):
     def __init__(self,main):
@@ -24,7 +24,7 @@ class Postac(object):
 
 
         #self.img = pygame.transform.rotate(self.img,45)
-        self.pos = pygame.Vector2(336,0)#336
+
         self.posReka = self.pos
         self.state = 1 # 0=na ziemie 1=podczas spadania 2=podczas skoku
         self.speed = pygame.Vector2(0,0)
@@ -64,23 +64,25 @@ class Postac(object):
         self.CzyMozeSpascPonizej600=True
         self.wczesciejszyheiht=0
         self.CzydzialaGrawitacja=True
-
+        self.czyMozeStrzelac=True
+        self.czyWyswietlac=True
     def wys(self):
         #print(pygame.mouse.get_pos())
-        for i in range(self.Zegar()):
-            self.Physik()
+        if self.czyWyswietlac:
+            for i in range(self.Zegar()):
+                self.Physik()
+                self.Ruch()
+                if self.czasUplyniety < self.cooldown:
+                    self.czasUplyniety+= self.cooldownZegar.tick()/1000
+                    self.strzel = False
+                else:
+                    self.cooldownZegar.tick()
+                    if self.strzel and self.czyMozeStrzelac:
+                        self.strzel= False
+                        self.czasUplyniety = 0
+                        self.Strzał()
+                        self.shootsound.play()
             self.Ruch()
-            if self.czasUplyniety < self.cooldown:
-                self.czasUplyniety+= self.cooldownZegar.tick()/1000
-                self.strzel = False
-            else:
-                self.cooldownZegar.tick()
-                if self.strzel:
-                    self.strzel= False
-                    self.czasUplyniety = 0
-                    self.Strzał()
-                    self.shootsound.play()
-        self.Ruch()
     def Ruch(self):
         if self.ruch=="prawo":
             self.RuchwPrawo()
@@ -105,7 +107,7 @@ class Postac(object):
         rotate_reka, rect = self.ObrotPunktu(self.imgReka, self.Rotate, self.PunktZaczepieniaRekiLewo,pygame.math.Vector2(6, 4))
         self.main.screen.blit(rotate_reka, rect)
     def Strzał(self):
-        if self.main.CzyKreatorOtworzony==False:
+        if self.main.CzyKreatorOtworzony==False and self.czyMozeStrzelac:
             self.main.Teren.pods.append(Strzała(self.main,(self.pos.x+self.szerokosc/2,self.pos.y+self.szerokosc/2),self.punktkierunkowyStrzlu,self.imgstrzala,self.celStrzalu,self.mocStrzalu))
         #(self.pos.x+self.szerokosc/2,self.pos.y+self.szerokosc/2-8)
     def ObrotPunktu(self,image, promien, pivot, przesuniecie):
@@ -117,13 +119,12 @@ class Postac(object):
         return rotate_img,rect
     def Physik(self):
 
-        height=self.main.Teren.ColisionWithFloar(self.pos,self.szerokosc) #przyjęcie wysokości podłożą
-        if self.CzyMozeSpascPonizej600 ==False and height > 600:
+        height=self.main.Teren.ColisionWithFloar(self.pos,self.szerokosc) #przyjęcie wysokości podłoż
+        if self.CzyMozeSpascPonizej600 ==False and height > 600 and self.wczesciejszyheiht!=0:
             height=self.wczesciejszyheiht
         heightSufit=self.main.Teren.CollisionWithUnderFloar(self.pos,self.szerokosc)#przyjęcie wysokości sufitu
 
         self.grawitacja(height,heightSufit)
-
 
 
         self.jump(heightSufit)

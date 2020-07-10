@@ -10,6 +10,7 @@ class Mana_coin(object):
         self.img = pygame.image.load(wlasciwosci[1])
         self.img=pygame.transform.rotozoom(self.img,0,self.mnoznik)
         self.pos = pygame.Vector2(pos)
+        self.orginalPos = pygame.Vector2(pos)
 
         self.iloscdodawanejMany=iloscdodawanejMany
 
@@ -60,6 +61,7 @@ class Mana_coin(object):
             if self.RuchDoPaska:
                 self.pojscieNaskos(self.miejscedocelowe)
         self.main.screen.blit(self.img, self.pos)
+
     def checkIsItToWys(self):
         if self.pos.x > 0-self.dlugosc and self.pos.x < 800:
             return True
@@ -136,6 +138,7 @@ class Mana_coin(object):
     def Zmienpolozenie(self,x):
         if self.RuchDoPaska==False:
             self.pos.x+=x
+            self.orginalPos.x+=x
     def Dodaj(self):
         self.main.GUI.pasekMany.DodawajMane(self.iloscdodawanejMany)
     def Zegar(self):
@@ -172,3 +175,5 @@ class Mana_coin(object):
     def ZmienWielkosc(self):
         self.img = pygame.transform.rotozoom(pygame.image.load(self.orginalImg), 0, self.mnoznik)
         self.szerokosc=self.orginalSzerokosc*self.mnoznik
+    def __bool__(self):
+        return False

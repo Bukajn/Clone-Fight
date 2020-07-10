@@ -13,7 +13,7 @@ class Promien():
         self.czasMiniety=0
         self.clock = pygame.time.Clock()
         self.Czasodostatniegozapisu=0
-        self.ObrazeniaNasekunde=-5
+        self.ObrazeniaNasekunde=-20
 
         self.delta=0.0
         self.max_tps=60

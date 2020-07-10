@@ -22,7 +22,7 @@ class main(object):
         self.CzyKreatorOtworzony = False
         self.StartMenuOtworzone=False
         self.mapy=["sekret","dotestow","NamenuStartowe","samouczek"]
-
+        self.poziomy=[Samouczek]
         #self.scena = Scene(self, "")
         self.scenaTestowa =  Scene_test(self)
         self.create_maps = Create_maps(self)
@@ -30,17 +30,19 @@ class main(object):
 
 
 
-        self.StartScena=StartMenu(self,"NamenuStartowe")
 
-        self.samouczek = Samouczek(self)
-        self.aktualnyPoziom=self.samouczek
-        self.aktualnyPoziom.main_loop()
+
+
+
+        #self.aktualnyPoziom.main_loop()
         #self.scena.WczytajMape("sekret")
         #self.scena.main_loop()
         #self.create_maps.WczytajMape("sekret", False)
         #self.create_maps.main_loop()
-        #self.StartScena.main_loop()
 
+        while True:
+            self.StartScena = StartMenu(self, "NamenuStartowe")
+            self.StartScena.main_loop()
     def set_window(self):
         self.screen = pygame.display.set_mode((800, 600))
         pygame.display.set_caption("Clone Fight")

@@ -47,6 +47,20 @@ imgZnakAutobusowyObramowka = resource_path("assets/ZnakAutobusowyObramowka.png")
 imgPoleDialogowe = resource_path("assets/PoleDialogowe.png")
 
 imgTloSamouczek = resource_path('assets/tloSamouczek.png')
+imgTloSamouczek2 = resource_path('assets/tloSamouczek2.png')
+
+imgProfessor = resource_path("assets/professor.png")
+imgProfessorObramowka =resource_path("assets/professorObramowka.png")
+
+imgKlonowator = resource_path("assets/imgKlonowator.png")
+imgKlonowatorObramowka = resource_path("assets/imgKlonowatorObramowka.png")
+imgKlonowatorUruchomiony = resource_path("assets/imgKlonowatorUruchomiony.png")
+
+imgJablko = resource_path("assets/jablko.png")
+
+imgWieza = resource_path("assets/wieza.png")
+imgwiezaObramowka=resource_path("assets/wiezaObarmowka.png")
+imgWiezaAktywowana=resource_path("assets/wiezaAktywowana.png")
 #sound
 soundJump = resource_path("assets/sound/jump.wav")
 zbieranieMana_coin = resource_path("assets/sound/zbieraniemany.wav")
@@ -57,5 +71,7 @@ soundClick = resource_path("assets/sound/clicksound.wav")
 soundDoor = resource_path("assets/sound/soundDoor.wav")
 soundBed = resource_path("assets/sound/soundBed.wav")
 soundPhone = resource_path("assets/sound/soundPhoneCalling.wav")
+soundKlonowator = resource_path("assets/sound/soundKlonowator.wav")
+soundWin=resource_path("assets/sound/win.wav")
 #font
 czcionkaRoboto = resource_path("assets/fonts/Roboto-Medium.ttf")
