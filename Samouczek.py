@@ -541,6 +541,7 @@ class Samouczek(Poziom):
                                                    czySkipAktywny=True)
         elif self.etap ==60:
             self.mainEnemy.pos.x+=2
+            self.mainEnemy.animacja=True
             self.mainEnemy.ZmianaWprawo()
             if self.mainEnemy.pos.x>self.Klononowator.pos.x + 500:
                 while self.mainEnemy in self.main.Teren.pods:
