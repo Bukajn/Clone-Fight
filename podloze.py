@@ -117,6 +117,7 @@ class Podloze():
         self.font=None
         self.napis=None
     def PoWczytaniu(self):
+        self.orginalImg=(asset.imgPodloze)
         self.img = pygame.image.load(self.orginalImg)
         self.img = pygame.transform.rotozoom(self.img, 0, self.mnoznik)
         self.__init__([self.main,self.orginalImg,self.d,self.szerokosc],self.pos,self.mnoznik,self.CzyKontronlowane)

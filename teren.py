@@ -102,7 +102,7 @@ class Teren(object):
         self.keys = pygame.key.get_pressed()
         self.Left = 0
         self.Right = 0
-
+        self.main.Player.animacja=False
         if self.CollisionNextTo("right",self.main.Player.szerokosc,self.main.Player.pos,self):
             self.Left=1
         if self.CollisionNextTo("left",self.main.Player.szerokosc,self.main.Player.pos,self):
@@ -111,6 +111,7 @@ class Teren(object):
         if self.keys[pygame.K_a]:
 
             if self.Left == 0:
+                self.main.Player.animacja=True
                 self.Ruch(self.speed)
                 self.main.Player.ZmianaWLewo()
                 if self.main.Player.CzydzialaGrawitacja == False:
@@ -120,6 +121,7 @@ class Teren(object):
         if self.keys[pygame.K_d]:
 
             if self.Right == 0:
+                self.main.Player.animacja = True
                 self.Ruch(-(self.speed))
                 self.main.Player.ZmianaWprawo()
                 if self.main.Player.CzydzialaGrawitacja==False:

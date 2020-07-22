@@ -66,6 +66,16 @@ class Postac(object):
         self.CzydzialaGrawitacja=True
         self.czyMozeStrzelac=True
         self.czyWyswietlac=True
+        #animacja
+        self.animacja=False
+        self.napraw=False
+        self.zegarAnimacji = pygame.time.Clock()
+        self.animacjaCzasMiniety=0
+        self.klatkiWPrawo=[]
+        self.klatkiWLewo=[]
+        self.predkoscAnimacji=1
+        self._numerKlatki=0
+        self._kierunekAnimacji=True
     def wys(self):
         #print(pygame.mouse.get_pos())
         if self.czyWyswietlac:
@@ -93,6 +103,11 @@ class Postac(object):
         rel_x, rel_y = mouse_x - self.pos.x, mouse_y - self.pos.y
         self.Rotate = ((180 / math.pi) * math.atan2(rel_y, rel_x))-40
         self.PunktZaczepieniaRekiPrawo = pygame.Vector2(self.pos.x + (self.OdlegloscRekiOdRoguPrawo.x),self.pos.y + (self.OdlegloscRekiOdRoguPrawo.y))
+        if self.animacja == True:
+            self.animacjaChodu(self.klatkiWPrawo, self.predkoscAnimacji)
+        elif self.napraw:
+            self.img = self.imgRight
+            self.napraw=False
         self.main.screen.blit(self.img, self.pos)
         rotate_reka, rect = self.ObrotPunktu(self.imgReka,self.Rotate,self.PunktZaczepieniaRekiPrawo,pygame.math.Vector2(-6,4))
         self.main.screen.blit(rotate_reka,rect)
@@ -103,9 +118,36 @@ class Postac(object):
         rel_x, rel_y = mouse_x - self.pos.x, mouse_y - self.pos.y
         self.Rotate = ((180 / math.pi) * math.atan2(rel_y, rel_x))+220
         self.PunktZaczepieniaRekiLewo = pygame.Vector2(self.pos.x + (-self.OdlegloscRekiOdRoguLewo.x),self.pos.y + (-self.OdlegloscRekiOdRoguLewo.y))
+        if self.animacja == True:
+            self.animacjaChodu(self.klatkiWLewo, self.predkoscAnimacji)
+        elif self.napraw:
+            self.img = self.imgLeft
+            self.napraw=False
         self.main.screen.blit(self.img, self.pos)
         rotate_reka, rect = self.ObrotPunktu(self.imgReka, self.Rotate, self.PunktZaczepieniaRekiLewo,pygame.math.Vector2(6, 4))
         self.main.screen.blit(rotate_reka, rect)
+
+    def animacjaChodu(self, klaltki, predkosc):
+        if self.animacjaCzasMiniety < predkosc:
+            self.animacjaCzasMiniety+= self.zegarAnimacji.tick()/1000
+        else:
+            self.animacjaCzasMiniety=0
+            if self._kierunekAnimacji:
+                self._numerKlatki+=1
+            else:
+                self._numerKlatki-=1
+
+            #sprawdzenie czy nie zaszło poza zakres
+            if self._numerKlatki> len(klaltki)-1:
+                self._numerKlatki-=1
+                self._kierunekAnimacji = False
+            elif self._numerKlatki<0:
+                self._numerKlatki+=1
+                self._kierunekAnimacji=True
+
+
+        self.img = klaltki[self._numerKlatki]
+        self.napraw=True
     def Strzał(self):
         if self.main.CzyKreatorOtworzony==False and self.czyMozeStrzelac:
             self.main.Teren.pods.append(Strzała(self.main,(self.pos.x+self.szerokosc/2,self.pos.y+self.szerokosc/2),self.punktkierunkowyStrzlu,self.imgstrzala,self.celStrzalu,self.mocStrzalu))

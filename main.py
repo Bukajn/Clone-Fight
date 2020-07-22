@@ -8,6 +8,7 @@ from StartMenu import StartMenu
 from Samouczek import Samouczek
 import maps
 from GUI import GUI
+from intro import Intro
 import pkg_resources.py2_warn
 
 class main(object):
@@ -39,13 +40,14 @@ class main(object):
         #self.scena.main_loop()
         #self.create_maps.WczytajMape("sekret", False)
         #self.create_maps.main_loop()
-
+        self.intro=Intro(self)
+        #self.intro.main_loop()
         while True:
             self.StartScena = StartMenu(self, "NamenuStartowe")
             self.StartScena.main_loop()
     def set_window(self):
         self.screen = pygame.display.set_mode((800, 600))
-        pygame.display.set_caption("Clone Fight")
+        pygame.display.set_caption("Clone Fight Demo 1.1")
     def IsCollision(self,pos1,pos2,wymaganaodleglosc):
         odleglosc = math.sqrt((math.pow(pos1.x-pos2.x,2)+math.pow(pos1.y-pos2.y,2)))
         if odleglosc <= wymaganaodleglosc:

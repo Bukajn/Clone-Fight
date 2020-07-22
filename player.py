@@ -1,10 +1,19 @@
 import pygame
 from Postac import Postac
 from Promien import Promien
+import asset
 class Player(Postac):
     def __init__(self,main):
         self.pos = pygame.Vector2(336, 0)
         super().__init__(main)
+
+        self.klatkiWPrawo=[asset.imgRight1,asset.imgRight2,asset.imgRight3,asset.imgRight4,asset.imgRight5,asset.imgRight6]
+        self.klatkiWPrawo=[pygame.transform.rotozoom(pygame.image.load(x),0,1.5) for x in self.klatkiWPrawo]
+
+        self.klatkiWLewo=[asset.imgLeft1,asset.imgLeft2,asset.imgLeft3,asset.imgLeft4,asset.imgLeft5,asset.imgLeft6]
+        self.klatkiWLewo = [pygame.transform.rotozoom(pygame.image.load(x), 0, 1.5) for x in self.klatkiWLewo]
+
+        self.predkoscAnimacji=0.03
 
         self.cooldown=1
         self.celStrzalu = "enemy"

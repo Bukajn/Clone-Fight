@@ -160,6 +160,8 @@ class Mana_coin(object):
 
 
     def PoWczytaniu(self):
+        self.orginalImg=asset.imgManaCoin
+        self.orginalzbieraniesound[0]=asset.zbieranieMana_coin
         self.img = pygame.image.load(self.orginalImg)
         self.img=pygame.transform.rotozoom(self.img,0,self.mnoznik)
         self.zbieraniesound =pygame.mixer.Sound(self.orginalzbieraniesound[0])

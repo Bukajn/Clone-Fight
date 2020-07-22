@@ -11,7 +11,7 @@ class Scene(object):
 
 
         self.niesmiertelnosc=False
-
+        self.dev=False
     def WczytajMape(self,mapa):
         self.mapa=mapa
         self.main.create_maps.OknoWyboru.Wczytaj(self.mapa)
@@ -70,11 +70,11 @@ class Scene(object):
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 self.oknowyboru=OknoPodwojnegoWyboru(self.main,"                Czy napewno chcesz wyjść?",self.ZamknijOknoWyboru,self.ZamknijScene,"    Tak","    Nie")
             #tymcasowe
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT and self.dev:
                 self.main.Teren.Ruch(-800)
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT and self.dev:
                 self.main.Teren.Ruch(800)
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_t:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_t and self.dev:
                 self.main.Player.pos.y = 0
     def ZamknijOknoWyboru(self):
         self.oknowyboru=None

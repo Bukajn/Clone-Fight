@@ -64,8 +64,13 @@ class Enemy(Postac):
         self.czydzialaAi=True
         self.czywyswietlaccPasekZrowia=True
 
+        #animacja
+        self.predkoscAnimacji =0.05
+        self.klatkiWPrawoOrginal = [asset.imgEnemyRight1,asset.imgEnemyRight2,asset.imgEnemyRight3,asset.imgEnemyRight4,asset.imgEnemyRight5,asset.imgEnemyRight6]
+        self.klatkiWPrawo = [pygame.transform.rotozoom(pygame.image.load(x), 0, 1.5) for x in self.klatkiWPrawoOrginal]
 
-
+        self.klatkiWLewoOrginal = [asset.imgEnemyLeft1,asset.imgEnemyLeft2,asset.imgEnemyLeft3,asset.imgEnemyLeft4,asset.imgEnemyLeft5,asset.imgEnemyLeft6]
+        self.klatkiWLewo = [pygame.transform.rotozoom(pygame.image.load(x), 0, 1.5) for x in self.klatkiWLewoOrginal]
     def __str__(self):
         return ("|" + str(self.numerElementu) + ",(" + str(self.pos.x) + ";" + str(self.pos.y) + ")" + "%")
     def wys(self):
@@ -123,9 +128,13 @@ class Enemy(Postac):
                 self.ZmianaWprawo()
             if self.main.IsCollision(self.pos,self.main.Player.pos,200)==False:
                     if self.ruch=="prawo" and self.pos.x!=self.main.Player.pos.x:
+                        self.animacja=True
                         self.Przemieszczenie(self.speed.x)
                     elif self.ruch=="lewo"and self.pos.x!=self.main.Player.pos.x:
+                        self.animacja = True
                         self.Przemieszczenie(-self.speed.x)
+            else:
+                self.animacja=False
     def Przemieszczenie(self,speed):
         if self.main.Teren.CollisionNextTo("right", self.szerokosc, self.pos, self)==None and self.ruch=="lewo" and self.LewoBlokada==False:
             self.pos.x+=speed
@@ -211,10 +220,18 @@ class Enemy(Postac):
         self.shootsound=None
         self.jumpSound=None
         self.cooldownZegar=None
+        self.klatkiWPrawo=None
+        self.klatkiWLewo=None
+        self.zegarAnimacji=None
         # bez zapisu
         self.font = None
         self.napis = None
     def PoWczytaniu(self):
+        self.orginalstrzala[0]=asset.imgStrzalaWrog
+        self.orginalimgRight[0]=asset.imgWrogRekaLeft
+        self.orginalRightReka[0]=asset.imgWrogRekaRight
+        self.orginalshootsound[0]=asset.soundWrogStrzal
+        self.orginalJump[0]=asset.soundJump
         self.imgstrzala = pygame.image.load(self.orginalstrzala[0])
         self.imgstrzala = pygame.transform.rotozoom(self.imgstrzala, 0, self.orginalstrzala[1])
 
@@ -230,6 +247,8 @@ class Enemy(Postac):
         self.jumpSound = pygame.mixer.Sound(self.orginalJump[0])
         self.jumpSound.set_volume(self.orginalJump[1])
         self.cooldownZegar=pygame.time.Clock()
+
+        self.zegarAnimacji=pygame.time.Clock()
 
         self.main.Teren.enemy.append(self)
 

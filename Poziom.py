@@ -165,7 +165,7 @@ class PoleDialogowe():
         self.napisNadawca = self.font2.render(nadawca,True,(0,0,0))
         self.clock = pygame.time.Clock()
         self.czasMiniety=0
-        self.cooldown=0.05 #0.05
+        self.cooldown=0.001 #0.05
         self.dlugoscWyswietlanegoTestu = 0
         self.aktualnalinijka=1
         self.NapisSkip = self.font.render("Q --->", True, (0, 0, 0))
@@ -247,7 +247,7 @@ class Tlo():
     def __init__(self,main,img):
         self.main = main
         self.img = pygame.image.load(img).convert_alpha()
-        self.pos= pygame.Vector2(5,0)
+        self.pos= pygame.Vector2(7,0)
     def wys(self):
         self.main.screen.blit(self.img,self.pos)
     def Przesun(self,droga):

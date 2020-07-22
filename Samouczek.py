@@ -62,7 +62,7 @@ class Samouczek(Poziom):
                                            asset.imgWieza,asset.imgwiezaObramowka,
                                            (14200, 205),
                                            self.Koniec,self.Koniec)
-        self.mur= [pygame.Rect(8109,370,102,128),(128,128,128)]
+        self.mur= [pygame.Rect(8111,370,102,128),(128,128,128)]
         self.autobus=None
         self.cel = Cel(self.main)
         self.CheckPoint = Checkpoint(self.main,self)
@@ -112,16 +112,22 @@ class Samouczek(Poziom):
     def UstawWlasciwosci(self):
         super().UstawWlasciwosci()
         #niewidzialnosc i szerokosc
-        self.obiektyDoKontrolowania[0].CzyWyswietlac = False
-        self.obiektyDoKontrolowania[0].d=10
-        self.obiektyDoKontrolowania[1].pojscieNaskos(pygame.Vector2(2607.5,466),pygame.Vector2(2607.5,295))
-        self.obiektyDoKontrolowania[2].CzyWyswietlac = False
-        self.obiektyDoKontrolowania[2].d = 5
-        self.obiektyDoKontrolowania[3].CzyWyswietlac = False
-        self.obiektyDoKontrolowania[3].d = 5
-        self.obiektyDoKontrolowania[4].CzyWyswietlac = False
-        self.obiektyDoKontrolowania[5].CzyWyswietlac = False
-        self.obiektyDoKontrolowania[6].CzyWyswietlac = False
+        try:
+            self.obiektyDoKontrolowania[0].CzyWyswietlac = False
+            self.obiektyDoKontrolowania[0].d=10
+            self.obiektyDoKontrolowania[1].pojscieNaskos(pygame.Vector2(2607.5,466),pygame.Vector2(2607.5,295))
+            self.obiektyDoKontrolowania[2].CzyWyswietlac = False
+            self.obiektyDoKontrolowania[2].d = 5
+            self.obiektyDoKontrolowania[3].CzyWyswietlac = False
+            self.obiektyDoKontrolowania[3].d = 5
+            self.obiektyDoKontrolowania[4].CzyWyswietlac = False
+            self.obiektyDoKontrolowania[5].CzyWyswietlac = False
+            self.obiektyDoKontrolowania[6].CzyWyswietlac = False
+            self.obiektyDoKontrolowania[7].CzyWyswietlac = False
+            self.obiektyDoKontrolowania[8].CzyWyswietlac = False
+            self.obiektyDoKontrolowania[9].CzyWyswietlac = False
+        except:
+            pass
 
     def OtworzDrzwi(self):
         self.obiektyDoKontrolowania[0].CzyKolizja=False
@@ -164,7 +170,7 @@ class Samouczek(Poziom):
         elif self.etap==1:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main,(10,440),"",
-                                                   "Użyj klawiszy 'a' i 'd' do poruszania się w lewo i w prawo",akcjaKoncowa=self.ZwiekszEtap,czySkipAktywny=False)
+                                                   "Użyj klawiszy 'a' i 'd' do poruszania się w lewo i w prawo.",akcjaKoncowa=self.ZwiekszEtap,czySkipAktywny=False)
 
         elif self.etap==2:
             self.main.Teren.czySterowanieAktywne=True
@@ -175,12 +181,12 @@ class Samouczek(Poziom):
         elif self.etap==3:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 440), "",
-                                                "Teraz nauczmy cię skakać",
+                                                "Teraz nauczmy cię skakać.",
                                                akcjaKoncowa=self.ZwiekszEtapzResetem, czySkipAktywny=True)
         elif self.etap==4:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 440), "",
-                                                "Kliknij Spacje by skoczyć",
+                                                "Kliknij spacje by skoczyć.",
                                                akcjaKoncowa=self.ZwiekszEtap, czySkipAktywny=False)
         elif self.etap==5:
             self.main.Player.CzyMoznaSkoczyc = True
@@ -191,18 +197,18 @@ class Samouczek(Poziom):
         elif self.etap==6:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 440), "",
-                                                "Z niektórymi przedmiotami możesz wejść w interakcje. Są to przedmioty, które podczas najechania na nich myszką, mają białą obwódkę ",
+                                                "Z niektórymi przedmiotami możesz wejść w interakcje. Są to przedmioty, które podczas najechania na nie myszką, mają białą obwódkę.",
                                                70,akcjaKoncowa=self.ZwiekszEtapzResetem, czySkipAktywny=True)
         elif self.etap==7:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 440), "",
-                                                "By wejść w interakcje z przedmiotem musisz na niego najechać myszką i kliknąć przycisk 'e'",
+                                                "By wejść w interakcje z przedmiotem musisz na niego najechać myszką i kliknąć klawisz 'e'.",
                                                70,akcjaKoncowa=self.ZwiekszEtapzResetem, czySkipAktywny=True)
         elif self.etap==8:
             if self.poleDialogowe == None:
 
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 440), "",
-                                                "Połóż się na łóżku",
+                                                "Połóż się na łóżku.",
                                                70,akcjaKoncowa=self.ZwiekszEtapzResetemPolozeniaSie, czySkipAktywny=False)
 
         elif self.etap==9:
@@ -222,7 +228,7 @@ class Samouczek(Poziom):
                 self.CzasMiniety=3.1
                 self.zegar.tick()
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 440), "",
-                                                   "By wejść w interakcje z niektórymi przedmiotami musisz być wystarczająco blisko nich",
+                                                   "By wejść w interakcje z niektórymi przedmiotami musisz być wystarczająco blisko nich.",
                                                    72, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                    czySkipAktywny=True)
         elif self.etap==11:
@@ -236,7 +242,7 @@ class Samouczek(Poziom):
             if self.poleDialogowe ==None:
                 self.OdebranyTelefon = False
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 440), "",
-                              "Odbierz telefon",
+                              "Odbierz telefon.",
                               70)
             if self.CzasMiniety>3:
                 self.phoneRinging.play()
@@ -256,7 +262,8 @@ class Samouczek(Poziom):
             if self.poleDialogowe == None:
                 self.cel.UstawNowyCel(self.Profesor.pos, "Pójdź do laboratorium")
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 440), "",
-                              "Jeśli chcesz sprawdzić aktualny cel oraz zobaczyć pobliskie przedmioty interaktywne przytrzymaj klawisz 'r'",
+                              "Jeśli chcesz sprawdzić aktualny cel lub zobaczyć pobliskie przedmioty interaktywne przytrzymaj klawisz 'r'. "
+                              "Gdy nie wiesz co zrobić to zawsze sprawdź to.",
                               70)
             keys = pygame.key.get_pressed()
             if keys[pygame.K_r]:
@@ -265,7 +272,8 @@ class Samouczek(Poziom):
         elif self.etap== 14.1:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 440), "",
-                                                   "W określonych momentach tworzy się punkt kontrolny. Do tych punktów wracasz gdy, zginiesz. Podczas i stworzenia występuje następująca animacja.",
+                                                   "W określonych momentach tworzy się punkt kontrolny. Do tego punktu wracasz, gdy zginiesz. "
+                                                   "Podczas tworzenia występuje następująca animacja.",
                                                    75,akcjaKoncowa=self.ZwiekszEtapLess,czySkipAktywny=True)
         elif self.etap==14.2:
             self.poleDialogowe=None
@@ -287,7 +295,7 @@ class Samouczek(Poziom):
             self.Profesor.czyAktywny=False
             if self.poleDialogowe ==None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.DoktorNadawca,
-                                               "Cześć. W końcu przyszedłeś",
+                                               "Cześć. W końcu przyszedłeś.",
                                                73, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                czySkipAktywny=True)
         elif self.etap==18:
@@ -307,7 +315,7 @@ class Samouczek(Poziom):
         elif self.etap==21:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.DoktorNadawca,
-                                               "Patrz. 3..2..1.. Odpalam",
+                                               "Patrz. 3..2..1.. odpalam...",
                                                73, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                czySkipAktywny=True)
         elif self.etap==22:
@@ -326,7 +334,7 @@ class Samouczek(Poziom):
             self.Klononowator.img = pygame.image.load(asset.imgKlonowator)
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.TyNadawca,
-                                               "Łał",
+                                               "Łał!",
                                                73, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                czySkipAktywny=True)
         elif self.etap==25:
@@ -345,7 +353,7 @@ class Samouczek(Poziom):
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.DoktorNadawca,
                                                    "Nie, nie, nie. Nie badałem tego, co oznacza, że jest to zbyt "
-                                                   "niebezpieczne. Niewiadomo jak zadziała klonowanie na mózg",
+                                                   "niebezpieczne. Niewiadomo jak zadziała klonowanie na mózg.",
                                                    75, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                     czySkipAktywny=True)
         elif self.etap==28:
@@ -359,7 +367,7 @@ class Samouczek(Poziom):
         elif self.etap==30:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.DoktorNadawca,
-                                                   "Zabieram te jabłka na badania. Zostań tu i niczego nie ruszaj. Za chwile wrócę",
+                                                   "Zabieram te jabłka na badania. Zostań tu i niczego nie ruszaj. Za chwile wrócę.",
                                                    79, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                     czySkipAktywny=True)
         elif self.etap ==31:
@@ -370,7 +378,7 @@ class Samouczek(Poziom):
         elif self.etap==32:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.TyNadawca,
-                                                   "Mieć swojego klona to coś. By wykonywał za mnie wszystkie ciężkie zadania",
+                                                   "Mieć swojego klona to coś. By wykonywał za mnie wszystkie ciężkie zadania.",
                                                    79, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                     czySkipAktywny=True)
         elif self.etap == 33:
@@ -460,37 +468,37 @@ class Samouczek(Poziom):
         elif self.etap==48:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.TyNadawca,
-                                                   "Eee... Do odważnych świat należy?",
+                                                   "Eee... do odważnych świat należy?",
                                                    79, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                    czySkipAktywny=True)
         elif self.etap==49:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.DoktorNadawca,
-                                                   "Mówiłem, żebyś niczego nie dotykał",
+                                                   "Mówiłem, żebyś niczego nie dotykał.",
                                                    79, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                    czySkipAktywny=True)
         elif self.etap==50:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.TyNadawca,
-                                                   "Przeprowadziłem eksperyment",
+                                                   "Przeprowadziłem eksperyment.",
                                                    79, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                    czySkipAktywny=True)
         elif self.etap==51:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.DoktorNadawca,
-                                                   "Nie na tym polegają eskperymenty",
+                                                   "Nie na tym polegają eskperymenty.",
                                                    79, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                    czySkipAktywny=True)
         elif self.etap==52:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.TyNadawca,
-                                                   "Bym mógł pomagać większej ilości ludzi",
+                                                   "Bym mógł pomagać większej ilości ludzi.",
                                                    79, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                    czySkipAktywny=True)
         elif self.etap==53:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.KlonNadawca,
-                                                   "Kłamiesz",
+                                                   "Kłamiesz!",
                                                    79, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                    czySkipAktywny=True)
         elif self.etap==54:
@@ -502,13 +510,13 @@ class Samouczek(Poziom):
         elif self.etap==55:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.KlonNadawca,
-                                                   "Ja, kopia ciebie. Chciałeś mnie wykorzystywać. Chciałeś mieć swojego niewolnika. ",
+                                                   "Ja, kopia twoja. Chciałeś mnie wykorzystywać. Chciałeś mieć swojego niewolnika. ",
                                                    80, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                   czySkipAktywny=True)
         elif self.etap==56:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.KlonNadawca,
-                                                   "A to z pomaganiem ludziom to marna wymówka",
+                                                   "A to z pomaganiem ludziom to kłamstwo.",
                                                    80, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                    czySkipAktywny=True)
         elif self.etap==57:
@@ -520,16 +528,16 @@ class Samouczek(Poziom):
         elif self.etap==58:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.KlonNadawca,
-                                                   "Pożyczę sobie tę maszynę i z niej skorzystam. Przynajmniej tyle dobrego z niej będzie",
-                                                   79, akcjaKoncowa=self.ZwiekszEtapzResetem,
+                                                   "Pożyczę tę maszynę i z niej skorzystam. Przynajmniej tyle dobrego z niej będzie.",
+                                                   80, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                    czySkipAktywny=True)
 
         elif self.etap == 59:
             if self.poleDialogowe == None:
                 self.Klononowator.Czywyswietla=False
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.KlonNadawca,
-                                                   "Dowidzenia i ostrzegam,że nasze kolejne spotkanie nie będzie już takie miłe",
-                                                   80, akcjaKoncowa=self.ZwiekszEtapzResetem,
+                                                   "Żegnam i ostrzegam, że nasze kolejne spotkanie nie będzie już takie miłe.",
+                                                   81, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                    czySkipAktywny=True)
         elif self.etap ==60:
             self.mainEnemy.pos.x+=2
@@ -543,6 +551,7 @@ class Samouczek(Poziom):
             self.ZwiekszEtap()
         elif self.etap ==62:
             if self.poleDialogowe == None:
+                #self.main.Teren.Ruch(-7200)
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.DoktorNadawca,
                                                    "Musimy działać. Najpierw cię zbadam.",
                                                    80, akcjaKoncowa=self.ZwiekszEtapzResetem,
@@ -595,7 +604,7 @@ class Samouczek(Poziom):
 
             if self.poleDialogowe ==None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.DoktorNadawca,
-                                               "Twój klon stworzył kolejne klony do pomocy. Najwyraźniej poprawił w pewnym sensie maszyne, bo są mu w 100% posłuszne",
+                                               "Twój klon stworzył kolejne klony do pomocy. Najwyraźniej poprawił w pewnym sensie maszyne, bo są mu w 100% posłuszne.",
                                                75, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                czySkipAktywny=True)
         elif self.etap==70:
@@ -614,13 +623,13 @@ class Samouczek(Poziom):
         elif self.etap==73:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.DoktorNadawca,
-                                                   "Z klonów wypadają apteczki (zielone kule) i mana (niebieskie kule)",
+                                                   "Z klonów wypadają apteczki (zielone kule) i mana (niebieskie kule).",
                                                    71, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                    czySkipAktywny=True)
         elif self.etap == 74:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.DoktorNadawca,
-                                                   "Mana jest potrzebna do przeprowadzenia specjalnego ataku",
+                                                   "Mana jest potrzebna do przeprowadzenia specjalnego ataku.",
                                                    71, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                    czySkipAktywny=True)
         elif self.etap==75:
@@ -645,6 +654,7 @@ class Samouczek(Poziom):
             if iloscWrogowPrzedmurem==0:
                 self.ZwiekszEtap()
         elif self.etap==79:
+
             self.cel.pos.y=-1000
             self.etap=79.1
         elif self.etap == 79.1:
@@ -655,14 +665,14 @@ class Samouczek(Poziom):
         elif self.etap==80:
             if self.poleDialogowe == None:
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.DoktorNadawca,
-                                                   "Pamiętaj, że klony też mogą cię atakować",
+                                                   "Pamiętaj, że klony też mogą cię atakować.",
                                                    74, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                    czySkipAktywny=True)
 
         elif self.etap==81:
             self.cel.UstawNowyCel(self.main.Teren.enemy[0].pos,"Znisz klona")
             self.mur[0] = self.mur[0].move(800, 0)
-            self.obiektyDoKontrolowania[5].CzyKolizja = False
+            self.obiektyDoKontrolowania[6].CzyKolizja = False
             self.ZwiekszEtap()
         elif self.etap==82:
             iloscWrogowPrzedmurem = 0
@@ -676,19 +686,19 @@ class Samouczek(Poziom):
             if self.poleDialogowe == None:
                 self.cel.UstawNowyCel(self.wieza.pos,"Dotrzyj do celu")
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.DoktorNadawca,
-                                                   "To wszystko co musisz narazie wiedzeć. Dotrzyj do wyznaczonego punktu i niszcz klony. Powodenia",
+                                                   "To wszystko co musisz narazie wiedzeć. Dotrzyj do wyznaczonego punktu i niszcz klony. Powodzenia.",
                                                    72, akcjaKoncowa=self.ZwiekszEtapzResetem,
                                                    czySkipAktywny=True)
         elif self.etap==84:
 
             self.mur[0] = self.mur[0].move(0, -1000)
-            self.obiektyDoKontrolowania[6].CzyKolizja = False
-            self.etap=81.1
-        elif self.etap == 81.1:
-            self.CheckPoint.UstawCheckPoint(81.2)
-            self.etap = 81.2
-        elif self.etap == 81.2:
-            self.obiektyDoKontrolowania[6].CzyKolizja = False
+            self.obiektyDoKontrolowania[8].CzyKolizja = False
+            self.etap=84.1
+        elif self.etap == 84.1:
+            self.CheckPoint.UstawCheckPoint(84.2)
+            self.etap = 84.2
+        elif self.etap == 84.2:
+            self.obiektyDoKontrolowania[8].CzyKolizja = False
             self.etap = 85
         elif self.etap==85:
             if self.main.Player.pos.x>self.wieza.pos.x-400:
@@ -698,8 +708,8 @@ class Samouczek(Poziom):
             if self.poleDialogowe == None:
                 self.cel.UstawNowyCel(self.wieza.pos,"Odpal wieże")
                 self.poleDialogowe = PoleDialogowe(self.main, (10, 40), self.DoktorNadawca,
-                                                   "Za każdym razem, na koniec poziomu musisz aktywować wieże ochronną. W ten sposób, na tym terenie już się pojawi żadan klon",
-                                                   73)
+                                                   "Za każdym razem, na koniec poziomu musisz aktywować wieże ochronną. W ten sposób na tym terenie już się pojawi żadan klon.",
+                                                   67)
 
         elif self.etap==87:
             self.soundWin.play()
@@ -725,6 +735,11 @@ class Samouczek(Poziom):
         if self.etap<15:
             if self.main.Player.pos.y>400:
                 self.main.Player.pos.y=100
+
+
+        if self.etap==100:
+
+            self.ZwiekszEtap()
     def Reset(self):
         self.poleDialogowe=None
     def Koniec(self):

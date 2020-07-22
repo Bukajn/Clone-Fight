@@ -57,7 +57,7 @@ class OknoWyboru(object):
                 #Po zapisie
                 i.main = self.main
                 i.PoWczytaniu()
-            except:
+            except AttributeError:
                 i.main = self.main
                 pass
         plikdoZapisu.close()
