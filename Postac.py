@@ -17,7 +17,7 @@ class Postac(object):
 
         self.img = pygame.image.load(asset.imgPlayerRight)
         self.imgReka = self.RightReka
-        self.jumpSound = mixer.Sound(asset.soundJump)
+        self.jumpSound = self.main.relugacjaDzwiekow.soundJump
         self.shootsound=mixer.Sound(asset.soundShoot)
         self.shootsound.set_volume(0.1)
         self.szerokosc=64

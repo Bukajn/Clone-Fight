@@ -1,7 +1,7 @@
 import pygame
 import asset
 class Przycisk(object):
-    def __init__(self,main,text,rozmiar,pos,colour,wielkoscfont,akcja,wyswietlanieTla=True,textColour=(0,0,0),textColour2=None):
+    def __init__(self,main,text,rozmiar,pos,colour,wielkoscfont,akcja,wyswietlanieTla=True,textColour=(0,0,0),textColour2=None,czygracdzwiek=True):
         self.main = main
         self.wielkoscfont=wielkoscfont
         self.font = pygame.font.Font(asset.czcionkaRoboto,self.wielkoscfont)
@@ -17,8 +17,9 @@ class Przycisk(object):
         self.WyswietlanieTla= wyswietlanieTla
         self.TextColour = textColour
         self.TextColour2=textColour2
+        self.czyGracDzwiek = czygracdzwiek
         self.tekst = self.font.render(self.Text, True, self.TextColour)
-        self.clicksound = pygame.mixer.Sound(asset.soundClick)
+
     def Wys(self):
 
         self.przycisk = pygame.Rect(self.pos.x, self.pos.y, self.dlugosc, self.szerokosc)
@@ -43,6 +44,7 @@ class Przycisk(object):
                 self.colour = self.colour1
     def Czyklikniety(self):
         if pygame.mouse.get_pressed()[0] and pygame.mouse.get_pressed()[0] !=self.wczesniejczyklik[0]:
-            self.clicksound.play()
+            if self.czyGracDzwiek:
+                self.main.relugacjaDzwiekow.soundclick.play()
             self.akcja()
         self.wczesniejczyklik= pygame.mouse.get_pressed()

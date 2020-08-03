@@ -1,6 +1,7 @@
 import pygame, sys, asset
 from button import Przycisk
 from scene import Scene
+from  PlanszUstawien import PlanszUstawien
 class StartMenu():
     def __init__(self,main,mapa):
 
@@ -15,11 +16,15 @@ class StartMenu():
         self.main.StartMenuOtworzone=True
         self.tytul = pygame.image.load(asset.imgTytul)
         self.PrzyciskStart=Przycisk(self.main,"         Start",(200,30),(301,250),(255,255,255),30,self.Start,False,(153,0,153),(153, 51, 153))
-        self.PrzyciskEdytor = Przycisk(self.main, "         Edytor", (200, 30), (294, 285), (255, 255, 255), 30,self.Edytor, False, (153, 0, 153), (153, 51, 153))
+        self.PrzyciskEdytor = Przycisk(self.main, "         Edytor", (200, 30), (294, 320), (255, 255, 255), 30,self.Edytor, False, (153, 0, 153), (153, 51, 153))
+        self.PrzyciskUstawienia = Przycisk(self.main, "     Ustawienia", (200, 30), (294, 285), (255, 255, 255), 30,
+                                       self.Ustawienia, False, (153, 0, 153), (153, 51, 153))
         self.PrzyciskPowrot = Przycisk(self.main, "Powrót", (100, 20), (0, 0), (153, 0, 153), 20,self.Powrot, True, (0, 0, 0), (153, 51, 153))
         self.PrzyciskNowaMapa = Przycisk(self.main, "Nowa mapa", (110, 20), (690, 580), (128, 128, 128), 20,self.OtworzPustyEdytor, True, (0, 0, 0), (100, 100, 100))
         self.GornyPasek = pygame.Rect(0,0,800,20)
         self.stan =0
+
+        self.PoleUstawienia = PlanszUstawien(self.main,(0,20))
 
         self.UtworzMapyDowyboru()
         self.UtworzMapyDowyboru2()
@@ -39,6 +44,7 @@ class StartMenu():
                 if self.stan==0:
                     self.main.screen.blit(self.tytul,pygame.Vector2(20,10))
                     self.PrzyciskStart.Wys()
+                    self.PrzyciskUstawienia.Wys()
                     self.PrzyciskEdytor.Wys()#Przcisk do edytora wyswietlany
                 elif self.stan==1:
                     pygame.draw.rect(self.main.screen, (153, 0, 153), self.GornyPasek)
@@ -51,6 +57,10 @@ class StartMenu():
                     for i in self.Elementy:
                         i.wys()
                     self.PrzyciskNowaMapa.Wys()
+                elif self.stan==3:
+                    pygame.draw.rect(self.main.screen, (153, 0, 153), self.GornyPasek)
+                    self.PrzyciskPowrot.Wys()
+                    self.PoleUstawienia.wys()
                 #pygame.draw.line(self.main.screen, (50, 50, 50), pygame.Vector2(400, 0), pygame.Vector2(400, 600))
                 pygame.display.update()
                 if len(self.main.Teren.towys)<=1:
@@ -76,6 +86,8 @@ class StartMenu():
         self.stan=0
     def Edytor(self):
         self.stan=2
+    def Ustawienia(self):
+        self.stan=3
     def UtworzMapyDowyboru(self):
         self.Elementy =[]
         y=30

@@ -10,6 +10,7 @@ import maps
 from GUI import GUI
 from intro import Intro
 import pkg_resources.py2_warn
+from soundVolume import RelugacjaDzwiekow
 
 class main(object):
     def __init__(self):
@@ -17,6 +18,7 @@ class main(object):
 
         self.set_window()
         self.max_tps = 60
+        self.relugacjaDzwiekow = RelugacjaDzwiekow()
         self.Teren = Teren(self)
         self.Player=Player(self)
         self.GUI =GUI(self)
@@ -54,4 +56,6 @@ class main(object):
             return True
         else:
             return False
+
+
 main()
