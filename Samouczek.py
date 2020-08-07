@@ -92,12 +92,15 @@ class Samouczek(Poziom):
         self.OdebranyTelefon =False
 
         self.phoneRinging =pygame.mixer.Sound(asset.soundPhone)
+        self.phoneRinging.set_volume(self.main.relugacjaDzwiekow.glownaGlosnosc)
         self.zegar = pygame.time.Clock()
         self.CzasMiniety =0
         self.tlo = Tlo(self.main, asset.imgTloSamouczek)
         self.jablko = pygame.image.load(asset.imgJablko)
         self.soundKlonowator = pygame.mixer.Sound(asset.soundKlonowator)
+        self.soundKlonowator.set_volume(self.main.relugacjaDzwiekow.glownaGlosnosc)
         self.soundWin = pygame.mixer.Sound(asset.soundWin)
+        self.soundWin.set_volume(self.main.relugacjaDzwiekow.glownaGlosnosc)
         self.DoktorNadawca ="Doktor Brown:"
         self.TyNadawca = "Ty:"
         self.KlonNadawca = "Twój klon:"

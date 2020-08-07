@@ -14,9 +14,9 @@ class Mana_coin(object):
 
         self.iloscdodawanejMany=iloscdodawanejMany
 
-        self.orginalzbieraniesound = [asset.zbieranieMana_coin,0.1]
-        self.zbieraniesound=pygame.mixer.Sound(self.orginalzbieraniesound[0])
-        self.zbieraniesound.set_volume(self.orginalzbieraniesound[1])
+
+        self.zbieraniesound = self.main.relugacjaDzwiekow.zbieraniesound
+
 
         self.dlugosc = wlasciwosci[2]
         self.szerokosc = wlasciwosci[3]
@@ -161,11 +161,11 @@ class Mana_coin(object):
 
     def PoWczytaniu(self):
         self.orginalImg=asset.imgManaCoin
-        self.orginalzbieraniesound[0]=asset.zbieranieMana_coin
+
         self.img = pygame.image.load(self.orginalImg)
         self.img=pygame.transform.rotozoom(self.img,0,self.mnoznik)
-        self.zbieraniesound =pygame.mixer.Sound(self.orginalzbieraniesound[0])
-        self.zbieraniesound.set_volume(self.orginalzbieraniesound[1])
+        self.zbieraniesound =self.main.relugacjaDzwiekow.zbieraniesound
+
         self.clock = pygame.time.Clock()
         self.__init__([self.main,self.orginalImg,self.szerokosc,self.dlugosc],self.pos,self.mnoznik,self.iloscdodawanejMany)
     def PrzyjmijWlasciwosci(self, wlasciwosci):

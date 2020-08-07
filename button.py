@@ -20,6 +20,7 @@ class Przycisk(object):
         self.czyGracDzwiek = czygracdzwiek
         self.tekst = self.font.render(self.Text, True, self.TextColour)
 
+        self.najechany = False
     def Wys(self):
 
         self.przycisk = pygame.Rect(self.pos.x, self.pos.y, self.dlugosc, self.szerokosc)
@@ -31,6 +32,7 @@ class Przycisk(object):
     def Czynajechany(self):
         mousePos = pygame.mouse.get_pos()
         if mousePos[0] > self.pos.x and mousePos[0] < self.pos.x + self.dlugosc and mousePos[1] > self.pos.y and mousePos[1] < self.pos.y + self.szerokosc:
+            self.najechany=True
             if self.TextColour2 !=None:
                 if self.WyswietlanieTla==False:
                     self.tekst = self.font.render(self.Text, True, self.TextColour2)
@@ -38,6 +40,7 @@ class Przycisk(object):
                     self.colour=self.TextColour2
             self.Czyklikniety()
         else:
+            self.najechany = False
             if self.WyswietlanieTla == False:
                 self.tekst = self.font.render(self.Text, True, self.TextColour)
             else:

@@ -16,12 +16,21 @@ class PlanszUstawien():
         self.regulacjaDzwiekuJump = Regulacja_Glosnosci(self.main,(20,110),self.main.relugacjaDzwiekow.glosnoscJump,
                                                         self.main.relugacjaDzwiekow.ZmianaGlosnoscJump,"Skok",
                                                         self.main.relugacjaDzwiekow.soundJump)
+        self.regulacjaDzwiekuShoot = Regulacja_Glosnosci(self.main, (20, 140), self.main.relugacjaDzwiekow.glosnoscStrzal,
+                                                        self.main.relugacjaDzwiekow.ZmianaGlosnoscStrzal, "Walka",
+                                                        self.main.relugacjaDzwiekow.shootsound)
+        self.regulacjaDzwiekuMana = Regulacja_Glosnosci(self.main, (20, 170),
+                                                         self.main.relugacjaDzwiekow.glosnoscMana,
+                                                         self.main.relugacjaDzwiekow.ZmianaGlosnoscMana, "Zbieranie",
+                                                         self.main.relugacjaDzwiekow.zbieraniesound)
     def wys(self):
         #pygame.draw.rect(self.main.screen,(100,100,100),self.rect)
         self.main.screen.blit(self.napisDzwieki,self.pos+pygame.Vector2(0,5))
         self.regulacjaDzwiekiMain.wys()
         self.regulacjaDzwiekuClick.wys()
         self.regulacjaDzwiekuJump.wys()
+        self.regulacjaDzwiekuShoot.wys()
+        self.regulacjaDzwiekuMana.wys()
         if self.main.relugacjaDzwiekow.zmiana:
             self.PrzypiszNoweDzwieki()
             self.main.relugacjaDzwiekow.zmiana=False
@@ -29,7 +38,7 @@ class PlanszUstawien():
         self.regulacjaDzwiekiMain.dzwiek=self.main.relugacjaDzwiekow.soundclick
 
         self.main.Player.jumpSound =  self.main.relugacjaDzwiekow.soundJump
-
+        self.main.Player.shootsound = self.main.relugacjaDzwiekow.shootsound
 class Regulacja_Glosnosci():
     def __init__(self,main,pos,wartosc,akcja,tytul, dzwiek=None):
         self.main=main

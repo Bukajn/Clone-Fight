@@ -44,16 +44,16 @@ class Enemy(Postac):
         self.PasekZdrowia = pygame.Rect(self.pos.x,self.pos.y,self.szerokosc,5)
         self.hpdododania=0
 
-        self.orginalshootsound = [asset.soundWrogStrzal,0.1]
-        self.shootsound = pygame.mixer.Sound(self.orginalshootsound[0])
-        self.shootsound.set_volume(self.orginalshootsound[1])
+        #self.orginalshootsound = [asset.soundWrogStrzal,0.1]
+        #self.shootsound = pygame.mixer.Sound(self.orginalshootsound[0])
+        self.shootsound = self.main.relugacjaDzwiekow.evilshootsound
+        #self.shootsound.set_volume(self.orginalshootsound[1])
 
-        self.orginalJump = [asset.soundJump,1]
-        self.jumpSound=pygame.mixer.Sound(self.orginalJump[0])
-        self.jumpSound.set_volume(self.orginalJump[1])
+
+        self.jumpSound = self.main.relugacjaDzwiekow.soundJump
 
         self.mocStrzalu = mocStrzalu
-        self.wysSkoku = 50
+        self.wysSkoku = 150
         self.speedGravitation = 0.005
         self.speedJump = -0.8
 
@@ -230,8 +230,7 @@ class Enemy(Postac):
         self.orginalstrzala[0]=asset.imgStrzalaWrog
         self.orginalimgRight[0]=asset.imgWrogRekaLeft
         self.orginalRightReka[0]=asset.imgWrogRekaRight
-        self.orginalshootsound[0]=asset.soundWrogStrzal
-        self.orginalJump[0]=asset.soundJump
+
         self.imgstrzala = pygame.image.load(self.orginalstrzala[0])
         self.imgstrzala = pygame.transform.rotozoom(self.imgstrzala, 0, self.orginalstrzala[1])
 
@@ -242,10 +241,9 @@ class Enemy(Postac):
         self.RightReka = pygame.transform.rotozoom(self.RightReka, 0, self.orginalimgRight[1])
         #self.LeftReka=listadoprzywrocenia[6]
         self.clock=pygame.time.Clock()
-        self.shootsound=pygame.mixer.Sound(self.orginalshootsound[0])
-        self.shootsound.set_volume(self.orginalshootsound[1])
-        self.jumpSound = pygame.mixer.Sound(self.orginalJump[0])
-        self.jumpSound.set_volume(self.orginalJump[1])
+        self.shootsound = self.main.relugacjaDzwiekow.evilshootsound
+        self.jumpSound = self.main.relugacjaDzwiekow.soundJump
+
         self.cooldownZegar=pygame.time.Clock()
 
         self.zegarAnimacji=pygame.time.Clock()

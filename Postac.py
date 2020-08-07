@@ -18,8 +18,8 @@ class Postac(object):
         self.img = pygame.image.load(asset.imgPlayerRight)
         self.imgReka = self.RightReka
         self.jumpSound = self.main.relugacjaDzwiekow.soundJump
-        self.shootsound=mixer.Sound(asset.soundShoot)
-        self.shootsound.set_volume(0.1)
+        self.shootsound= self.main.relugacjaDzwiekow.shootsound
+
         self.szerokosc=64
 
 
@@ -30,7 +30,7 @@ class Postac(object):
         self.speed = pygame.Vector2(0,0)
         self.speedGravitation=0.1
         self.speedJump=-8
-        self.wysSkoku=100
+        self.wysSkoku=150
         self.old_pos_y=0
         self.ruch = "prawo"
 

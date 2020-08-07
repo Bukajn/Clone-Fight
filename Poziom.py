@@ -54,7 +54,7 @@ class Poziom():
         self.ZwiekszEtap()
         self.poleDialogowe=None
 class PrzedmiotInteraktywny():
-    def __init__(self,main,img,imgO,img2,imgO2,pos,akcja1=None,akcja2=None,sound1=None,sound2=None,odleglosc=999,czyaktywny=True,CzywykonacReset=False):
+    def __init__(self,main,img,imgO,img2,imgO2,pos,akcja1=None,akcja2=None,sound1=None,sound2=None,odleglosc=999,czyaktywny=True,CzywykonacReset=False,):
         self.main = main
         self.img=pygame.image.load(img)
         self.imgO = pygame.image.load(imgO)
@@ -68,7 +68,9 @@ class PrzedmiotInteraktywny():
         self.Czywyswietla=True
         try:
             self.sound1 = pygame.mixer.Sound(sound1)
+            self.sound1.set_volume(self.main.relugacjaDzwiekow.glownaGlosnosc)
             self.sound2 = pygame.mixer.Sound(sound2)
+            self.sound2.set_volume(self.main.relugacjaDzwiekow.glownaGlosnosc)
         except:
             pass
         self.czyAktywny = czyaktywny

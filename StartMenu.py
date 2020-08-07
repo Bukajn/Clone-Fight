@@ -2,6 +2,7 @@ import pygame, sys, asset
 from button import Przycisk
 from scene import Scene
 from  PlanszUstawien import PlanszUstawien
+from OpisPoziomu import OpisPoziomu
 class StartMenu():
     def __init__(self,main,mapa):
 
@@ -126,6 +127,7 @@ class WyborMapa():
         self.menu=menu
         self.pos=pygame.Vector2(pos)
         self.nazwamapy = nazwamapy
+        self.opisPoziomu = OpisPoziomu(self.main)
         if type(self.nazwamapy)!= str:
             self.poziom=self.nazwamapy
             self.nazwamapy=str(self.poziom(self.main))
@@ -133,8 +135,18 @@ class WyborMapa():
         self.pole = Przycisk(self.main,self.nazwamapy,(400,20),(self.pos.x,self.pos.y),(128,128,128),20,self.JestWybrany,True,(0,0,0),(100,100,100))
     def wys(self):
         self.pole.Wys()
+        self.opisPoziomu.wys()
+        if self.pole.najechany ==True and self.menu.stan ==1: #
+            self.JestNajechany()
+        elif self.menu.stan==1 and self.opisPoziomu.otworzony ==True:
+            self.opisPoziomu.ZaczecieZamykania()
     def JestWybrany(self):
         if self.menu.stan==1:
             self.menu.OtworzScene2(self.poziom)
         elif self.menu.stan==2:
             self.menu.OtworzEdytor(self.nazwamapy)
+    def JestNajechany(self):
+        if self.opisPoziomu.otworzony==False:
+            self.opisPoziomu.ZaczecieOtwierania()
+
+
