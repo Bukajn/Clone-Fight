@@ -24,6 +24,7 @@ class StartMenu():
         self.PrzyciskNowaMapa = Przycisk(self.main, "Nowa mapa", (110, 20), (690, 580), (128, 128, 128), 20,self.OtworzPustyEdytor, True, (0, 0, 0), (100, 100, 100))
         self.GornyPasek = pygame.Rect(0,0,800,20)
         self.stan =0
+        self.poruszanieMapy = False
 
         self.PoleUstawienia = PlanszUstawien(self.main,(0,20))
 
@@ -41,13 +42,17 @@ class StartMenu():
                 self.main.screen.fill((100, 150, 255))
                 self.check_events()
                 self.main.Teren.wys()
-                self.main.Teren.Ruch(self.speed)
+                if self.poruszanieMapy:
+                    self.main.Teren.Ruch(self.speed)
+                else:
+                    self.poruszanieMapy = True
                 if self.stan==0:
                     self.main.screen.blit(self.tytul,pygame.Vector2(20,10))
                     self.PrzyciskStart.Wys()
                     self.PrzyciskUstawienia.Wys()
                     self.PrzyciskEdytor.Wys()#Przcisk do edytora wyswietlany
                 elif self.stan==1:
+                    self.poruszanieMapy = False
                     pygame.draw.rect(self.main.screen, (153, 0, 153), self.GornyPasek)
                     self.PrzyciskPowrot.Wys()
                     for i in self.Elementy2:

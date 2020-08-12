@@ -48,6 +48,7 @@ imgPoleDialogowe = resource_path("assets/PoleDialogowe.png")
 
 imgTloSamouczek = resource_path("assets/tloSamouczek.png")
 imgTloSamouczek2 = resource_path("assets/tloSamouczek2.png")
+imgMiniaturaSamouczek = resource_path("assets/SamouczekMiniatura.png")
 
 imgProfessor = resource_path("assets/professor.png")
 imgProfessorObramowka =resource_path("assets/professorObramowka.png")
